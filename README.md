@@ -11,7 +11,7 @@ ImperialBin is a hastebin alternative built with UI and user experience in mind.
 
 * `/api/PostCode` > `post_code()`
 * `/api/getCode` > `get_code()`
-* `/api/checkApiToken/:apiToken` > verify()`
+* `/api/checkApiToken/:apiToken` > `verify()`
 * `/api/getShareXConfig/:apiToken` > `get_sharex_config()`
 
 
