@@ -12,17 +12,17 @@ setup(
     name="imperialbin",
     version=version,
     description=(
-        "bruh"
+        "ImperialBin is a hastebin alternative built with UI and user experience in mind."
     ),
     long_description=readme,
     long_description_content_type="text/markdown",
     author="Hexiro",
     author_email="realhexiro@gmail.com",
-    url="https://github.com/Hexiro/",
+    url="https://github.com/imperialbin/imperial-py",
     packages=["imperialbin"],
-    python_requires=">=3",
+    python_requires=">=3.5",
     install_requires=requirements,
-    license="CC0",
+    license="MPL2",
     classifiers=[
         "Environment :: Console",
         "Intended Audience :: Developers",
