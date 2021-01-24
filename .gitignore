@@ -2,3 +2,6 @@
 __pycache__/
 ./imperial/.idea/
 ./imperial/__pycache__/
+build/
+dist/
+imperial_py.egg-info/

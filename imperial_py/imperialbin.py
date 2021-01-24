@@ -1,5 +1,4 @@
 __title__ = "Imperialb.in simple API wrapper"
-__version__ = "1.0.0"
 __author__ = "Hexiro"
 
 from re import compile
