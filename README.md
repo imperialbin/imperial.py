@@ -1,3 +1,4 @@
+
 # Imperial-py README
 
 ImperialBin is a hastebin alternative built with UI and user experience in mind.
@@ -13,6 +14,20 @@ ImperialBin is a hastebin alternative built with UI and user experience in mind.
 * `/api/getCode` > `get_code()`
 * `/api/checkApiToken/:apiToken` > `verify()`
 * `/api/getShareXConfig/:apiToken` > `get_sharex_config()`
+
+
+# Example Usage
+```python
+from imperial_py import Imperial
+
+imp = Imperial()  # with or without api token
+
+imp.post_code("Hello World!")
+>>> {'success': True, 'document_id': 'bmhn60klmpw', 'raw_link': 'https://www.imperialb.in/r/bmhn60klmpw', 'formatted_link': 'https://www.imperialb.in/p/bmhn60klmpw', 'expires_in': datetime.datetime(2021, 1, 29, 18, 55, 37, 725000), 'instant_delete': False}
+
+imp.get_code("bmhn60klmpw")
+>>> {'success': True, 'document': 'Hello World!'}
+```
 
 
 ## Python Exclusives
