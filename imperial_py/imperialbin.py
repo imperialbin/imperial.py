@@ -2,6 +2,7 @@ __title__ = "Imperialb.in simple API wrapper"
 __author__ = "Hexiro"
 
 from re import compile
+from os import environ
 from datetime import datetime
 from json.decoder import JSONDecodeError
 
@@ -51,6 +52,9 @@ class Imperial:
         """
         self.api_url = "https://imperialb.in/api"
         self.api_token = api_token
+        path_token = environ.get("IMPERIAL-TOKEN")
+        if not self.api_token and path_token:
+            self.api_token = path_token
 
     def post_code(self, code: str, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
         """
