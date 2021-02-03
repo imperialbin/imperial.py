@@ -47,6 +47,7 @@ class Imperial:
     def __init__(self, api_token=None):
         """
         :param api_token: ImperialBin API token (type: str).
+        15 requests max every 15 minutes; unlimited with an api token.
         """
         self.api_url = "https://imperialb.in/api"
         self.api_token = api_token
@@ -58,7 +59,6 @@ class Imperial:
         """
         Uploads code to https://imperialb.in
         POST https://imperialb.in/api/postCode
-        15 requests max every 15 minutes; unlimited with an api token.
         :param code: Code from any programming language, capped at 512KB per request (type: str).
         :param longer_urls: increases the length of the random document id by 3x (type: boolean).
         :param instant_delete: makes the paste delete on its first visit (type: boolean).
@@ -94,7 +94,6 @@ class Imperial:
         """
         Gets code from https://imperialb.in
         GET https://imperialb.in/api/getCode/:documentID
-        15 requests max every 15 minutes; unlimited with an api token.
         :param document_id: ImperialBin Document ID (type: str).
         :return: ImperialBin API response (type: dict).
         """
@@ -115,7 +114,6 @@ class Imperial:
         """
         Validate API token from https://imperialb.in
         GET https://imperialb.in/api/checkApiToken/:apiToken
-        not rate-limited.
         :return: ImperialBin API response (type: dict).
         """
         if not isinstance(self.api_token, str):
@@ -131,7 +129,6 @@ class Imperial:
         """
         Get ShareX config from https://imperialb.in
         GET https://imperialb.in/api/getShareXConfig/:apiToken
-        not rate-limited.
         :return: ImperialBin API response, or mock dict if no API token set (type: dict).
         """
         if not isinstance(self.api_token, str):
