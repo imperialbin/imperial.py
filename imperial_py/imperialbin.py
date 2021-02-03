@@ -136,3 +136,51 @@ class Imperial:
         return compose_json(requests.get("%s/getShareXConfig/%s" % (self.api_url, self.api_token), headers={
             "authorization": self.api_token
         }))
+
+
+# shorthand functions
+
+
+def post_code(code: str, api_token=None, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
+    """
+    Uploads code to https://imperialb.in
+    POST https://imperialb.in/api/postCode
+    :param code: Code from any programming language, capped at 512KB per request (type: str).
+    :param api_token: ImperialBin API token (type: str).
+    :param longer_urls: increases the length of the random document id by 3x (type: boolean).
+    :param instant_delete: makes the paste delete on its first visit (type: boolean).
+    :param image_embed: changes embed content from text to an image (type: boolean; overwritten by instant_delete)
+    :param expiration: sets the number of days before the paste deletes (type: str/int; overwritten by instant_delete)
+    :return: ImperialBin API response (type: dict).
+    """
+    return Imperial(api_token).post_code(code, longer_urls, instant_delete, image_embed, expiration)
+
+
+def get_code(document_id: str, api_token=None):
+    """
+    Gets code from https://imperialb.in
+    GET https://imperialb.in/api/getCode/:documentID
+    :param document_id: ImperialBin Document ID (type: str).
+    :param api_token: ImperialBin API token (type: str).
+    :return: ImperialBin API response (type: dict).
+    """
+    return Imperial(api_token).get_code(document_id)
+
+
+def verify(api_token):
+    """
+    Validate API token from https://imperialb.in
+    GET https://imperialb.in/api/checkApiToken/:apiToken
+    :param api_token: ImperialBin API token (type: str).
+    :return: ImperialBin API response (type: dict).
+    """
+    return Imperial(api_token).verify()
+
+
+def get_sharex_config(api_token):
+    """
+    Get ShareX config from https://imperialb.in
+    GET https://imperialb.in/api/getShareXConfig/:apiToken
+    :return: ImperialBin API response, or mock dict if no API token set (type: dict).
+    """
+    return Imperial(api_token).get_sharex_config()
