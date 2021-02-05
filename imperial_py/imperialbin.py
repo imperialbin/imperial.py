@@ -1,6 +1,7 @@
 __title__ = "Imperialb.in simple API wrapper"
 __author__ = "Hexiro"
 
+from re import match
 from re import compile
 from os import environ
 from datetime import datetime
@@ -10,7 +11,8 @@ import requests
 from requests import Response
 
 
-pattern = compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
+snake_regex = compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
+api_token_regex = compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-Z\d]{12}$")
 
 
 # helper functions
@@ -38,7 +40,7 @@ def compose_snake_case(_dict: dict):
         if key.islower():
             snake_dict[key] = value
         else:
-            snake_dict[pattern.sub("_", key).lower()] = value
+            snake_dict[snake_regex.sub("_", key).lower()] = value
     return snake_dict
 
 
@@ -118,7 +120,7 @@ class Imperial:
         """
         if not isinstance(self.api_token, str):
             return {"success": False, "message": "No token to verify!"}
-        if not self.api_token.startswith("IMPERIAL-") or len(self.api_token) != 45:
+        if not match(api_token_regex, self.api_token):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "API token is invalid!"}
         return compose_snake_case(compose_json(requests.get("%s/checkApiToken/%s" % (self.api_url, self.api_token), headers={
