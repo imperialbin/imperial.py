@@ -125,18 +125,6 @@ class Imperial:
             "authorization": self.api_token
         })))
 
-    def get_sharex_config(self):
-        """
-        Get ShareX config from https://imperialb.in
-        GET https://imperialb.in/api/getShareXConfig/:apiToken
-        :return: ImperialBin API response, or mock dict if no API token set (type: dict).
-        """
-        if not isinstance(self.api_token, str):
-            return {"success": False, "message": "No token to add to config!"}
-        return compose_json(requests.get("%s/getShareXConfig/%s" % (self.api_url, self.api_token), headers={
-            "authorization": self.api_token
-        }))
-
 
 # shorthand functions
 
@@ -175,12 +163,3 @@ def verify(api_token):
     :return: ImperialBin API response (type: dict).
     """
     return Imperial(api_token).verify()
-
-
-def get_sharex_config(api_token):
-    """
-    Get ShareX config from https://imperialb.in
-    GET https://imperialb.in/api/getShareXConfig/:apiToken
-    :return: ImperialBin API response, or mock dict if no API token set (type: dict).
-    """
-    return Imperial(api_token).get_sharex_config()
