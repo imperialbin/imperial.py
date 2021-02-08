@@ -5,43 +5,12 @@ from re import match
 from re import compile
 from os import environ
 from datetime import datetime
-from json.decoder import JSONDecodeError
 
 import requests
-from requests import Response
 
+from imperial_py.helpers import compose_snake_case
 
-snake_regex = compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 api_token_regex = compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-Z\d]{12}$")
-
-
-# helper functions
-def compose_json(_post: Response):
-    """
-    `compose_json` makes sure the rest of the function has dictionary regardless of failure or not.
-    :param _post: python3 requests POST method (type: Response).
-    :return: ImperialBin API response (type: dict).
-    """
-    try:
-        return _post.json()
-    except JSONDecodeError:  # maybe this could be better checking status codes? would have to look into that more
-        return {"success": False}
-
-
-def compose_snake_case(_dict: dict):
-    """
-    `compose_snake_case` converts the camelCase of the API response json keys to snake_case.
-    (snake_case is more pythonic and is just what I prefer)
-    :param _dict: ImperialBin API response (type: dict).
-    :return: ImperialBin snake_case API response (type: dict).
-    """
-    snake_dict = {}
-    for key, value in _dict.items():
-        if key.islower():
-            snake_dict[key] = value
-        else:
-            snake_dict[snake_regex.sub("_", key).lower()] = value
-    return snake_dict
 
 
 class Imperial:
@@ -83,7 +52,7 @@ class Imperial:
             "imageEmbed": image_embed,
             "expiration": expiration
         }
-        json = compose_snake_case(compose_json(self.session.post("%s/postCode" % self.api_url, json=payload)))
+        json = compose_snake_case(self.session.post("%s/postCode" % self.api_url, json=payload))
         if "expires_in" in json:
             json["expires_in"] = datetime.strptime(json["expires_in"], "%Y-%m-%dT%H:%M:%S.%fZ")
         return json
@@ -100,7 +69,7 @@ class Imperial:
             return {"success": False, "message": "We couldn't find that document!"}
         if "/" in document_id:  # url passed
             document_id = document_id.split("/")[-1]
-        return compose_snake_case(compose_json(self.session.get("%s/getCode/%s" % (self.api_url, document_id))))
+        return compose_snake_case(self.session.get("%s/getCode/%s" % (self.api_url, document_id)))
 
     def verify(self):
         """
@@ -113,7 +82,7 @@ class Imperial:
         if not match(api_token_regex, self.api_token):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "API token is invalid!"}
-        return compose_snake_case(compose_json(self.session.get("%s/checkApiToken/%s" % (self.api_url, self.api_token))))
+        return compose_snake_case(self.session.get("%s/checkApiToken/%s" % (self.api_url, self.api_token)))
 
 
 # shorthand functions
