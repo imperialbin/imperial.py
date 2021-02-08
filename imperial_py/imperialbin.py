@@ -9,6 +9,7 @@ import requests
 
 from imperial_py.helpers import compose_snake_case, format_datetime_expiry, parse_document_id
 
+
 api_token_regex = compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-Z\d]{12}$")
 
 
@@ -95,7 +96,7 @@ class Imperial:
 # shorthand functions
 
 
-def post_code(code: str, api_token=None, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
+def post_code(code: str, api_token: str = None, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/postCode
@@ -110,7 +111,7 @@ def post_code(code: str, api_token=None, longer_urls=False, instant_delete=False
     return Imperial(api_token).post_code(code, longer_urls, instant_delete, image_embed, expiration)
 
 
-def get_code(document_id: str, api_token=None):
+def get_code(document_id: str, api_token: str = None):
     """
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/getCode/:documentID
@@ -121,7 +122,7 @@ def get_code(document_id: str, api_token=None):
     return Imperial(api_token).get_code(document_id)
 
 
-def edit_code(api_token: str, code: str, document_id: str):
+def edit_code(code: str, document_id: str, api_token: str = None):
     """
     Edits document code on https://imperialb.in
     PATCH https://imperialb.in/api/document
@@ -133,7 +134,7 @@ def edit_code(api_token: str, code: str, document_id: str):
     return Imperial(api_token).edit_code(code, document_id)
 
 
-def verify(api_token: str):
+def verify(api_token: str = None):
     """
     Validate API token from https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken
