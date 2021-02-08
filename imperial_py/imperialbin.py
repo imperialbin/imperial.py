@@ -20,7 +20,8 @@ class Imperial:
         :param api_token: ImperialBin API token (type: str).
         15 requests max every 15 minutes; unlimited with an api token.
         """
-        self.api_url = "https://imperialb.in/api"
+        self.document_url = "https://imperialb.in/api/document/"
+        self.api_url = "https://imperialb.in/api/"
         self.api_token = api_token
         path_token = environ.get("IMPERIAL-TOKEN")
         if not self.api_token and path_token:
@@ -45,17 +46,16 @@ class Imperial:
         if not isinstance(code, str):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "You need to post code! No code was submitted!"}
-        payload = {
+        response_dict = compose_snake_case(self.session.post(self.document_url, json={
             "code": code,
             "longerUrls": longer_urls,
             "instantDelete": instant_delete,
             "imageEmbed": image_embed,
             "expiration": expiration
-        }
-        json = compose_snake_case(self.session.post("%s/postCode" % self.api_url, json=payload))
-        if "expires_in" in json:
-            json["expires_in"] = datetime.strptime(json["expires_in"], "%Y-%m-%dT%H:%M:%S.%fZ")
-        return json
+        }))
+        if "expires_in" in response_dict:
+            response_dict["expires_in"] = datetime.strptime(response_dict["expires_in"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        return response_dict
 
     def get_code(self, document_id: str):
         """
@@ -69,7 +69,7 @@ class Imperial:
             return {"success": False, "message": "We couldn't find that document!"}
         if "/" in document_id:  # url passed
             document_id = document_id.split("/")[-1]
-        return compose_snake_case(self.session.get("%s/getCode/%s" % (self.api_url, document_id)))
+        return compose_snake_case(self.session.get(self.document_url + document_id))
 
     def verify(self):
         """
@@ -82,7 +82,7 @@ class Imperial:
         if not match(api_token_regex, self.api_token):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "API token is invalid!"}
-        return compose_snake_case(self.session.get("%s/checkApiToken/%s" % (self.api_url, self.api_token)))
+        return compose_snake_case(self.session.get(self.api_url + "checkApiToken/" + self.api_token))
 
 
 # shorthand functions
