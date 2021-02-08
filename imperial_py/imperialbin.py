@@ -4,11 +4,10 @@ __author__ = "Hexiro"
 from re import match
 from re import compile
 from os import environ
-from datetime import datetime
 
 import requests
 
-from imperial_py.helpers import compose_snake_case
+from imperial_py.helpers import compose_snake_case, format_datetime_expiry, parse_document_id
 
 api_token_regex = compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-Z\d]{12}$")
 
@@ -35,7 +34,7 @@ class Imperial:
     def post_code(self, code: str, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
         """
         Uploads code to https://imperialb.in
-        POST https://imperialb.in/api/postCode
+        POST https://imperialb.in/api/document
         :param code: Code from any programming language, capped at 512KB per request (type: str).
         :param longer_urls: increases the length of the random document id by 3x (type: boolean).
         :param instant_delete: makes the paste delete on its first visit (type: boolean).
@@ -46,30 +45,38 @@ class Imperial:
         if not isinstance(code, str):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "You need to post code! No code was submitted!"}
-        response_dict = compose_snake_case(self.session.post(self.document_url, json={
+        return format_datetime_expiry(compose_snake_case(self.session.post(self.document_url, json={
             "code": code,
             "longerUrls": longer_urls,
             "instantDelete": instant_delete,
             "imageEmbed": image_embed,
             "expiration": expiration
-        }))
-        if "expires_in" in response_dict:
-            response_dict["expires_in"] = datetime.strptime(response_dict["expires_in"], "%Y-%m-%dT%H:%M:%S.%fZ")
-        return response_dict
+        })))
 
     def get_code(self, document_id: str):
         """
         Gets code from https://imperialb.in
-        GET https://imperialb.in/api/getCode/:documentID
+        GET https://imperialb.in/api/document/:documentID
         :param document_id: ImperialBin Document ID (type: str).
         :return: ImperialBin API response (type: dict).
         """
         if not isinstance(document_id, str):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "We couldn't find that document!"}
-        if "/" in document_id:  # url passed
-            document_id = document_id.split("/")[-1]
-        return compose_snake_case(self.session.get(self.document_url + document_id))
+        return compose_snake_case(self.session.get(self.document_url + parse_document_id(document_id)))
+
+    def edit_code(self, code: str, document_id: str):
+        """
+        Edits document code on https://imperialb.in
+        PATCH https://imperialb.in/api/document
+        :param code: Code from any programming language, capped at 512KB per request (type: str).
+        :param document_id: ImperialBin Document ID (type: str).
+        :return: ImperialBin API response (type: dict).
+        """
+        return format_datetime_expiry(compose_snake_case(self.session.patch(self.document_url, json={
+            "newCode": code,
+            "document": parse_document_id(document_id)
+        })))
 
     def verify(self):
         """
@@ -114,7 +121,19 @@ def get_code(document_id: str, api_token=None):
     return Imperial(api_token).get_code(document_id)
 
 
-def verify(api_token):
+def edit_code(api_token: str, code: str, document_id: str):
+    """
+    Edits document code on https://imperialb.in
+    PATCH https://imperialb.in/api/document
+    :param api_token: ImperialBin API token (type: str).
+    :param code: Code from any programming language, capped at 512KB per request (type: str).
+    :param document_id: ImperialBin Document ID (type: str).
+    :return: ImperialBin API response (type: dict).
+    """
+    return Imperial(api_token).edit_code(code, document_id)
+
+
+def verify(api_token: str):
     """
     Validate API token from https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken
