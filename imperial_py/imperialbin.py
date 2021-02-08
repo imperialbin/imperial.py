@@ -56,6 +56,11 @@ class Imperial:
         path_token = environ.get("IMPERIAL-TOKEN")
         if not self.api_token and path_token:
             self.api_token = path_token
+        self.session = requests.Session()
+        if self.api_token:
+            self.session.headers.update({
+                "authorization": self.api_token
+            })
 
     def post_code(self, code: str, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
         """
@@ -71,23 +76,14 @@ class Imperial:
         if not isinstance(code, str):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "You need to post code! No code was submitted!"}
-        if self.api_token:
-            headers = {
-                "authorization": self.api_token
-            }
-            payload = {
-                "code": code,
-                "longerUrls": longer_urls,
-                "instantDelete": instant_delete,
-                "imageEmbed": image_embed,
-                "expiration": expiration
-            }
-        else:
-            headers = {}
-            payload = {
-                "code": code
-            }
-        json = compose_snake_case(compose_json(requests.post("%s/postCode" % self.api_url, json=payload, headers=headers)))
+        payload = {
+            "code": code,
+            "longerUrls": longer_urls,
+            "instantDelete": instant_delete,
+            "imageEmbed": image_embed,
+            "expiration": expiration
+        }
+        json = compose_snake_case(compose_json(self.session.post("%s/postCode" % self.api_url, json=payload)))
         if "expires_in" in json:
             json["expires_in"] = datetime.strptime(json["expires_in"], "%Y-%m-%dT%H:%M:%S.%fZ")
         return json
@@ -102,15 +98,9 @@ class Imperial:
         if not isinstance(document_id, str):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "We couldn't find that document!"}
-        if self.api_token:
-            headers = {
-                "authorization": self.api_token
-            }
-        else:
-            headers = {}
         if "/" in document_id:  # url passed
             document_id = document_id.split("/")[-1]
-        return compose_snake_case(compose_json(requests.get("%s/getCode/%s" % (self.api_url, document_id), headers=headers)))
+        return compose_snake_case(compose_json(self.session.get("%s/getCode/%s" % (self.api_url, document_id))))
 
     def verify(self):
         """
@@ -123,9 +113,7 @@ class Imperial:
         if not match(api_token_regex, self.api_token):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "API token is invalid!"}
-        return compose_snake_case(compose_json(requests.get("%s/checkApiToken/%s" % (self.api_url, self.api_token), headers={
-            "authorization": self.api_token
-        })))
+        return compose_snake_case(compose_json(self.session.get("%s/checkApiToken/%s" % (self.api_url, self.api_token))))
 
 
 # shorthand functions
