@@ -39,7 +39,9 @@ def format_datetime_expiry(response_dict: dict):
     :param response_dict:
     :return:
     """
-    if "expires_in" in response_dict:
+    # changed from `if "expires_in" in response_dict:`
+    # expires_in was `None` due to a bug so now it's future proof :)
+    if response_dict.get("expires_in"):
         response_dict["expires_in"] = datetime.strptime(response_dict["expires_in"], "%Y-%m-%dT%H:%M:%S.%fZ")
     return response_dict
 
