@@ -10,12 +10,12 @@ ImperialBin is a hastebin alternative built with UI and user experience in mind.
 
 ## Endpoints
 
-|Function     |Endpoint            |Request Type|
-|:----:       |:----:              |:----:      |
-|`post_code()`|`/api/document`     |POST        |
-|`get_code()` |`/api/document`     |GET         |
-|`edit_code()`|`/api/document`     |PATCH       |
-|`verify()`   |`/api/CheckApiToken`|GET         |
+|Function           |Endpoint            |Request Type|
+|:----:             |:----:              |:----:      |
+|`create_document()`|`/api/document`     |POST        |
+|`get_document()`   |`/api/document`     |GET         |
+|`edit_document()`  |`/api/document`     |PATCH       |
+|`verify()`         |`/api/CheckApiToken`|GET         |
 
 # Example Usage
 
