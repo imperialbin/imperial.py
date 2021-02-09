@@ -101,7 +101,7 @@ class Imperial:
 # shorthand functions
 
 
-def post_code(code: str, api_token: str = None, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
+def create_document(code: str, api_token: str = None, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/postCode
@@ -116,7 +116,7 @@ def post_code(code: str, api_token: str = None, longer_urls=False, instant_delet
     return Imperial(api_token).post_code(code, longer_urls, instant_delete, image_embed, expiration)
 
 
-def get_code(document_id: str, api_token: str = None):
+def get_document(document_id: str, api_token: str = None):
     """
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/getCode/:documentID
@@ -127,7 +127,7 @@ def get_code(document_id: str, api_token: str = None):
     return Imperial(api_token).get_code(document_id)
 
 
-def edit_code(code: str, document_id: str, api_token: str = None):
+def edit_document(code: str, document_id: str, api_token: str = None):
     """
     Edits document code on https://imperialb.in
     PATCH https://imperialb.in/api/document
@@ -147,3 +147,10 @@ def verify(api_token: str = None):
     :return: ImperialBin API response (type: dict).
     """
     return Imperial(api_token).verify()
+
+
+# backwards compatible with other imperial_py versions
+# will most likely be removed sometime soon :shrug:
+post_code = create_document
+get_code = get_document
+edit_code = edit_document

@@ -28,27 +28,26 @@ from imperial_py import Imperial
 
 imp = Imperial()
 
-imp.post_code("Hello World!")
+imp.create_document("Hello World!")
 # {'success': True, 'document_id': 'bmhn60klmpw', 'raw_link': 'https://www.imperialb.in/r/bmhn60klmpw', 'formatted_link': 'https://www.imperialb.in/p/bmhn60klmpw', 'expires_in': datetime.datetime(2021, 1, 29, 18, 55, 37, 725000), 'instant_delete': False}
 
-imp.get_code("bmhn60klmpw")
+imp.get_document("bmhn60klmpw")
 # {'success': True, 'document': 'Hello World!'}
 
-imp.edit_code("Hello From Python!", "bmhn60klmpw")
+imp.edit_document("Hello From Python!", "bmhn60klmpw")
 # {'success': True, 'message': 'Successfully edited the document!', 'document_id': 'phqmaxastug', 'raw_link': 'https://www.imperialb.in/r/phqmaxastug', 'formatted_link': 'https://www.imperialb.in/p/phqmaxastug', 'expires_in': datetime.datetime(2021, 2, 13, 19, 30, 54, 839000), 'instant_delete': False}
 
-imp.get_code("bmhn60klmpw")
+imp.get_document("bmhn60klmpw")
 # {'success': True, 'document': 'Hello From Python!'}
 
 ```
+
 ### Shorthand Functions
 ```python
 import imperial_py
-
-
-imperial_py.post_code("Hello World!")  # same as Imperial().post_code()
-imperial_py.get_code("bmhn60klmpw")  # same as Imperial().get_code()
-etc...
+imperial_py.create_document("Hello World!")  # same as Imperial().post_code()
+imperial_py.get_document("bmhn60klmpw")  # same as Imperial().get_code()
+# etc...
 ```
 
 
