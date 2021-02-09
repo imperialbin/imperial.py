@@ -1,7 +1,7 @@
 
 # Imperial-py README
 
-ImperialBin is a hastebin alternative built with UI and user experience in mind.
+ImperialBin is a Hastebin alternative built with UI and user experience in mind.
 
 ### Connect With Us!
 
@@ -19,9 +19,9 @@ ImperialBin is a hastebin alternative built with UI and user experience in mind.
 
 # Example Usage
 
-An API Token is not required, but certain calls don't work without one and this is generally made with authorization in mind. 
+An API Token is not required, but you can't edit without one, and this is generally made with authorization in mind.
 
-Add `IMPERIAL-TOKEN` to path to set it automatically.
+Add `IMPERIAL-TOKEN` to path to set it automatically; this will get overwritten by setting one manually.
 
 ```python
 from imperial_py import Imperial
@@ -45,8 +45,8 @@ imp.get_document("bmhn60klmpw")
 ### Shorthand Functions
 ```python
 import imperial_py
-imperial_py.create_document("Hello World!")  # same as Imperial().post_code()
-imperial_py.get_document("bmhn60klmpw")  # same as Imperial().get_code()
+imperial_py.create_document("Hello World!")  # same as Imperial().create_document()
+imperial_py.get_document("bmhn60klmpw")  # same as Imperial().get_document()
 # etc...
 ```
 
@@ -56,8 +56,8 @@ imperial_py.get_document("bmhn60klmpw")  # same as Imperial().get_code()
 * The `expires_in` dict key gets converted from an isoformat string to a datetime object
 
 ## Docs 
-To get full docs, refer to imperial documentation. To view what goes on with imperial-py, view the full code. Every function has docstrings, and a description.
+To get full docs, refer to imperial documentation. To view what goes on with imperial-py, view the full code. Every function has docstrings and a description.
 
 
-## Contibuting
-Either send contributions in the discord or open a pull request.  If you suggest a change, make sure it's backwards compatible. I believe right now, imperial-py is python 3.5 and up.
+## Contributing
+Either send contributions in the discord or open a pull request. If you suggest a change, make sure it's backwards compatible. As of now, imperial-py is python 3.5 and up.
