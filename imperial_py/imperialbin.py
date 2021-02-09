@@ -20,19 +20,24 @@ class Imperial:
         :param api_token: ImperialBin API token (type: str).
         15 requests max every 15 minutes; unlimited with an api token.
         """
+        self.session = requests.Session()
         self.document_url = "https://imperialb.in/api/document/"
         self.api_url = "https://imperialb.in/api/"
         self.api_token = api_token
         path_token = environ.get("IMPERIAL-TOKEN")
         if not self.api_token and path_token:
             self.api_token = path_token
-        self.session = requests.Session()
         if self.api_token:
             self.session.headers.update({
                 "authorization": self.api_token
             })
+        # backwards compatible with other imperial_py versions
+        # will most likely be removed sometime soon :shrug:
+        self.post_code = self.create_document
+        self.get_code = self.get_document
+        self.edit_code = self.edit_document
 
-    def post_code(self, code: str, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
+    def create_document(self, code: str, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
         """
         Uploads code to https://imperialb.in
         POST https://imperialb.in/api/document
@@ -54,7 +59,7 @@ class Imperial:
             "expiration": expiration
         })))
 
-    def get_code(self, document_id: str):
+    def get_document(self, document_id: str):
         """
         Gets code from https://imperialb.in
         GET https://imperialb.in/api/document/:documentID
@@ -66,7 +71,7 @@ class Imperial:
             return {"success": False, "message": "We couldn't find that document!"}
         return compose_snake_case(self.session.get(self.document_url + parse_document_id(document_id)))
 
-    def edit_code(self, code: str, document_id: str):
+    def edit_document(self, code: str, document_id: str):
         """
         Edits document code on https://imperialb.in
         PATCH https://imperialb.in/api/document
