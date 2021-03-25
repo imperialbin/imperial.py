@@ -1,16 +1,15 @@
 __title__ = "Imperialb.in simple API wrapper"
 __author__ = "Hexiro"
 
-from re import match
-from re import compile
-from os import environ
+import re
+import os
 
 import requests
 
 from .utils import compose_snake_case, format_datetime_expiry, parse_document_id
 
 
-api_token_regex = compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-Z\d]{12}$")
+api_token_regex = re.compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-Z\d]{12}$")
 
 
 class Imperial:
@@ -25,7 +24,8 @@ class Imperial:
         self.document_url = "https://imperialb.in/api/document/"
         self.api_url = "https://imperialb.in/api/"
         self.api_token = api_token
-        path_token = environ.get("IMPERIAL-TOKEN")
+        path_token = os.environ.get("IMPERIAL-TOKEN")
+
         # set token overrides path set token
         if not self.api_token and path_token:
             self.api_token = path_token
@@ -110,7 +110,7 @@ class Imperial:
         """
         if not isinstance(self.api_token, str):
             return {"success": False, "message": "No token to verify!"}
-        if not match(api_token_regex, self.api_token):
+        if not re.match(api_token_regex, self.api_token):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "API token is invalid!"}
         return compose_snake_case(self.session.get(self.api_url + "checkApiToken/" + self.api_token))

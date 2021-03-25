@@ -1,5 +1,5 @@
+import re
 from datetime import datetime
-from re import compile
 from json.decoder import JSONDecodeError
 
 # for pycharm to count the docstring type as valid this needs to be imported still
@@ -7,7 +7,7 @@ from json.decoder import JSONDecodeError
 from requests import Response
 
 
-snake_regex = compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
+snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 
 
 def compose_snake_case(response):
