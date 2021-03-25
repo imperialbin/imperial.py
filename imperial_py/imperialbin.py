@@ -33,11 +33,6 @@ class Imperial:
             self.session.headers.update({
                 "authorization": self.api_token
             })
-        # backwards compatible with other imperial_py versions
-        # will most likely be removed sometime soon :shrug:
-        self.post_code = self.create_document
-        self.get_code = self.get_document
-        self.edit_code = self.edit_document
 
     def create_document(self,
                         code,
@@ -153,7 +148,7 @@ def create_document(code,
     :type password: str
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).post_code(code, longer_urls, instant_delete, image_embed, expiration, encrypted, password)
+    return Imperial(api_token).create_document(code, longer_urls, instant_delete, image_embed, expiration, encrypted, password)
 
 
 def get_document(document_id, api_token=None):
@@ -166,7 +161,7 @@ def get_document(document_id, api_token=None):
     :type api_token: str
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).get_code(document_id)
+    return Imperial(api_token).get_document(document_id)
 
 
 def edit_document(code, document_id, api_token=None):
@@ -181,7 +176,7 @@ def edit_document(code, document_id, api_token=None):
     :type api_token: str
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).edit_code(code, document_id)
+    return Imperial(api_token).edit_document(code, document_id)
 
 
 def verify(api_token=None):
@@ -195,9 +190,3 @@ def verify(api_token=None):
     # p.s. this isn't required because api_token can be set by environment variable :)
     return Imperial(api_token).verify()
 
-
-# backwards compatible with other imperial_py versions
-# will most likely be removed sometime soon :shrug:
-post_code = create_document
-get_code = get_document
-edit_code = edit_document
