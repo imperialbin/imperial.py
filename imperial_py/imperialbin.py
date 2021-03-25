@@ -39,7 +39,14 @@ class Imperial:
         self.get_code = self.get_document
         self.edit_code = self.edit_document
 
-    def create_document(self, code, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
+    def create_document(self,
+                        code,
+                        longer_urls=False,
+                        instant_delete=False,
+                        image_embed=False,
+                        expiration=5,
+                        encrypted=False,
+                        password=None):
         """
         Uploads code to https://imperialb.in
         POST https://imperialb.in/api/document
@@ -53,6 +60,10 @@ class Imperial:
         :type image_embed: bool
         :param expiration: sets the number of days before the paste deletes (overwritten by instant_delete)
         :type expiration: int
+        :param encrypted: whether the document gets encrypted or not
+        :type encrypted: bool
+        :param password: the document password (only if document is encrypted)
+        :type password: str
         :return: ImperialBin API response (type: dict).
         """
         if not isinstance(code, str):
@@ -63,7 +74,9 @@ class Imperial:
             "longerUrls": longer_urls,
             "instantDelete": instant_delete,
             "imageEmbed": image_embed,
-            "expiration": expiration
+            "expiration": expiration,
+            "encrypted": encrypted,
+            "password": password
         })))
 
     def get_document(self, document_id):
@@ -111,7 +124,14 @@ class Imperial:
 # shorthand functions
 
 
-def create_document(code, api_token=None, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
+def create_document(code,
+                    api_token=None,
+                    longer_urls=False,
+                    instant_delete=False,
+                    image_embed=False,
+                    expiration=5,
+                    encrypted=False,
+                    password=None):
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/postCode
@@ -127,9 +147,13 @@ def create_document(code, api_token=None, longer_urls=False, instant_delete=Fals
     :type image_embed: bool
     :param expiration: sets the number of days before the paste deletes (overwritten by instant_delete)
     :type expiration: int
+    :param encrypted: whether the document gets encrypted or not
+    :type encrypted: bool
+    :param password: the document password (only if document is encrypted)
+    :type password: str
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).post_code(code, longer_urls, instant_delete, image_embed, expiration)
+    return Imperial(api_token).post_code(code, longer_urls, instant_delete, image_embed, expiration, encrypted, password)
 
 
 def get_document(document_id, api_token=None):
