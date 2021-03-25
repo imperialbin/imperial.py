@@ -74,18 +74,23 @@ class Imperial:
             "password": password
         })))
 
-    def get_document(self, document_id):
+    def get_document(self, document_id, password=None):
         """
         Gets code from https://imperialb.in
         GET https://imperialb.in/api/document/:documentID
         :param document_id: ImperialBin Document ID.
         :type document_id: str
+        :param password: ImperialBin Document password
+        :type password: str
         :return: ImperialBin API response (type: dict).
         """
         if not isinstance(document_id, str):
             # save imperialbin bandwidth by catching the error for them
             return {"success": False, "message": "We couldn't find that document!"}
-        return compose_snake_case(self.session.get(self.document_url + parse_document_id(document_id)))
+        return compose_snake_case(self.session.get(self.document_url + parse_document_id(document_id), params={
+            # imperial backend will ignore this if no password is set
+            "password": password
+        }))
 
     def edit_document(self, code, document_id):
         """
@@ -151,7 +156,7 @@ def create_document(code,
     return Imperial(api_token).create_document(code, longer_urls, instant_delete, image_embed, expiration, encrypted, password)
 
 
-def get_document(document_id, api_token=None):
+def get_document(document_id, api_token=None, password=None):
     """
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/getCode/:documentID
@@ -159,9 +164,11 @@ def get_document(document_id, api_token=None):
     :type document_id: str
     :param api_token: ImperialBin API token.
     :type api_token: str
+    :param password: ImperialBin Document password.
+    :type password: str
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).get_document(document_id)
+    return Imperial(api_token).get_document(document_id, password)
 
 
 def edit_document(code, document_id, api_token=None):
