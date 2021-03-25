@@ -2,17 +2,20 @@ from datetime import datetime
 from re import compile
 from json.decoder import JSONDecodeError
 
+# for pycharm to count the docstring type as valid this needs to be imported still
+# even though it's not explicitly used :shrug:
 from requests import Response
 
 
 snake_regex = compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 
 
-def compose_snake_case(response: Response):
+def compose_snake_case(response):
     """
     `compose_snake_case` converts the camelCase of the API response to snake_case.
     (snake_case is more pythonic and is just what I prefer)
     :param response: raw API request response (type: Response).
+    :type response: Response
     :return: ImperialBin snake_case API response (type: dict).
     """
     try:
@@ -33,11 +36,12 @@ def compose_snake_case(response: Response):
     return snake_dict
 
 
-def format_datetime_expiry(response_dict: dict):
+def format_datetime_expiry(response_dict):
     """
     changes isoformat formated key `expires_in` to datetime object.
-    :param response_dict:
-    :return:
+    :param response_dict: dictionary to modify
+    :type response_dict: dict
+    :return: datetime object modified dictionary
     """
     # changed from `if "expires_in" in response_dict:`
     # expires_in was `None` due to a bug so now it's future proof :)
@@ -46,10 +50,11 @@ def format_datetime_expiry(response_dict: dict):
     return response_dict
 
 
-def parse_document_id(document_id: str):
+def parse_document_id(document_id):
     """
     returns raw document_id or document id from end of full URL.
-    :param document_id: ImperialBin Document ID (type: str).
+    :param document_id: ImperialBin Document ID
+    :type document_id: str
     :return: parsed document_id (type: str).
     """
     if "/" in document_id:

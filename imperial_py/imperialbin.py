@@ -17,7 +17,8 @@ class Imperial:
 
     def __init__(self, api_token=None):
         """
-        :param api_token: ImperialBin API token (type: str).
+        :param api_token: ImperialBin API token
+        :type api_token: str
         15 requests max every 15 minutes; unlimited with an api token.
         """
         self.session = requests.Session()
@@ -25,6 +26,7 @@ class Imperial:
         self.api_url = "https://imperialb.in/api/"
         self.api_token = api_token
         path_token = environ.get("IMPERIAL-TOKEN")
+        # set token overrides path set token
         if not self.api_token and path_token:
             self.api_token = path_token
         if self.api_token:
@@ -37,15 +39,20 @@ class Imperial:
         self.get_code = self.get_document
         self.edit_code = self.edit_document
 
-    def create_document(self, code: str, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
+    def create_document(self, code, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
         """
         Uploads code to https://imperialb.in
         POST https://imperialb.in/api/document
-        :param code: Code from any programming language, capped at 512KB per request (type: str).
-        :param longer_urls: increases the length of the random document id by 3x (type: boolean).
-        :param instant_delete: makes the paste delete on its first visit (type: boolean).
-        :param image_embed: changes embed content from text to an image (type: boolean; overwritten by instant_delete)
-        :param expiration: sets the number of days before the paste deletes (type: str/int; overwritten by instant_delete)
+        :param code: Code from any programming language, capped at 512KB per request.
+        :type code: str
+        :param longer_urls: increases the length of the random document id by 3x.
+        :type longer_urls: bool
+        :param instant_delete: makes the paste delete on its first visit.
+        :type instant_delete: bool
+        :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
+        :type image_embed: bool
+        :param expiration: sets the number of days before the paste deletes (overwritten by instant_delete)
+        :type expiration: int
         :return: ImperialBin API response (type: dict).
         """
         if not isinstance(code, str):
@@ -59,11 +66,12 @@ class Imperial:
             "expiration": expiration
         })))
 
-    def get_document(self, document_id: str):
+    def get_document(self, document_id):
         """
         Gets code from https://imperialb.in
         GET https://imperialb.in/api/document/:documentID
-        :param document_id: ImperialBin Document ID (type: str).
+        :param document_id: ImperialBin Document ID.
+        :type document_id: str
         :return: ImperialBin API response (type: dict).
         """
         if not isinstance(document_id, str):
@@ -71,12 +79,14 @@ class Imperial:
             return {"success": False, "message": "We couldn't find that document!"}
         return compose_snake_case(self.session.get(self.document_url + parse_document_id(document_id)))
 
-    def edit_document(self, code: str, document_id: str):
+    def edit_document(self, code, document_id):
         """
         Edits document code on https://imperialb.in
         PATCH https://imperialb.in/api/document
         :param code: Code from any programming language, capped at 512KB per request (type: str).
-        :param document_id: ImperialBin Document ID (type: str).
+        :type code: str
+        :param document_id: ImperialBin Document ID.
+        :type document_id: str
         :return: ImperialBin API response (type: dict).
         """
         return format_datetime_expiry(compose_snake_case(self.session.patch(self.document_url, json={
@@ -101,51 +111,64 @@ class Imperial:
 # shorthand functions
 
 
-def create_document(code: str, api_token: str = None, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
+def create_document(code, api_token=None, longer_urls=False, instant_delete=False, image_embed=False, expiration=5):
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/postCode
-    :param code: Code from any programming language, capped at 512KB per request (type: str).
-    :param api_token: ImperialBin API token (type: str).
-    :param longer_urls: increases the length of the random document id by 3x (type: boolean).
-    :param instant_delete: makes the paste delete on its first visit (type: boolean).
-    :param image_embed: changes embed content from text to an image (type: boolean; overwritten by instant_delete)
-    :param expiration: sets the number of days before the paste deletes (type: str/int; overwritten by instant_delete)
+    :param code: Code from any programming language, capped at 512KB per request.
+    :type code: str
+    :param api_token: ImperialBin API token
+    :type api_token: str
+    :param longer_urls: increases the length of the random document id by 3x.
+    :type longer_urls: bool
+    :param instant_delete: makes the paste delete on its first visit.
+    :type instant_delete: bool
+    :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
+    :type image_embed: bool
+    :param expiration: sets the number of days before the paste deletes (overwritten by instant_delete)
+    :type expiration: int
     :return: ImperialBin API response (type: dict).
     """
     return Imperial(api_token).post_code(code, longer_urls, instant_delete, image_embed, expiration)
 
 
-def get_document(document_id: str, api_token: str = None):
+def get_document(document_id, api_token=None):
     """
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/getCode/:documentID
-    :param document_id: ImperialBin Document ID (type: str).
-    :param api_token: ImperialBin API token (type: str).
+    :param document_id: ImperialBin Document ID.
+    :type document_id: str
+    :param api_token: ImperialBin API token.
+    :type api_token: str
     :return: ImperialBin API response (type: dict).
     """
     return Imperial(api_token).get_code(document_id)
 
 
-def edit_document(code: str, document_id: str, api_token: str = None):
+def edit_document(code, document_id, api_token=None):
     """
     Edits document code on https://imperialb.in
     PATCH https://imperialb.in/api/document
-    :param api_token: ImperialBin API token (type: str).
-    :param code: Code from any programming language, capped at 512KB per request (type: str).
-    :param document_id: ImperialBin Document ID (type: str).
+    :param code: Code from any programming language, capped at 512KB per request.
+    :type code: str
+    :param document_id: ImperialBin Document ID.
+    :type document_id: str
+    :param api_token: ImperialBin API token.
+    :type api_token: str
     :return: ImperialBin API response (type: dict).
     """
     return Imperial(api_token).edit_code(code, document_id)
 
 
-def verify(api_token: str = None):
+def verify(api_token=None):
     """
     Validate API token from https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken
-    :param api_token: ImperialBin API token (type: str).
+    :param api_token: ImperialBin API token.
+    :type api_token: str
     :return: ImperialBin API response (type: dict).
     """
+    # p.s. this isn't required because api_token can be set by environment variable :)
     return Imperial(api_token).verify()
 
 
