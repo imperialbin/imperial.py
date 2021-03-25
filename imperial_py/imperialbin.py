@@ -7,7 +7,7 @@ from os import environ
 
 import requests
 
-from imperial_py.helpers import compose_snake_case, format_datetime_expiry, parse_document_id
+from imperial_py.utils import compose_snake_case, format_datetime_expiry, parse_document_id
 
 
 api_token_regex = compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-Z\d]{12}$")
