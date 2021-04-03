@@ -111,6 +111,14 @@ class Imperial:
             "document": parse_document_id(document_id)
         })))
 
+    def delete_document(self, document_id):
+        """
+        Deletes document from https://imperialb.in
+        DELETE https://imperialb.in/api/document/:documentID
+        :return: ImperialBin API response (type: dict).
+        """
+        return compose_snake_case(self.session.delete(self.document_url + document_id))
+
     def verify(self):
         """
         Validate API token from https://imperialb.in
@@ -192,6 +200,15 @@ def edit_document(code, document_id, api_token=None):
     :return: ImperialBin API response (type: dict).
     """
     return Imperial(api_token).edit_document(code, document_id)
+
+
+def delete_document(document_id, api_token=None):
+    """
+    Deletes document from https://imperialb.in
+    DELETE https://imperialb.in/api/document/:documentID
+    :return: ImperialBin API response (type: dict).
+    """
+    return Imperial(api_token).delete_document(document_id)
 
 
 def verify(api_token=None):

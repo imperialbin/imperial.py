@@ -15,6 +15,7 @@ ImperialBin is a Hastebin alternative built with UI and user experience in mind.
 |`create_document()`|`/api/document`     |POST        |
 |`get_document()`   |`/api/document`     |GET         |
 |`edit_document()`  |`/api/document`     |PATCH       |
+|`delete_document()`|`/api/document`     |DELETE      |
 |`verify()`         |`/api/CheckApiToken`|GET         |
 
 # Example Usage
