@@ -1,11 +1,5 @@
 import re
 from datetime import datetime
-from json.decoder import JSONDecodeError
-
-# for pycharm to count the docstring type as valid this needs to be imported still
-# even though it's not explicitly used :shrug:
-from requests import Response
-
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 defaults = {"longerUrls": False,
