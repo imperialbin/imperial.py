@@ -5,20 +5,18 @@ class Document:
 
     def __init__(self, document_dict, code=None, api_token=None):
         self.__document_dict = document_dict
+        # `code` is added to document_dict so everything is easy to access
+        self.__document_dict["code"] = None
         self.__api_token = api_token
-        # doesn't get code if instant_delete is on
-        if self.success:
-            # `code` is added to document_dict so everything is easy to access
-            if "code" in self.__document_dict:
-                pass
+        if "code" not in self.__document_dict:
+            if not self.success:
+                self.__document_dict["code"] = None
             elif code:
                 self.__document_dict["code"] = code
             elif not self.instant_delete:
                 # code isn't specified so we try and fetch it
                 # kind of confusing with two `get` functions, but they do different things. (one is a builtin)
                 self.__document_dict["code"] = get(self.id, password=self.password).get("content")
-            else:
-                self.__document_dict["code"] = None
 
     def __eq__(self, other):
         return isinstance(other, Document) and hasattr(other, "id") and self.id == other.id
@@ -28,8 +26,8 @@ class Document:
 
     def __repr__(self):
         if not self.success:
-            return f"<Document success=False id=None>"
-        return "<Document id={0.id} password={0.password} expiration={0.expiration!r}>".format(self)
+            return "<Document id=None>"
+        return "<Document id={0.id} expiration={0.expiration:%x} password={0.password}>".format(self)
 
     def __getitem__(self, item):
         return self.__document_dict.get(item)
@@ -44,6 +42,8 @@ class Document:
 
     @property
     def dict(self):
+        # as of right now, I'm not sure if this is going to be permanent and/or
+        # if the `message` key will be deleted
         return self.__document_dict
 
     @property
@@ -60,11 +60,11 @@ class Document:
 
     @property
     def longer_urls(self):
-        return self.__document_dict.get("longer_urls")
+        return self.__document_dict.get("longer_urls", False)
 
     @property
     def image_embed(self):
-        return self.__document_dict.get("image_embed")
+        return self.__document_dict.get("image_embed", False)
 
     @property
     def expiration(self):
@@ -76,7 +76,7 @@ class Document:
 
     @property
     def encrypted(self):
-        return self.__document_dict.get("encrypted")
+        return self.__document_dict.get("encrypted", False)
 
     @property
     def password(self):
