@@ -41,7 +41,8 @@ class Imperial:
                         image_embed=False,
                         expiration=5,
                         encrypted=False,
-                        password=None):
+                        password=None,
+                        language=None):
         """
         Uploads code to https://imperialb.in
         POST https://imperialb.in/api/document
@@ -59,6 +60,8 @@ class Imperial:
         :type encrypted: bool
         :param password: the document password (only if document is encrypted)
         :type password: str
+        :param language: the programming language of the code (or plain)
+        :type language: str
         :return: ImperialBin API response (type: dict).
         """
         if not isinstance(code, str):
@@ -71,7 +74,8 @@ class Imperial:
             "imageEmbed": image_embed,
             "expiration": expiration,
             "encrypted": encrypted,
-            "password": password
+            "password": password,
+            "language": language
         })))
 
     def get_document(self, document_id, password=None):
@@ -131,7 +135,8 @@ def create_document(code,
                     image_embed=False,
                     expiration=5,
                     encrypted=False,
-                    password=None):
+                    password=None,
+                    language=None):
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/postCode
@@ -151,9 +156,12 @@ def create_document(code,
     :type encrypted: bool
     :param password: the document password (only if document is encrypted)
     :type password: str
+    :param language: the programming language of the code (or plain)
+    :type language: str
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).create_document(code, longer_urls, instant_delete, image_embed, expiration, encrypted, password)
+    return Imperial(api_token).create_document(code, longer_urls, instant_delete, image_embed, expiration, encrypted,
+                                               password, language)
 
 
 def get_document(document_id, api_token=None, password=None):
