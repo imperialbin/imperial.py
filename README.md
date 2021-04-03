@@ -53,7 +53,7 @@ imperial_py.get_document("bmhn60klmpw")  # same as Imperial().get_document()
 
 ## Python Exclusives
 * camelCase json response is converted to snake_case
-* The `expires_in` dict key gets converted from an isoformat string to a datetime object
+* The `expiration` dict key gets converted from an isoformat string to a datetime object
 
 ## Docs 
 To get full docs, refer to imperial documentation. To view what goes on with imperial-py, view the full code. Every function has docstrings and a description.
