@@ -8,58 +8,53 @@ from requests import Response
 
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
+defaults = {"longerUrls": False,
+            "instantDelete": False,
+            "imageEmbed": False,
+            "expiration": 5,
+            "encrypted": False,
+            "password": None}
 
 
-def compose_snake_case(response):
-    """
-    `compose_snake_case` converts the camelCase of the API response to snake_case.
-    (snake_case is more pythonic and is just what I prefer)
-    :param response: raw API request response (type: Response).
-    :type response: Response
-    :return: ImperialBin snake_case API response (type: dict).
-    """
-    try:
-        response_dict = response.json()
-    except JSONDecodeError:
-        # invalid json
-        # maybe this could be better checking status codes? would have to look into that more
-        response_dict = {
-            "success": False,
-            "message": "Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py"
-        }
-    snake_dict = {}
-    for key, value in response_dict.items():
-        if key.islower():
-            snake_dict[key] = value
-        else:
-            snake_dict[snake_regex.sub("_", key).lower()] = value
-    return snake_dict
+def parse_kwargs(method, kwargs):
+    json = {}
+    params = {}
+    # parse kwargs into json / params
+    for key, value in kwargs.items():
+        if key not in defaults:
+            # if there is not default value we assume it's mandatory,
+            # and always pass it into the json body.
+            json[key] = value
+        elif value != defaults[key]:
+            if key != "password":
+                json[key] = value
+            elif method != "GET":
+                json["password"] = value
+            else:  # elif method == "GET"
+                # as of right now, I believe this is the only case where we pass params
+                json["params"]["password"] = value
+    return {"json": json, "params": params}
 
 
-def format_datetime_expiry(response_dict):
-    """
-    changes isoformat formated key `expires_in` to datetime object.
-    :param response_dict: dictionary to modify
-    :type response_dict: dict
-    :return: datetime object modified dictionary
-    """
-    # changed from `if "expires_in" in response_dict:`
-    # expires_in was `None` due to a bug so now it's future proof :)
-    if response_dict.get("expiration"):
-        response_dict["expiration"] = datetime.strptime(response_dict["expiration"], "%Y-%m-%dT%H:%M:%S.%fZ")
-    return response_dict
+def ensure_json(response):
+    if response.status_code <= 404:
+        return response.json()
+    return {"success": False,
+            "message": "Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py"}
 
 
-def parse_document_id(document_id):
+def json_modifications(json):
+    json = {(key if key.islower() else snake_regex.sub("_", key).lower()): value for key, value in
+            json.items()}
+    if "expiration" in json:
+        json["expiration"] = datetime.strptime(json["expiration"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    return json
+
+
+def remove_self(data):
     """
-    returns raw document_id or document id from end of full URL.
-    :param document_id: ImperialBin Document ID
-    :type document_id: str
-    :return: parsed document_id (type: str).
+    removes keys from dict w/o errors if key isn't found (dict comp.)
+    :type data: dict
+    # :type to_remove: list[str]
     """
-    if "/" in document_id:
-        # url parsed
-        # might change this to match a regex like imperial-node.
-        # as of now, we assume they are passing a valid url
-        return document_id.split("/")[-1]
-    return document_id
+    return {key: value for key, value in data.items() if key != "self"}
