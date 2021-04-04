@@ -5,10 +5,9 @@ class Document:
 
     def __init__(self, document_dict, code=None, api_token=None):
         self.__document_dict = document_dict
-        # `code` is added to document_dict so everything is easy to access
-        self.__document_dict["code"] = None
         self.__api_token = api_token
         if "code" not in self.__document_dict:
+            # `code` is added to document_dict so everything is easy to access
             if not self.success:
                 self.__document_dict["code"] = None
             elif code:
