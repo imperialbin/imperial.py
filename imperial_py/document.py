@@ -39,15 +39,13 @@ class Document:
     def __len__(self):
         return len(self.code)
 
+    # extra properties
+
     @property
     def dict(self):
         # as of right now, I'm not sure if this is going to be permanent and/or
         # if the `message` key will be deleted
         return self.__document_dict
-
-    @property
-    def success(self):
-        return self.__document_dict.get("success", False)
 
     @property
     def code(self):
@@ -57,6 +55,8 @@ class Document:
     def code(self, value):
         self.edit(value)
 
+    # properties that might get added to the api response in the future
+
     @property
     def longer_urls(self):
         return self.__document_dict.get("longer_urls", False)
@@ -65,13 +65,31 @@ class Document:
     def image_embed(self):
         return self.__document_dict.get("image_embed", False)
 
+    # properties directly from the api
+
+    @property
+    def success(self):
+        return self.__document_dict.get("success", False)
+
+    @property
+    def id(self):
+        return self.__document_dict.get("document_id")
+
+    @property
+    def link(self):
+        return self.__document_dict.get("formatted_link")
+
     @property
     def expiration(self):
         return self.__document_dict.get("expiration")
 
     @property
-    def id(self):
-        return self.__document_dict.get("document_id")
+    def language(self):
+        return self.__document_dict.get("language")
+
+    @property
+    def instant_delete(self):
+        return self.__document_dict.get("instant_delete", False)
 
     @property
     def encrypted(self):
@@ -80,14 +98,6 @@ class Document:
     @property
     def password(self):
         return self.__document_dict.get("password")
-
-    @property
-    def instant_delete(self):
-        return self.__document_dict.get("instant_delete", False)
-
-    @property
-    def link(self):
-        return self.__document_dict.get("formatted_link")
 
     def edit(self, code):
         """
