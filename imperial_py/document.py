@@ -26,7 +26,12 @@ class Document:
     def __repr__(self):
         if not self.success:
             return "<Document id=None>"
-        return "<Document id={0.id} expiration={0.expiration:%x} password={0.password}>".format(self)
+        representation = "<Document id={self.id} expiration={self.expiration:%x}"
+        if self.language:
+            representation += " language={self.language}"
+        if self.password:
+            representation += " password={self.password}"
+        return (representation + ">").format(self=self)
 
     def __getitem__(self, item):
         return self.__document_dict.get(item)
