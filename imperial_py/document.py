@@ -102,3 +102,14 @@ class Document:
             self.__document_dict = json
             self.__document_dict["code"] = code
         return json
+
+    def duplicate(self):
+        return Document(create(code=self.code,
+                               longer_urls=self.longer_urls,
+                               instant_delete=self.instant_delete,
+                               image_embed=self.image_embed,
+                               expiration=5,
+                               encrypted=self.encrypted,
+                               password=self.password,
+                               api_token=self.__api_token), api_token=self.__api_token)
+
