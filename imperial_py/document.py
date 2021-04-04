@@ -18,7 +18,7 @@ class Document:
                 self.__document_dict["code"] = get(self.id, password=self.password).get("content")
 
     def __eq__(self, other):
-        return isinstance(other, Document) and hasattr(other, "id") and self.id == other.id
+        return isinstance(other, Document) and (self.id == other.id or self.code == other.code)
 
     def __ne__(self, other):
         return not self.__eq__(other)
