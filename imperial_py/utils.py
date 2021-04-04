@@ -3,6 +3,7 @@ from datetime import datetime
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 defaults = {"longerUrls": False,
+            "language": None,
             "instantDelete": False,
             "imageEmbed": False,
             "expiration": 5,

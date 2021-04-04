@@ -20,6 +20,7 @@ def request(*, method, url, api_token=None, **kwargs):
 def create(code,
            api_token=None,
            longer_urls=False,
+           language=None,
            instant_delete=False,
            image_embed=False,
            expiration=5,
@@ -33,6 +34,8 @@ def create(code,
     :type code: str
     :param longer_urls: increases the length of the random document id by 3x.
     :type longer_urls: bool
+    :param language: the programming language of the code (or plain)
+    :type language: str
     :param instant_delete: makes the paste delete on its first visit.
     :type instant_delete: bool
     :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
