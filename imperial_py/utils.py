@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-from imperial_py.exceptions import ImperialError
+from .exceptions import ImperialError
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 defaults = {"longerUrls": False,
@@ -27,9 +27,9 @@ def parse_kwargs(method, kwargs):
                 json[key] = value
             elif method != "GET":
                 json["password"] = value
-            else:  # elif method == "GET"
+            else:
                 # as of right now, I believe this is the only case where we pass params
-                json["params"]["password"] = value
+                params["password"] = value
     return {"json": json, "params": params}
 
 

@@ -1,11 +1,8 @@
-import re
-
 import requests
-from imperial_py.exceptions import ImperialError
 
 from .utils import parse_kwargs, ensure_json, json_modifications
+from .checks import check_code, check_document_id, check_api_token
 
-api_token_regex = re.compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-Z\d]{12}$")
 document_url = "https://imperialb.in/api/document/"
 api_token_url = "https://imperialb.in/api/checkApiToken/"
 
@@ -49,17 +46,7 @@ def create(code,
     :type password: str
     :return: ImperialBin API response (type: dict).
     """
-    if not isinstance(code, str):
-        raise ImperialError("You need to post code! No code was submitted!", status=400)
-
-    # api_token = None,
-    # longer_urls = False,
-    # language = None,
-    # instant_delete = False,
-    # image_embed = False,
-    # expiration = 5,
-    # encrypted = False,
-    # password = None
+    check_code(code)
 
     return request(
         method="POST",
@@ -88,9 +75,7 @@ def get(document_id, api_token=None, password=None):
     :param password: ImperialBin Document password
     :type password: str
     """
-    if not isinstance(document_id, str):
-        return {"success": False,
-                "message": "We couldn't find that document!"}
+    check_document_id(document_id)
 
     return request(
         method="GET",
@@ -114,13 +99,16 @@ def edit(code, document_id, api_token=None, password=None):
     :type password: str
     :return: ImperialBin API response (type: dict).
     """
+    check_code(code)
+    check_document_id(document_id)
+
     return request(
         method="PATCH",
         url=document_url,
+        api_token=api_token,
         code=code,
         # for some reason this has a different name :/
         document=document_id,
-        api_token=api_token,
         # optional
         password=password,
     )
@@ -141,11 +129,7 @@ def verify(api_token):
     GET https://imperialb.in/api/checkApiToken/:apiToken
     :return: ImperialBin API response (type: dict).
     """
-    if isinstance(api_token, str):
-        raise ImperialError("No token to verify!")
-
-    if not re.match(api_token_regex, api_token):
-        raise ImperialError("API token is invalid!", status=401)
+    check_api_token(api_token)
 
     return request(
         method="GET",
