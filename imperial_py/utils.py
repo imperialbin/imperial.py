@@ -34,7 +34,7 @@ def parse_kwargs(method, kwargs):
 
 
 def ensure_json(response):
-    if response.text.lower().startswith("<!doctype html>"):
+    if response.text.lower().startswith("<!doctype html"):
         raise ImperialError("Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py")
 
     json = response.json()
