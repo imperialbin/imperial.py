@@ -1,6 +1,7 @@
 import re
 
 import requests
+from imperial_py.exceptions import ImperialError
 
 from .utils import parse_kwargs, ensure_json, json_modifications
 
@@ -49,8 +50,7 @@ def create(code,
     :return: ImperialBin API response (type: dict).
     """
     if not isinstance(code, str):
-        return {"success": False,
-                "message": "You need to post code! No code was submitted!"}
+        raise ImperialError("You need to post code! No code was submitted!", status=400)
 
     # api_token = None,
     # longer_urls = False,
@@ -142,12 +142,10 @@ def verify(api_token):
     :return: ImperialBin API response (type: dict).
     """
     if isinstance(api_token, str):
-        return {"success": False,
-                "message": "No token to verify!"}
+        raise ImperialError("No token to verify!")
 
     if not re.match(api_token_regex, api_token):
-        return {"success": False,
-                "message": "API token is invalid!"}
+        raise ImperialError("API token is invalid!", status=401)
 
     return request(
         method="GET",

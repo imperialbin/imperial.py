@@ -1,6 +1,8 @@
 import re
 from datetime import datetime
 
+from imperial_py.exceptions import ImperialError
+
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 defaults = {"longerUrls": False,
             "language": None,
@@ -32,10 +34,16 @@ def parse_kwargs(method, kwargs):
 
 
 def ensure_json(response):
-    if response.status_code <= 404:
-        return response.json()
-    return {"success": False,
-            "message": "Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py"}
+    if response.text.lower().startswith("<!doctype html>"):
+        raise ImperialError("Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py")
+
+    json = response.json()
+    if json.get("success", False):
+        return json
+    elif json.get("message"):
+        raise ImperialError(json["message"], status=response.status_code)
+    else:
+        raise ImperialError("Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py")
 
 
 def to_snake_case(json):
