@@ -121,6 +121,12 @@ class Document:
     def views(self):
         return self.__document_dict.get("views")
 
+    # aliases (i won't be using these)
+    document_id = id
+    allowed_editors = editors
+    creation_date = creation
+    expiration_date = expiration
+
     def edit(self, code):
         """
         Edits document code on https://imperialb.in
