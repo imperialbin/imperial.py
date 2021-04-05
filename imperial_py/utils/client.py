@@ -1,8 +1,9 @@
 import requests
 
+# utils
 from .hostname import Host
-from .utils import parse_kwargs, ensure_json, json_modifications
-from .checks import check_code, check_document_id, check_api_token
+from .json_parser import parse_kwargs, ensure_json, json_modifications
+from .param_checks import check_code, check_document_id, check_api_token
 
 document_url = Host() / "api" / "document"
 api_token_url = Host() / "api" / "checkApiToken"

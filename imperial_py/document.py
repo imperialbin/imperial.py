@@ -1,4 +1,4 @@
-from .client import create, get, edit, delete
+from .utils import client
 
 
 class Document:
@@ -17,7 +17,7 @@ class Document:
                 elif not self.instant_delete:
                     # code isn't specified so we try and fetch it
                     # kind of confusing with two `get` functions, but they do different things. (one is a builtin)
-                    self.__document_dict["code"] = get(self.id, password=self.password).get("content")
+                    self.__document_dict["code"] = client.get(self.id, password=self.password).get("content")
         else:
             self.__full_document_dict = {"document": {}}
             self.__document_dict = self.__full_document_dict["document"]
@@ -35,7 +35,7 @@ class Document:
 
         if hasattr(self.expiration, "strftime"):
             # due to a bug expiration was unable to be converted into a datetime obj so now we have this check
-            # kind of a hacky check to see if it's a datetime obj w/o needing to import datetime for an isinstance check
+            # kind of a hacky way of seeing if it's a datetime obj w/o needing to import datetime for a type check
             representation += " expiration={self.expiration:%x}"
         if self.language:
             representation += " language={self.language}"
@@ -144,7 +144,7 @@ class Document:
         :type code: str
         :return: ImperialBin API response (type: dict).
         """
-        json = edit(code, document_id=self.id, password=self.password, api_token=self.__api_token)
+        json = client.edit(code, document_id=self.id, password=self.password, api_token=self.__api_token)
         if json["success"]:
             if "message" in json:
                 del json["message"]
@@ -153,12 +153,11 @@ class Document:
         return json
 
     def duplicate(self):
-        return Document(create(code=self.code,
-                               longer_urls=self.longer_urls,
-                               instant_delete=self.instant_delete,
-                               image_embed=self.image_embed,
-                               expiration=5,
-                               encrypted=self.encrypted,
-                               password=self.password,
-                               api_token=self.__api_token), api_token=self.__api_token)
-
+        return Document(client.create(code=self.code,
+                                      longer_urls=self.longer_urls,
+                                      instant_delete=self.instant_delete,
+                                      image_embed=self.image_embed,
+                                      expiration=5,
+                                      encrypted=self.encrypted,
+                                      password=self.password,
+                                      api_token=self.__api_token), api_token=self.__api_token)

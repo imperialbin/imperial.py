@@ -3,10 +3,9 @@ __author__ = "Hexiro"
 
 import os
 
+from .utils import client
+from .utils.json_parser import remove_self
 from .document import Document
-from .client import create, get, edit, delete
-from .client import verify as _verify  # fix recursion error
-from .utils import remove_self
 
 
 class Imperial:
@@ -55,7 +54,7 @@ class Imperial:
         """
 
         return Document(
-            document_dict=create(**remove_self(locals()), api_token=self.api_token),
+            document_dict=client.create(**remove_self(locals()), api_token=self.api_token),
             code=code,
             api_token=self.api_token
         )
@@ -69,7 +68,7 @@ class Imperial:
         :param password: ImperialBin Document password
         :type password: str
         """
-        return get(**remove_self(locals()), api_token=self.api_token)
+        return client.get(**remove_self(locals()), api_token=self.api_token)
 
     def edit_document(self, code, document_id):
         """
@@ -80,7 +79,7 @@ class Imperial:
         :param document_id: ImperialBin Document ID.
         :type document_id: str
         """
-        return edit(**remove_self(locals()), api_token=self.api_token)
+        return client.edit(**remove_self(locals()), api_token=self.api_token)
 
     def delete_document(self, document_id, password=None):
         """
@@ -91,7 +90,7 @@ class Imperial:
         :param password: ImperialBin Document password
         :type password: str
         """
-        return delete(document_id, password=password, api_token=self.api_token)
+        return client.delete(document_id, password=password, api_token=self.api_token)
 
     def verify(self):
         """
@@ -99,7 +98,7 @@ class Imperial:
         GET https://imperialb.in/api/checkApiToken/:apiToken
         :return: ImperialBin API response (type: dict).
         """
-        return _verify(self.api_token)
+        return client.verify(self.api_token)
 
 
 # shorthand functions

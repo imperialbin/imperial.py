@@ -1,6 +1,6 @@
 import re
 
-from .exceptions import ImperialError
+from ..exceptions import ImperialError
 
 api_token_regex = re.compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-Z\d]{12}$")
 

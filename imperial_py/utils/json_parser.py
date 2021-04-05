@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-from .exceptions import ImperialError
+from ..exceptions import ImperialError
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 defaults = {"longerUrls": False,
@@ -63,7 +63,6 @@ def json_modifications(json):
     # convert to datetime obj
     # this super weird syntax just checks if both those keys exist in the document
     if {"creation_date", "expiration_date"} <= set(document):
-        # note: datetime.fromisoformat() can be used in newer python versions
         document["creation_date"] = datetime.fromtimestamp(document["creation_date"] / 1000)
         document["expiration_date"] = datetime.fromtimestamp(document["expiration_date"] / 1000)
     return json
@@ -73,6 +72,5 @@ def remove_self(data):
     """
     removes keys from dict w/o errors if key isn't found (dict comp.)
     :type data: dict
-    # :type to_remove: list[str]
     """
     return {key: value for key, value in data.items() if key != "self"}
