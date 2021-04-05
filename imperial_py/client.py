@@ -52,10 +52,28 @@ def create(code,
         return {"success": False,
                 "message": "You need to post code! No code was submitted!"}
 
+    # api_token = None,
+    # longer_urls = False,
+    # language = None,
+    # instant_delete = False,
+    # image_embed = False,
+    # expiration = 5,
+    # encrypted = False,
+    # password = None
+
     return request(
         method="POST",
         url=document_url,
-        **locals()
+        code=code,
+        api_token=api_token,
+        # optional
+        longerUrls=longer_urls,
+        language=language,
+        instantDelete=instant_delete,
+        imageEmbed=image_embed,
+        expiration=expiration,
+        encrypted=encrypted,
+        password=password,
     )
 
 
@@ -78,6 +96,7 @@ def get(document_id, api_token=None, password=None):
         method="GET",
         url=(document_url + document_id),
         api_token=api_token,
+        # optional
         password=password
     )
 
@@ -98,11 +117,12 @@ def edit(code, document_id, api_token=None, password=None):
     return request(
         method="PATCH",
         url=document_url,
-        api_token=api_token,
-        password=password,
         code=code,
         # for some reason this has a different name :/
         document=document_id,
+        api_token=api_token,
+        # optional
+        password=password,
     )
 
 
