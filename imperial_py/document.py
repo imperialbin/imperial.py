@@ -146,8 +146,10 @@ class Document:
         """
         json = edit(code, document_id=self.id, password=self.password, api_token=self.__api_token)
         if json["success"]:
+            if "message" in json:
+                del json["message"]
             self.__full_document_dict = json
-            self.__full_document_dict["code"] = code
+            self.__document_dict["code"] = code
         return json
 
     def duplicate(self):
