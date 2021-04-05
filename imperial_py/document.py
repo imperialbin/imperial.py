@@ -4,19 +4,23 @@ from .client import create, get, edit, delete
 class Document:
 
     def __init__(self, document_dict, code=None, api_token=None):
-        self.__full_document_dict = document_dict
-        self.__document_dict = document_dict["document"]
-        self.__api_token = api_token
-        if "code" not in self.__document_dict:
-            # `code` is added to document_dict so everything is easy to access
-            if not self.success:
-                self.__document_dict["code"] = None
-            elif code:
-                self.__document_dict["code"] = code
-            elif not self.instant_delete:
-                # code isn't specified so we try and fetch it
-                # kind of confusing with two `get` functions, but they do different things. (one is a builtin)
-                self.__document_dict["code"] = get(self.id, password=self.password).get("content")
+        if isinstance(document_dict, dict) and document_dict.get("success", False):
+            self.__full_document_dict = document_dict
+            self.__document_dict = self.__full_document_dict["document"]
+            self.__api_token = api_token
+            if "code" not in self.__document_dict:
+                # `code` is added to document_dict so everything is easy to access
+                if not self.success:
+                    self.__document_dict["code"] = None
+                elif code:
+                    self.__document_dict["code"] = code
+                elif not self.instant_delete:
+                    # code isn't specified so we try and fetch it
+                    # kind of confusing with two `get` functions, but they do different things. (one is a builtin)
+                    self.__document_dict["code"] = get(self.id, password=self.password).get("content")
+        else:
+            self.__full_document_dict = {"document": {}}
+            self.__document_dict = self.__full_document_dict["document"]
 
     def __eq__(self, other):
         return isinstance(other, Document) and (self.id == other.id or self.code == other.code)
@@ -27,7 +31,12 @@ class Document:
     def __repr__(self):
         if not self.success:
             return "<Document id=None>"
-        representation = "<Document id={self.id} expiration={self.expiration:%x}"
+        representation = "<Document id={self.id}"
+
+        if hasattr(self.expiration, "strftime"):
+            # due to a bug expiration was unable to be converted into a datetime obj so now we have this check
+            # kind of a hacky check to see if it's a datetime obj w/o needing to import datetime for an isinstance check
+            representation += " expiration={self.expiration:%x}"
         if self.language:
             representation += " language={self.language}"
         if self.password:
