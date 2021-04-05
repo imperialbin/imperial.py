@@ -54,10 +54,10 @@ def json_modifications(json):
     document = json["document"]
     # convert to datetime obj
     # this super weird syntax just checks if both those keys exist in the document
-    if {"creationDate", "expirationDate"} <= set(document):
+    if {"creation_date", "expiration_date"} <= set(document):
         # note: datetime.fromisoformat() can be used in newer python versions
-        document["creationDate"] = datetime.strptime(document["creationDate"], "%Y-%m-%dT%H:%M:%S.%fZ")
-        document["expirationDate"] = datetime.strptime(document["expirationDate"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        document["creation_date"] = datetime.fromtimestamp(document["creation_date"] / 1000)
+        document["expiration_date"] = datetime.fromtimestamp(document["expiration_date"] / 1000)
     return json
 
 
