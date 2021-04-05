@@ -1,10 +1,11 @@
 import requests
 
+from .hostname import Host
 from .utils import parse_kwargs, ensure_json, json_modifications
 from .checks import check_code, check_document_id, check_api_token
 
-document_url = "https://imperialb.in/api/document/"
-api_token_url = "https://imperialb.in/api/checkApiToken/"
+document_url = Host() / "api" / "document"
+api_token_url = Host() / "api" / "checkApiToken"
 
 
 def request(*, method, url, api_token=None, **kwargs):
@@ -79,7 +80,7 @@ def get(document_id, api_token=None, password=None):
 
     return request(
         method="GET",
-        url=(document_url + document_id),
+        url=document_url / document_id,
         api_token=api_token,
         # optional
         password=password
@@ -117,7 +118,7 @@ def edit(code, document_id, api_token=None, password=None):
 def delete(document_id, api_token=None, password=None):
     return request(
         method="DELETE",
-        url=(document_url + document_id),
+        url=document_url / document_id,
         api_token=api_token,
         password=password
     )
