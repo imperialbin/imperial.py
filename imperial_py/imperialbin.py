@@ -5,6 +5,7 @@ import os
 
 from .document import Document
 from .client import create, get, edit, delete
+from .client import verify as _verify  # fix recursion error
 from .utils import remove_self
 
 
@@ -98,7 +99,7 @@ class Imperial:
         GET https://imperialb.in/api/checkApiToken/:apiToken
         :return: ImperialBin API response (type: dict).
         """
-        return verify(self.api_token)
+        return _verify(self.api_token)
 
 
 # shorthand functions
