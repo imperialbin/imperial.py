@@ -38,11 +38,26 @@ def ensure_json(response):
             "message": "Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py"}
 
 
+def to_snake_case(json):
+    json = {(key if key.islower() else snake_regex.sub("_", key).lower()): value for key, value in json.items()}
+    # i would dict comp. this recursion, but I don't want to torture future maintainers (me lol)
+    for key, value in json.items():
+        if isinstance(value, dict):
+            json[key] = to_snake_case(value)
+    return json
+
+
 def json_modifications(json):
-    json = {(key if key.islower() else snake_regex.sub("_", key).lower()): value for key, value in
-            json.items()}
-    if "expiration" in json:
-        json["expiration"] = datetime.strptime(json["expiration"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    # convert to snake case
+    json = to_snake_case(json)
+    # this just creates a more specific pointer
+    document = json["document"]
+    # convert to datetime obj
+    # this super weird syntax just checks if both those keys exist in the document
+    if {"creationDate", "expirationDate"} <= set(document):
+        # note: datetime.fromisoformat() can be used in newer python versions
+        document["creationDate"] = datetime.strptime(document["creationDate"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        document["expirationDate"] = datetime.strptime(document["expirationDate"], "%Y-%m-%dT%H:%M:%S.%fZ")
     return json
 
 
