@@ -65,7 +65,7 @@ class Document:
 
     @property
     def longer_urls(self):
-        return self.__full_document_dict.get("longer_urls", False)
+        return len(self.id) == 26
 
     # properties directly from the api
 
