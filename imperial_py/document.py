@@ -54,13 +54,11 @@ class Document:
     def __len__(self):
         return len(self.code)
 
-    # extra properties
+    def __iter__(self):
+        for item, key in self.__full_document_dict.items():
+            yield item, key
 
-    @property
-    def dict(self):
-        # as of right now, I'm not sure if this is going to be permanent and/or
-        # if the `message` key will be deleted
-        return self.__full_document_dict
+    # extra properties
 
     @property
     def code(self):
