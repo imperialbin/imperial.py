@@ -146,7 +146,7 @@ class Document:
         if json["success"]:
             if "message" in json:
                 del json["message"]
-            self.__full_document_dict["document"]["views"] = json["document"]["views"]
+            self.__full_document_dict["document"]["views"] = json["document"].get("views", 0)
             self.__full_document_dict["document"]["code"] = code
             self.__document_dict = self.__full_document_dict["document"]
         return self
