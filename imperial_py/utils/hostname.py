@@ -9,7 +9,7 @@ class Host:
         return text[:-1] if text.endswith("/") else text
 
     def __init__(self, name=None):
-        self.path = "https://imperialb.in/"
+        self.path = "https://imperialb.in"
         if name:
             self.path = self.remove_tailing_slash(name)
 
