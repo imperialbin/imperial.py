@@ -6,7 +6,7 @@ with open("README.md", encoding="utf-8") as readme_file:
     readme = readme_file.read()
 
 with open("requirements.txt", encoding="utf-8") as req_file:
-    requirements = req_file.read().splitlines()
+    requirements = [line for line in req_file.read().splitlines() if line and not line.startswith("#")]
 
 setup(
     name="imperial-py",
@@ -17,7 +17,7 @@ setup(
     author="Hexiro",
     author_email="realhexiro@gmail.com",
     url="https://github.com/imperialbin/imperial-py",
-    packages=["imperial_py"],
+    packages=["imperial_py", "imperial_py.utils"],
     python_requires=">=3.5",
     install_requires=requirements,
     license="MPL2",
@@ -31,10 +31,12 @@ setup(
         "Topic :: Software Development",
     ],
     keywords=[
-        "Python",
-        "Python3",
-        "ImperialBin",
-        "HasteBin",
-        "CodeBin"
+        "py",
+        "py3",
+        "python",
+        "python3",
+        "imperialbin",
+        "hastebin",
+        "pastebin"
     ],
 )

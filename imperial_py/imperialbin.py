@@ -1,15 +1,11 @@
 __title__ = "Imperialb.in simple API wrapper"
 __author__ = "Hexiro"
 
-import re
 import os
 
-import requests
-
-from .utils import compose_snake_case, format_datetime_expiry, parse_document_id
-
-
-api_token_regex = re.compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-Z\d]{12}$")
+from .utils import client
+from .utils.json_parser import remove_self
+from .document import Document
 
 
 class Imperial:
@@ -20,29 +16,22 @@ class Imperial:
         :type api_token: str
         15 requests max every 15 minutes; unlimited with an api token.
         """
-        self.session = requests.Session()
-        self.document_url = "https://imperialb.in/api/document/"
-        self.api_url = "https://imperialb.in/api/"
-        self.api_token = api_token
-        path_token = os.environ.get("IMPERIAL-TOKEN")
 
         # set token overrides path set token
+        self.api_token = api_token
+        path_token = os.environ.get("IMPERIAL-TOKEN")
         if not self.api_token and path_token:
             self.api_token = path_token
-        if self.api_token:
-            self.session.headers.update({
-                "authorization": self.api_token
-            })
 
     def create_document(self,
                         code,
                         longer_urls=False,
+                        language=None,
                         instant_delete=False,
                         image_embed=False,
                         expiration=5,
                         encrypted=False,
-                        password=None,
-                        language=None):
+                        password=False):
         """
         Uploads code to https://imperialb.in
         POST https://imperialb.in/api/document
@@ -50,6 +39,8 @@ class Imperial:
         :type code: str
         :param longer_urls: increases the length of the random document id by 3x.
         :type longer_urls: bool
+        :param language: the programming language of the code (or plain)
+        :type language: str
         :param instant_delete: makes the paste delete on its first visit.
         :type instant_delete: bool
         :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
@@ -60,23 +51,13 @@ class Imperial:
         :type encrypted: bool
         :param password: the document password (only if document is encrypted)
         :type password: str
-        :param language: the programming language of the code (or plain)
-        :type language: str
-        :return: ImperialBin API response (type: dict).
         """
-        if not isinstance(code, str):
-            # save imperialbin bandwidth by catching the error for them
-            return {"success": False, "message": "You need to post code! No code was submitted!"}
-        return format_datetime_expiry(compose_snake_case(self.session.post(self.document_url, json={
-            "code": code,
-            "longerUrls": longer_urls,
-            "instantDelete": instant_delete,
-            "imageEmbed": image_embed,
-            "expiration": expiration,
-            "encrypted": encrypted,
-            "password": password,
-            "language": language
-        })))
+
+        return Document(
+            document_dict=client.create(**remove_self(locals()), api_token=self.api_token),
+            code=code,
+            api_token=self.api_token
+        )
 
     def get_document(self, document_id, password=None):
         """
@@ -86,15 +67,8 @@ class Imperial:
         :type document_id: str
         :param password: ImperialBin Document password
         :type password: str
-        :return: ImperialBin API response (type: dict).
         """
-        if not isinstance(document_id, str):
-            # save imperialbin bandwidth by catching the error for them
-            return {"success": False, "message": "We couldn't find that document!"}
-        return compose_snake_case(self.session.get(self.document_url + parse_document_id(document_id), params={
-            # imperial backend will ignore this if no password is set
-            "password": password
-        }))
+        return client.get(**remove_self(locals()), api_token=self.api_token)
 
     def edit_document(self, code, document_id):
         """
@@ -104,20 +78,19 @@ class Imperial:
         :type code: str
         :param document_id: ImperialBin Document ID.
         :type document_id: str
-        :return: ImperialBin API response (type: dict).
         """
-        return format_datetime_expiry(compose_snake_case(self.session.patch(self.document_url, json={
-            "newCode": code,
-            "document": parse_document_id(document_id)
-        })))
+        return client.edit(**remove_self(locals()), api_token=self.api_token)
 
-    def delete_document(self, document_id):
+    def delete_document(self, document_id, password=None):
         """
         Deletes document from https://imperialb.in
         DELETE https://imperialb.in/api/document/:documentID
-        :return: ImperialBin API response (type: dict).
+        :param document_id: ImperialBin Document ID.
+        :type document_id: str
+        :param password: ImperialBin Document password
+        :type password: str
         """
-        return compose_snake_case(self.session.delete(self.document_url + document_id))
+        return client.delete(document_id, password=password, api_token=self.api_token)
 
     def verify(self):
         """
@@ -125,12 +98,7 @@ class Imperial:
         GET https://imperialb.in/api/checkApiToken/:apiToken
         :return: ImperialBin API response (type: dict).
         """
-        if not isinstance(self.api_token, str):
-            return {"success": False, "message": "No token to verify!"}
-        if not re.match(api_token_regex, self.api_token):
-            # save imperialbin bandwidth by catching the error for them
-            return {"success": False, "message": "API token is invalid!"}
-        return compose_snake_case(self.session.get(self.api_url + "checkApiToken/" + self.api_token))
+        return client.verify(self.api_token)
 
 
 # shorthand functions
@@ -139,12 +107,12 @@ class Imperial:
 def create_document(code,
                     api_token=None,
                     longer_urls=False,
+                    language=None,
                     instant_delete=False,
                     image_embed=False,
                     expiration=5,
                     encrypted=False,
-                    password=None,
-                    language=None):
+                    password=False):
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/postCode
@@ -154,6 +122,8 @@ def create_document(code,
     :type api_token: str
     :param longer_urls: increases the length of the random document id by 3x.
     :type longer_urls: bool
+    :param language: the programming language of the code (or plain)
+    :type language: str
     :param instant_delete: makes the paste delete on its first visit.
     :type instant_delete: bool
     :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
@@ -164,12 +134,10 @@ def create_document(code,
     :type encrypted: bool
     :param password: the document password (only if document is encrypted)
     :type password: str
-    :param language: the programming language of the code (or plain)
-    :type language: str
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).create_document(code, longer_urls, instant_delete, image_embed, expiration, encrypted,
-                                               password, language)
+    params = locals().copy()
+    return Imperial(params.pop("api_token")).create_document(**params)
 
 
 def get_document(document_id, api_token=None, password=None):
@@ -184,7 +152,8 @@ def get_document(document_id, api_token=None, password=None):
     :type password: str
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).get_document(document_id, password)
+    params = locals().copy()
+    return Imperial(params.pop("api_token")).get_document(**params)
 
 
 def edit_document(code, document_id, api_token=None):
@@ -199,16 +168,24 @@ def edit_document(code, document_id, api_token=None):
     :type api_token: str
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).edit_document(code, document_id)
+    params = locals().copy()
+    return Imperial(params.pop("api_token")).edit_document(**params)
 
 
-def delete_document(document_id, api_token=None):
+def delete_document(document_id, password=None, api_token=None):
     """
     Deletes document from https://imperialb.in
     DELETE https://imperialb.in/api/document/:documentID
+    :param document_id: ImperialBin Document ID.
+    :type document_id: str
+    :param password: ImperialBin Document password
+    :type password: str
+    :param api_token: ImperialBin API token.
+    :type api_token: str
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).delete_document(document_id)
+    params = locals().copy()
+    return Imperial(params.pop("api_token")).delete_document(**params)
 
 
 def verify(api_token=None):
@@ -219,6 +196,6 @@ def verify(api_token=None):
     :type api_token: str
     :return: ImperialBin API response (type: dict).
     """
-    # p.s. this isn't required because api_token can be set by environment variable :)
+    # p.s. `api_token` isn't required because it can be set by an environment variable :)
     return Imperial(api_token).verify()
 
