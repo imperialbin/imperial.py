@@ -1,12 +1,9 @@
 import requests
 
 # utils
-from .hostname import Host
+from .hostname import https
 from .json_parser import parse_kwargs, ensure_json, json_modifications
 from .param_checks import check_code, check_document_id, check_api_token
-
-document_url = Host() / "api" / "document"
-api_token_url = Host() / "api" / "checkApiToken"
 
 
 def request(*, method, url, api_token=None, **kwargs):
@@ -52,7 +49,7 @@ def create(code,
 
     return request(
         method="POST",
-        url=document_url,
+        url=https.imperialbin / "api" / "document",
         code=code,
         api_token=api_token,
         # optional
@@ -81,7 +78,7 @@ def get(document_id, api_token=None, password=None):
 
     return request(
         method="GET",
-        url=document_url / document_id,
+        url=https.imperialbin / "api" / "document" / document_id,
         api_token=api_token,
         # optional
         password=password
@@ -106,7 +103,7 @@ def edit(code, document_id, api_token=None, password=None):
 
     return request(
         method="PATCH",
-        url=document_url,
+        url=https.imperialbin / "api" / "document",
         api_token=api_token,
         code=code,
         # for some reason this has a different name :/
@@ -119,7 +116,7 @@ def edit(code, document_id, api_token=None, password=None):
 def delete(document_id, api_token=None, password=None):
     return request(
         method="DELETE",
-        url=document_url / document_id,
+        url=https.imperialbin / "api" / "document" / document_id,
         api_token=api_token,
         password=password
     )
@@ -135,5 +132,5 @@ def verify(api_token):
 
     return request(
         method="GET",
-        url=(api_token_url + api_token)
+        url=https.imperialbin / "api" / "checkApiToken" / api_token
     )
