@@ -82,7 +82,11 @@ class Imperial:
         :param document_id: ImperialBin Document ID.
         :type document_id: str
         """
-        return client.edit(**remove_self(locals()), api_token=self.api_token)
+        return Document(
+            document_dict=client.edit(**remove_self(locals()), api_token=self.api_token),
+            code=code,
+            api_token=self.api_token
+        )
 
     def delete_document(self, document_id, password=None):
         """
