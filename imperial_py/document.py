@@ -5,17 +5,20 @@ from .utils.hostname import https
 class Document:
 
     def __init__(self, document_dict, code=None, api_token=None):
+        self.__document_dict = {}
         if isinstance(document_dict, dict) and document_dict.get("success", False):
-            self.__full_document_dict = document_dict
-            self.__document_dict = self.__full_document_dict["document"]
             self.__api_token = api_token
-            if "content" not in self.__full_document_dict:
-                self.__full_document_dict["content"] = code
-            if not (self.instant_delete or self.__full_document_dict.get("content")):
-                self.__full_document_dict["content"] = client.get(self.id, password=self.password).get("content")
-        else:
-            self.__full_document_dict = {"document": {}}
-            self.__document_dict = self.__full_document_dict["document"]
+            self.__document_dict = document_dict["document"]
+
+            if "content" in document_dict:
+                self.__document_dict["content"] = document_dict["content"]
+            elif code:
+                self.__document_dict["content"] = code
+            elif not self.instant_delete or not self.__document_dict.get("content"):
+                self.__document_dict["content"] = client.get(self.id, password=self.password).get("content")
+            # this should cover all cases but just in case
+            else:
+                self.__document_dict["content"] = None
 
     def __eq__(self, other):
         return isinstance(other, Document) and (self.id == other.id or self.code == other.code)
@@ -37,7 +40,7 @@ class Document:
         return (representation + ">").format(self=self)
 
     def __getitem__(self, item):
-        return self.__full_document_dict.get(item)
+        return self.__document_dict.get(item)
 
     def __setitem__(self, key, value):
         if key == "code":
@@ -48,14 +51,14 @@ class Document:
         return len(self.code)
 
     def __iter__(self):
-        for item, key in self.__full_document_dict.items():
+        for item, key in self.__document_dict.items():
             yield item, key
 
     # extra properties
 
     @property
     def code(self):
-        return self.__full_document_dict.get("content")
+        return self.__document_dict.get("content")
 
     @code.setter
     def code(self, value):
@@ -133,11 +136,8 @@ class Document:
         """
         json = client.edit(code, document_id=self.id, password=self.password, api_token=self.__api_token)
         if json["success"]:
-            if "message" in json:
-                del json["message"]
-            self.__full_document_dict["document"]["views"] = json["document"].get("views", 0)
-            self.__full_document_dict["document"]["code"] = code
-            self.__document_dict = self.__full_document_dict["document"]
+            self.__document_dict["views"] = json.get("document", {}).get("views", 0)
+            self.__document_dict["content"] = code
         return self
 
     def duplicate(self):
