@@ -2,12 +2,17 @@ import requests
 
 # utils
 from .hostname import https
-from .json_parser import parse_kwargs, ensure_json, json_modifications
+from .json_parser import parse_body, ensure_json, json_modifications
 from .param_checks import check_code, check_document_id, check_api_token
 
 
 def request(*, method, url, api_token=None, **kwargs):
-    resp = requests.request(method=method, url=url, **parse_kwargs(method, kwargs), headers={"authorization": api_token})
+    resp = requests.request(
+        method=method,
+        url=url,
+        headers={"authorization": api_token} if api_token else None,
+        **parse_body(method, kwargs)
+    )
     json = ensure_json(resp)
     if not json["success"]:
         return json

@@ -1,35 +1,32 @@
 import re
 from datetime import datetime
 
+from .param_checks import is_required, is_valid_data
 from ..exceptions import ImperialError
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
-defaults = {"longerUrls": False,
-            "language": None,
-            "instantDelete": False,
-            "imageEmbed": False,
-            "expiration": 5,
-            "encrypted": False,
-            "password": None}
 
 
-def parse_kwargs(method, kwargs):
+def parse_body(method, kwargs):
     json = {}
     params = {}
     # parse kwargs into json / params
     for key, value in kwargs.items():
-        if key not in defaults:
+        if is_required(key):
             # if there is not default value we assume it's mandatory,
             # and always pass it into the json body.
+            # mandatory keys are pre-checked to be valid
             json[key] = value
-        elif value != defaults[key]:
-            if key != "password":
-                json[key] = value
-            elif method != "GET":
-                json["password"] = value
-            else:
-                # as of right now, I believe this is the only case where we pass params
-                params["password"] = value
+        elif is_valid_data(key, value):
+            pass
+        elif key != "password":
+            json[key] = value
+        # from now on, `key` will always be `password`
+        elif method != "GET":
+            json[key] = value
+        # as of right now, I believe this is the only case where we pass params
+        else:
+            params[key] = value
     return {"json": json, "params": params}
 
 
