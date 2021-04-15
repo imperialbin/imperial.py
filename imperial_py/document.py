@@ -8,16 +8,11 @@ class Document:
             self.__full_document_dict = document_dict
             self.__document_dict = self.__full_document_dict["document"]
             self.__api_token = api_token
-            if "code" not in self.__document_dict:
-                # `code` is added to document_dict so everything is easy to access
-                if not self.success:
-                    self.__document_dict["code"] = None
-                elif code:
-                    self.__document_dict["code"] = code
-                elif not self.instant_delete:
-                    # code isn't specified so we try and fetch it
-                    # kind of confusing with two `get` functions, but they do different things. (one is a builtin)
-                    self.__document_dict["code"] = client.get(self.id, password=self.password).get("content")
+            self.__document_dict["code"] = code
+            if not (code or self.instant_delete):
+                # code isn't specified so we try and fetch it
+                # kind of confusing with two `get` functions, but they do different things. (one is a builtin)
+                self.__document_dict["code"] = client.get(self.id, password=self.password).get("content")
         else:
             self.__full_document_dict = {"document": {}}
             self.__document_dict = self.__full_document_dict["document"]
