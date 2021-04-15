@@ -17,12 +17,13 @@ class https:
         # handle / operator
         endpoint = self.remove_leading_slash(endpoint)
         endpoint = self.remove_tailing_slash(endpoint)
-        return https(f"{self.path}/{endpoint}")
+        return https(self.path + "/" + endpoint)
 
     def __repr__(self):
-        return self.path + "/"
+        return self.path
 
 
 # because python doesn't have static getters,
 # and I don't want the ()
+# used as https.imperialbin / "whatever"
 https.imperialbin = https("https://imperialb.in")
