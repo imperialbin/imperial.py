@@ -1,4 +1,5 @@
 from .utils import client
+from .utils.hostname import https
 
 
 class Document:
@@ -8,11 +9,10 @@ class Document:
             self.__full_document_dict = document_dict
             self.__document_dict = self.__full_document_dict["document"]
             self.__api_token = api_token
-            self.__document_dict["code"] = code
-            if not (code or self.instant_delete):
-                # code isn't specified so we try and fetch it
-                # kind of confusing with two `get` functions, but they do different things. (one is a builtin)
-                self.__document_dict["code"] = client.get(self.id, password=self.password).get("content")
+            if "content" not in self.__full_document_dict:
+                self.__full_document_dict["content"] = code
+            if not (self.instant_delete or self.__full_document_dict.get("content")):
+                self.__full_document_dict["content"] = client.get(self.id, password=self.password).get("content")
         else:
             self.__full_document_dict = {"document": {}}
             self.__document_dict = self.__full_document_dict["document"]
@@ -55,7 +55,7 @@ class Document:
 
     @property
     def code(self):
-        return self.__document_dict.get("code")
+        return self.__full_document_dict.get("content")
 
     @code.setter
     def code(self, value):
@@ -73,7 +73,7 @@ class Document:
 
     @property
     def link(self):
-        return self.__full_document_dict.get("formatted_link")
+        return str(https.imperialbin / "p" / self.id)
 
     # nested inside `document` key
 

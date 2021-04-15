@@ -68,7 +68,10 @@ class Imperial:
         :param password: ImperialBin Document password
         :type password: str
         """
-        return client.get(**remove_self(locals()), api_token=self.api_token)
+        return Document(
+            document_dict=client.get(**remove_self(locals()), api_token=self.api_token),
+            api_token=self.api_token
+        )
 
     def edit_document(self, code, document_id):
         """
