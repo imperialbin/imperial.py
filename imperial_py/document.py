@@ -24,18 +24,16 @@ class Document:
         return not self.__eq__(other)
 
     def __repr__(self):
-        if not self.success:
-            return "<Document id=None>"
         representation = "<Document id={self.id}"
-
-        if hasattr(self.expiration, "strftime"):
-            # due to a bug expiration was unable to be converted into a datetime obj so now we have this check
-            # kind of a hacky way of seeing if it's a datetime obj w/o needing to import datetime for a type check
-            representation += " expiration={self.expiration:%x}"
-        if self.language:
-            representation += " language={self.language}"
-        if self.password:
-            representation += " password={self.password}"
+        if self.id:
+            if hasattr(self.expiration, "strftime"):
+                # due to a bug expiration was unable to be converted into a datetime obj so now we have this check
+                # kind of a hacky way of seeing if it's a datetime obj w/o needing to import datetime for a type check
+                representation += " expiration={self.expiration:%x}"
+            if self.language:
+                representation += " language={self.language}"
+            if self.password:
+                representation += " password={self.password}"
         return (representation + ">").format(self=self)
 
     def __getitem__(self, item):
@@ -72,10 +70,6 @@ class Document:
     # properties directly from the api
 
     # general
-
-    @property
-    def success(self):
-        return self.__full_document_dict.get("success", False)
 
     @property
     def link(self):
