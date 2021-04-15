@@ -57,6 +57,10 @@ class Document:
     # extra properties
 
     @property
+    def token(self):
+        return self.__api_token
+
+    @property
     def code(self):
         return self.__document_dict.get("content")
 
