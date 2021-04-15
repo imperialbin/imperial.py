@@ -56,10 +56,10 @@ def json_modifications(json):
     # convert to snake case
     json = to_snake_case(json)
     # this just creates a more specific pointer
-    document = json["document"]
+    document = json.get("document")
     # convert to datetime obj
     # this super weird syntax just checks if both those keys exist in the document
-    if {"creation_date", "expiration_date"} <= set(document):
+    if document and {"creation_date", "expiration_date"} <= set(document):
         document["creation_date"] = datetime.fromtimestamp(document["creation_date"] / 1000)
         document["expiration_date"] = datetime.fromtimestamp(document["expiration_date"] / 1000)
     return json
