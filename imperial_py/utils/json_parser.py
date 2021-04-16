@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-from .param_checks import is_default
+from .param_checks import is_default, is_required
 from ..exceptions import ImperialError
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
@@ -10,7 +10,7 @@ snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 def parse_body(method, kwargs):
     return {
         "params": {"password": kwargs.pop("password")} if ("password" in kwargs and method == "GET") else None,
-        "json": {key: value for key, value in kwargs.items() if not is_default(key, value)} if kwargs else None,
+        "json": {key: value for key, value in kwargs.items() if not is_default(key, value)} if kwargs else None
     }
 
 

@@ -7,12 +7,13 @@ from .param_checks import check_code, check_document_id, check_api_token, check_
 
 
 def request(*, method, url, api_token=None, **kwargs):
-    check_params({**kwargs, "apiToken": api_token})
+    # check_params is what throws the errors, so parse_body assumes everything is fine
+    check_params(api_token, **kwargs)
     resp = requests.request(
         method=method,
         url=url,
         headers={"authorization": api_token} if api_token else None,
-        # this copy isn't necessary it's just to prevent future bugs because we pop from it
+        # this .copy() isn't necessary it's just to prevent future bugs because we pop from it
         **parse_body(method, kwargs.copy())
     )
     json = ensure_json(resp)
