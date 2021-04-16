@@ -15,5 +15,5 @@ class ImperialError(Exception):
         # pretty hacky solution to get the add the status keyword param tbh
         msg = self.message
         if self.status:
-            msg += f" status={self.status} {responses[self.status]}"
+            msg += " status={} {}".format(self.status, responses[self.status])
         return msg

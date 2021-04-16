@@ -49,6 +49,7 @@ def check_params(params):
         default_value = default_params[key]
         expected_types = {type(default_value)} if default_value is not None else {type(None), str}
         if type(value) not in expected_types:
+            # this is ugly i know
             raise ImperialError(
                 message="{} expects type(s) {} not '{}'".format(
                     key,
