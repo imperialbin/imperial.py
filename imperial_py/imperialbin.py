@@ -18,7 +18,7 @@ class Imperial:
         """
         # set token overrides path set token
         self.api_token = api_token
-        path_token = os.environ.get("IMPERIAL-TOKEN")
+        path_token = os.environ.get("IMPERIAL-TOKEN") or os.environ.get("IMPERIAL_TOKEN")
         if self.api_token is None and path_token:
             self.api_token = path_token
 
