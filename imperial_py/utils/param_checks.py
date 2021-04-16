@@ -46,12 +46,12 @@ def check_params(method, api_token, **kwargs):
     for key, value in kwargs.items():
         if is_required(key):
             continue
-        if not api_token and value and method != "GET":
+        default_value = default_params[key]
+        if not api_token and value != default_value and method != "GET":
             # for right now, GET requests get a pass because they have public params
             raise ImperialError(
                 message="You must be authenticated to pass, `{param}`".format(param=key)
             )
-        default_value = default_params[key]
         # i hate how I have to do this in python
         # lmk if there is a better way to check for nullables + types
         expected_types = {type(default_value)} if default_value is not None else {type(None), str}
