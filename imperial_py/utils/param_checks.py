@@ -30,7 +30,8 @@ def check_api_token(api_token=None):
 
 # optional params
 
-default_params =  {
+default_params = {
+    "apiToken": None,
     "longerUrls": False,
     "language": None,
     "instantDelete": False,
@@ -41,10 +42,23 @@ default_params =  {
 }
 
 
-def is_required(key):
-    return key in default_params
+def check_params(params):
+    for key, value in params.items():
+        if key not in default_params:
+            continue
+        default_value = default_params[key]
+        expected_types = {type(default_value)} if default_value is not None else {type(None), str}
+        if type(value) not in expected_types:
+            raise ImperialError(
+                message="{} expects type(s) {} not '{}'".format(
+                    key,
+                    ", ".join("'" + str(_type).split("'")[1] + "'" for _type in expected_types),
+                    # ex. {NoneType, str} -> 'NoneType', 'str'
+                    # quite hacky with the split not sure if theres a better way to convert "<class 'str'>" to "str"
+                    str(type(value)).split("'")[1]
+                )
+            )
 
 
-def is_valid_data(key, value):
-    default_value = default_params.get(key)
-    return default_value != value and isinstance(type(value), type(default_value))
+def is_default(key, value):
+    return key in default_params and default_params[key] == value

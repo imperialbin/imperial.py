@@ -3,15 +3,17 @@ import requests
 # utils
 from .hostname import https
 from .json_parser import parse_body, ensure_json, json_modifications
-from .param_checks import check_code, check_document_id, check_api_token
+from .param_checks import check_code, check_document_id, check_api_token, check_params
 
 
 def request(*, method, url, api_token=None, **kwargs):
+    check_params({**kwargs, "apiToken": api_token})
     resp = requests.request(
         method=method,
         url=url,
         headers={"authorization": api_token} if api_token else None,
-        **parse_body(method, kwargs)
+        # this copy isn't necessary it's just to prevent future bugs because we pop from it
+        **parse_body(method, kwargs.copy())
     )
     json = ensure_json(resp)
     if not json["success"]:
@@ -119,6 +121,8 @@ def edit(code, document_id, api_token=None, password=None):
 
 
 def delete(document_id, api_token=None, password=None):
+    check_document_id(document_id)
+
     return request(
         method="DELETE",
         url=https.imperialbin / "api" / "document" / document_id,
