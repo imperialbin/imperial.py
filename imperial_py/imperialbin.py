@@ -16,11 +16,10 @@ class Imperial:
         :type api_token: str
         15 requests max every 15 minutes; unlimited with an api token.
         """
-
         # set token overrides path set token
         self.api_token = api_token
         path_token = os.environ.get("IMPERIAL-TOKEN")
-        if not self.api_token and path_token:
+        if self.api_token is None and path_token:
             self.api_token = path_token
 
     def create_document(self,
