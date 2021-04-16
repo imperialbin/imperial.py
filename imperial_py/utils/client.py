@@ -8,7 +8,7 @@ from .param_checks import check_code, check_document_id, check_api_token, check_
 
 def request(*, method, url, api_token=None, **kwargs):
     # check_params is what throws the errors, so parse_body assumes everything is fine
-    check_params(api_token, **kwargs)
+    check_params(method, api_token, **kwargs)
     resp = requests.request(
         method=method,
         url=url,
@@ -61,10 +61,10 @@ def create(code,
         code=code,
         api_token=api_token,
         # optional
-        longerUrls=longer_urls,
+        longer_urls=longer_urls,
         language=language,
-        instantDelete=instant_delete,
-        imageEmbed=image_embed,
+        instant_delete=instant_delete,
+        image_embed=image_embed,
         expiration=expiration,
         encrypted=encrypted,
         password=password,

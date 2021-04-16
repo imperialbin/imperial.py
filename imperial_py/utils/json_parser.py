@@ -8,6 +8,7 @@ snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 
 
 def parse_body(method, kwargs):
+    kwargs = to_camel_case(kwargs)
     return {
         "params": {"password": kwargs.pop("password")} if ("password" in kwargs and method == "GET") else None,
         "json": {key: value for key, value in kwargs.items() if not is_default(key, value)} if kwargs else None
@@ -29,10 +30,19 @@ def ensure_json(response):
 
 def to_snake_case(json):
     json = {(key if key.islower() else snake_regex.sub("_", key).lower()): value for key, value in json.items()}
-    # i would dict comp. this recursion, but I don't want to torture future maintainers (me lol)
+    # note: in python 3.8+ this can be done with list comprehension with the := operator
     for key, value in json.items():
         if isinstance(value, dict):
             json[key] = to_snake_case(value)
+    return json
+
+
+def to_camel_case(json):
+    json = {("".join((word.title() if num != 0 else word.lower()) for num, word in enumerate(key.split("_")))): value
+            for key, value in json.items()}
+    for key, value in json.items():
+        if isinstance(value, dict):
+            json[key] = to_camel_case(value)
     return json
 
 

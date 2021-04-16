@@ -31,22 +31,23 @@ def check_api_token(api_token=None):
 # optional params
 
 default_params = {
-    "apiToken": None,
-    "longerUrls": False,
+    "api_token": None,
+    "longer_urls": False,
     "language": None,
-    "instantDelete": False,
-    "imageEmbed": False,
+    "instant_delete": False,
+    "image_embed": False,
     "expiration": 5,
     "encrypted": False,
     "password": None
 }
 
 
-def check_params(api_token, **kwargs):
+def check_params(method, api_token, **kwargs):
     for key, value in kwargs.items():
         if is_required(key):
             continue
-        if not api_token:
+        if not api_token and value and method != "GET":
+            # for right now, GET requests get a pass because they have public params
             raise ImperialError(
                 message="You must be authenticated to pass, `{param}`".format(param=key)
             )
