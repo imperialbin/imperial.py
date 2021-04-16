@@ -31,7 +31,7 @@ class Imperial:
                         image_embed=False,
                         expiration=5,
                         encrypted=False,
-                        password=False):
+                        password=None):
         """
         Uploads code to https://imperialb.in
         POST https://imperialb.in/api/document
@@ -119,7 +119,7 @@ def create_document(code,
                     image_embed=False,
                     expiration=5,
                     encrypted=False,
-                    password=False):
+                    password=None):
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/postCode
