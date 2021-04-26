@@ -62,7 +62,7 @@ class Document:
 
     @property
     def code(self):
-        return self.__document_dict.get("content")
+        return self.__document_dict.get("content", "")
 
     @code.setter
     def code(self, value):
@@ -90,7 +90,7 @@ class Document:
 
     @property
     def language(self):
-        return self.__document_dict.get("language")
+        return self.__document_dict.get("language", "auto")
 
     @property
     def image_embed(self):
@@ -110,7 +110,7 @@ class Document:
 
     @property
     def editors(self):
-        return self.__document_dict.get("allowed_editors")
+        return self.__document_dict.get("allowed_editors", [])
 
     @property
     def encrypted(self):
@@ -122,7 +122,7 @@ class Document:
 
     @property
     def views(self):
-        return self.__document_dict.get("views")
+        return self.__document_dict.get("views", 0)
 
     # aliases (i won't be using these)
     document_id = id
