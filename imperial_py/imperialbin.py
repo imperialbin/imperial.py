@@ -4,7 +4,6 @@ __author__ = "Hexiro"
 import os
 
 from .utils import client
-from .utils.json_parser import remove_self
 from .document import Document
 
 
@@ -16,10 +15,7 @@ class Imperial:
         15 requests max every 15 minutes; unlimited with an api token.
         """
         # set token overrides path set token
-        self.api_token = api_token
-        path_token = os.environ.get("IMPERIAL-TOKEN") or os.environ.get("IMPERIAL_TOKEN")
-        if self.api_token is None and path_token:
-            self.api_token = path_token
+        self.api_token = api_token or os.environ.get("IMPERIAL_TOKEN")
 
     def create_document(self,
                         code: str,
@@ -43,8 +39,20 @@ class Imperial:
         :param password: the document password (only if document is encrypted)
         """
 
+        resp = client.create(
+            code=code,
+            longer_urls=longer_urls,
+            language=language,
+            instant_delete=instant_delete,
+            image_embed=image_embed,
+            expiration=expiration,
+            encrypted=encrypted,
+            password=password,
+            api_token=self.api_token
+        )
+
         return Document(
-            document_dict=client.create(**remove_self(locals()), api_token=self.api_token),
+            document_dict=resp,
             code=code,
             api_token=self.api_token
         )
@@ -57,7 +65,7 @@ class Imperial:
         :param password: ImperialBin Document password
         """
         return Document(
-            document_dict=client.get(**remove_self(locals()), api_token=self.api_token),
+            document_dict=client.get(document_id=document_id, password=password, api_token=self.api_token),
             api_token=self.api_token
         )
 
@@ -69,7 +77,7 @@ class Imperial:
         :param document_id: ImperialBin Document ID.
         """
         return Document(
-            document_dict=client.edit(**remove_self(locals()), api_token=self.api_token),
+            document_dict=client.edit(code=code, document_id=document_id, api_token=self.api_token),
             code=code,
             api_token=self.api_token
         )
@@ -118,11 +126,19 @@ def create_document(code: str,
     :param password: the document password (only if document is encrypted)
     :return: ImperialBin API response (type: dict).
     """
-    params = locals().copy()
-    return Imperial(params.pop("api_token")).create_document(**params)
+    return Imperial(api_token).create_document(
+        code=code,
+        longer_urls=longer_urls,
+        language=language,
+        instant_delete=instant_delete,
+        image_embed=image_embed,
+        expiration=expiration,
+        encrypted=encrypted,
+        password=password
+    )
 
 
-def get_document(document_id: str, api_token: str = None, password: str = None):
+def get_document(document_id: str, password: str = None, api_token: str = None):
     """
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/getCode/:documentID
@@ -131,8 +147,7 @@ def get_document(document_id: str, api_token: str = None, password: str = None):
     :param password: ImperialBin Document password.
     :return: ImperialBin API response (type: dict).
     """
-    params = locals().copy()
-    return Imperial(params.pop("api_token")).get_document(**params)
+    return Imperial(api_token).get_document(document_id, password=password)
 
 
 def edit_document(code: str, document_id: str, api_token: str = None):
@@ -144,8 +159,7 @@ def edit_document(code: str, document_id: str, api_token: str = None):
     :param api_token: ImperialBin API token.
     :return: ImperialBin API response (type: dict).
     """
-    params = locals().copy()
-    return Imperial(params.pop("api_token")).edit_document(**params)
+    return Imperial(api_token).edit_document(code=code, document_id=document_id)
 
 
 def delete_document(document_id: str, password: str = None, api_token: str = None):
@@ -157,8 +171,7 @@ def delete_document(document_id: str, password: str = None, api_token: str = Non
     :param api_token: ImperialBin API token.
     :return: ImperialBin API response (type: dict).
     """
-    params = locals().copy()
-    return Imperial(params.pop("api_token")).delete_document(**params)
+    return Imperial(api_token).delete_document(document_id=document_id, password=password)
 
 
 def verify(api_token: str = None):

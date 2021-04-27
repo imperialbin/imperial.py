@@ -8,21 +8,21 @@ api_token_regex = re.compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-
 # required params
 
 
-def throw_if_invalid(key: str, value: str, message: str, status: int = None):
+def throw_if_invalid(value: str, message: str, status: int = None):
     if not (isinstance(value, str) and value):
         raise ImperialError(message=message, status=status)  # hardcoded caught error
 
 
 def check_code(code: str):
-    throw_if_invalid("code", code, message="You need to give text in the `code` parameter!", status=400)
+    throw_if_invalid(code, message="You need to give text in the `code` parameter!", status=400)
 
 
 def check_document_id(document_id: str):
-    throw_if_invalid("documentId", document_id, message="We couldn't find that document!", status=404)
+    throw_if_invalid(document_id, message="We couldn't find that document!", status=404)
 
 
 def check_api_token(api_token: str = None):
-    throw_if_invalid("apiToken", api_token, message="No token to verify!", status=404)
+    throw_if_invalid(api_token, message="No token to verify!", status=404)
 
     if not re.match(api_token_regex, api_token):
         raise ImperialError("API token is invalid!", status=401)  # hardcoded caught error

@@ -2,8 +2,8 @@ import requests
 
 # utils
 from .hostname import https
-from .json_parser import parse_body, ensure_json, json_modifications
-from .param_checks import check_code, check_document_id, check_api_token, check_params
+from .parser import parse_request, ensure_json, parse_response
+from .checks import check_code, check_document_id, check_api_token, check_params
 
 
 def request(*, method: str, url: str, api_token: str = None, **kwargs):
@@ -12,14 +12,9 @@ def request(*, method: str, url: str, api_token: str = None, **kwargs):
     resp = requests.request(
         method=method,
         url=url,
-        headers={"authorization": api_token} if api_token else None,
-        # this .copy() isn't necessary it's just to prevent future bugs because we pop from it
-        **parse_body(method, kwargs.copy())
+        **parse_request(method, api_token, **kwargs)
     )
-    json = ensure_json(resp)
-    if not json["success"]:
-        return json
-    return json_modifications(json)
+    return parse_response(resp)
 
 
 def create(code: str,
@@ -35,6 +30,7 @@ def create(code: str,
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/document
     :param code: Code from any programming language, capped at 512KB per request.
+    :param api_token: ImperialBin API token
     :param longer_urls: increases the length of the random document id by 3x.
     :param language: the programming language of the code (or plain)
     :param instant_delete: makes the paste delete on its first visit.
@@ -67,6 +63,7 @@ def get(document_id: str, api_token: str = None, password: str = None):
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/document/:documentID
     :param document_id: ImperialBin Document ID.
+    :param api_token: ImperialBin API token
     :param password: ImperialBin Document password
     :return: ImperialBin API response (type: dict).
     """
@@ -87,6 +84,7 @@ def edit(code: str, document_id: str, api_token: str = None, password: str = Non
     PATCH https://imperialb.in/api/document
     :param code: Code from any programming language, capped at 512KB per request (type: str).
     :param document_id: ImperialBin Document ID.
+    :param api_token: ImperialBin API token
     :param password: ImperialBin Document password
     :return: ImperialBin API response (type: dict).
     """
@@ -106,6 +104,14 @@ def edit(code: str, document_id: str, api_token: str = None, password: str = Non
 
 
 def delete(document_id: str, api_token: str = None, password: str = None):
+    """
+    Deletes document on https://imperialb.in
+    DELETE https://imperialb.in/api/document/:document_id
+    :param document_id: ImperialBin Document ID.
+    :param api_token: ImperialBin API token
+    :param password: ImperialBin Document password
+    :return: ImperialBin API response (type: dict).
+    """
     check_document_id(document_id)
 
     return request(
@@ -118,8 +124,9 @@ def delete(document_id: str, api_token: str = None, password: str = None):
 
 def verify(api_token: str):
     """
-    Validate API token from https://imperialb.in
+    Validate API token on https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken
+    :param api_token: ImperialBin API token
     :return: ImperialBin API response (type: dict).
     """
     check_api_token(api_token)

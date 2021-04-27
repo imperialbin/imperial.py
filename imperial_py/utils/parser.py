@@ -1,21 +1,17 @@
 import re
 from datetime import datetime
 
-from .param_checks import is_default, is_required
+# this is required so pycharm recognized the type
+# (there's no good way to do this unfortunately)
+from requests import Response
+
+from .checks import is_default
 from ..exceptions import ImperialError
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 
 
-def parse_body(method, kwargs):
-    kwargs = to_camel_case(kwargs)
-    return {
-        "params": {"password": kwargs.pop("password")} if ("password" in kwargs and method == "GET") else None,
-        "json": {key: value for key, value in kwargs.items() if not is_default(key, value)} if kwargs else None
-    }
-
-
-def ensure_json(response):
+def ensure_json(response: Response):
     if response.text.lower().startswith("<!doctype html"):
         raise ImperialError("Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py")
 
@@ -28,7 +24,7 @@ def ensure_json(response):
         raise ImperialError("Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py")
 
 
-def to_snake_case(json):
+def to_snake_case(json: dict):
     json = {(key if key.islower() else snake_regex.sub("_", key).lower()): value for key, value in json.items()}
     # note: in python 3.8+ this can be done with list comprehension with the := operator
     for key, value in json.items():
@@ -37,8 +33,9 @@ def to_snake_case(json):
     return json
 
 
-def to_camel_case(json):
-    json = {("".join((word.title() if num != 0 else word.lower()) for num, word in enumerate(key.split("_")))): value
+def to_camel_case(json: dict):
+    # please don't make fun of my minified-looking comps
+    json = {("".join((word.capitalize() if num != 0 else word.lower()) for num, word in enumerate(key.split("_")))): value
             for key, value in json.items()}
     for key, value in json.items():
         if isinstance(value, dict):
@@ -46,12 +43,9 @@ def to_camel_case(json):
     return json
 
 
-def json_modifications(json):
-    # convert to snake case
-    json = to_snake_case(json)
+def parse_dates(json: dict):
     # this just creates a more specific pointer
     document = json.get("document")
-    # convert to datetime obj
     # this super weird syntax just checks if both those keys exist in the document
     if document and {"creation_date", "expiration_date"} <= set(document):
         document["creation_date"] = datetime.fromtimestamp(document["creation_date"] / 1000)
@@ -59,9 +53,17 @@ def json_modifications(json):
     return json
 
 
-def remove_self(data):
-    """
-    removes keys from dict w/o errors if key isn't found (dict comp.)
-    :type data: dict
-    """
-    return {key: value for key, value in data.items() if key != "self"}
+def parse_response(response: Response):
+    # probably not good that i just nest three funcs here :shrug:
+    return parse_dates(to_snake_case(ensure_json(response)))
+
+
+def parse_request(method: str, api_token: str, **kwargs):
+    kwargs = to_camel_case(kwargs)
+    return {
+        # I don't think you're supposed to pass bare mutable types into requests
+        # ex. passing json={} could cause issues
+        "headers": {"authorization": api_token} if api_token else None,
+        "params": {"password": kwargs.pop("password")} if ("password" in kwargs and method == "GET") else None,
+        "json": {key: value for key, value in kwargs.items() if not is_default(key, value)} if kwargs else None
+    }
