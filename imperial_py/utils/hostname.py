@@ -3,17 +3,17 @@ class https:
     imperialbin = None
 
     @staticmethod
-    def remove_leading_slash(text):
+    def remove_leading_slash(text: str):
         return text[1:] if text.startswith("/") else text
 
     @staticmethod
-    def remove_tailing_slash(text):
+    def remove_tailing_slash(text: str):
         return text[:-1] if text.endswith("/") else text
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.path = self.remove_tailing_slash(name)
 
-    def __truediv__(self, endpoint):
+    def __truediv__(self, endpoint: str):
         # handle / operator
         endpoint = self.remove_leading_slash(endpoint)
         endpoint = self.remove_tailing_slash(endpoint)

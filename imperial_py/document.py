@@ -4,7 +4,7 @@ from .utils.hostname import https
 
 class Document:
 
-    def __init__(self, document_dict, code=None, api_token=None):
+    def __init__(self, document_dict: dict, code: str = None, api_token: str = None):
         self.__document_dict = {}
         if isinstance(document_dict, dict) and document_dict.get("success", False):
             self.__api_token = api_token
@@ -39,10 +39,10 @@ class Document:
                 representation += " password={self.password}"
         return (representation + ">").format(self=self)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: str):
         return self.__document_dict.get(item)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, value: str):
         if key == "code":
             # reminds me of javascript with . and [""] syntax for dicts
             self.edit(value)
@@ -65,7 +65,7 @@ class Document:
         return self.__document_dict.get("content", "")
 
     @code.setter
-    def code(self, value):
+    def code(self, value: str):
         self.edit(value)
 
     # properties that might get added to the api response in the future
@@ -130,12 +130,11 @@ class Document:
     creation_date = creation
     expiration_date = expiration
 
-    def edit(self, code):
+    def edit(self, code: str):
         """
         Edits document code on https://imperialb.in
         PATCH https://imperialb.in/api/document
         :param code: Code from any programming language, capped at 512KB per request (type: str).
-        :type code: str
         :return: ImperialBin API response (type: dict).
         """
         json = client.edit(code, document_id=self.id, password=self.password, api_token=self.__api_token)

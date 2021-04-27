@@ -3,11 +3,7 @@ from http.client import responses
 
 class ImperialError(Exception):
 
-    def __init__(self, message, *, status=None):
-        """
-        :type message: str
-        :type status: int
-        """
+    def __init__(self, message: str, status: int = None):
         self.message = message
         self.status = status
 

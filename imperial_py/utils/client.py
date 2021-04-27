@@ -6,7 +6,7 @@ from .json_parser import parse_body, ensure_json, json_modifications
 from .param_checks import check_code, check_document_id, check_api_token, check_params
 
 
-def request(*, method, url, api_token=None, **kwargs):
+def request(*, method: str, url: str, api_token: str = None, **kwargs):
     # check_params is what throws the errors, so parse_body assumes everything is fine
     check_params(method, api_token, **kwargs)
     resp = requests.request(
@@ -22,35 +22,26 @@ def request(*, method, url, api_token=None, **kwargs):
     return json_modifications(json)
 
 
-def create(code,
-           api_token=None,
-           longer_urls=False,
-           language=None,
-           instant_delete=False,
-           image_embed=False,
-           expiration=5,
-           encrypted=False,
-           password=None):
+def create(code: str,
+           api_token: str = None,
+           longer_urls: bool = False,
+           language: str = None,
+           instant_delete: bool = False,
+           image_embed: bool = False,
+           expiration: int = 5,
+           encrypted: bool = False,
+           password: str = None):
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/document
-    :type api_token: str
     :param code: Code from any programming language, capped at 512KB per request.
-    :type code: str
     :param longer_urls: increases the length of the random document id by 3x.
-    :type longer_urls: bool
     :param language: the programming language of the code (or plain)
-    :type language: str
     :param instant_delete: makes the paste delete on its first visit.
-    :type instant_delete: bool
     :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
-    :type image_embed: bool
     :param expiration: sets the number of days before the paste deletes (overwritten by instant_delete)
-    :type expiration: int
     :param encrypted: whether the document gets encrypted or not
-    :type encrypted: bool
     :param password: the document password (only if document is encrypted)123
-    :type password: str
     :return: ImperialBin API response (type: dict).
     """
     check_code(code)
@@ -71,16 +62,13 @@ def create(code,
     )
 
 
-def get(document_id, api_token=None, password=None):
+def get(document_id: str, api_token: str = None, password: str = None):
     """
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/document/:documentID
-    :type api_token: str
     :param document_id: ImperialBin Document ID.
-    :type document_id: str
-    :return: ImperialBin API response (type: dict).
     :param password: ImperialBin Document password
-    :type password: str
+    :return: ImperialBin API response (type: dict).
     """
     check_document_id(document_id)
 
@@ -93,17 +81,13 @@ def get(document_id, api_token=None, password=None):
     )
 
 
-def edit(code, document_id, api_token=None, password=None):
+def edit(code: str, document_id: str, api_token: str = None, password: str = None):
     """
     Edits document code on https://imperialb.in
     PATCH https://imperialb.in/api/document
-    :type api_token: str
     :param code: Code from any programming language, capped at 512KB per request (type: str).
-    :type code: str
     :param document_id: ImperialBin Document ID.
-    :type document_id: str
     :param password: ImperialBin Document password
-    :type password: str
     :return: ImperialBin API response (type: dict).
     """
     check_code(code)
@@ -121,7 +105,7 @@ def edit(code, document_id, api_token=None, password=None):
     )
 
 
-def delete(document_id, api_token=None, password=None):
+def delete(document_id: str, api_token: str = None, password: str = None):
     check_document_id(document_id)
 
     return request(
@@ -132,7 +116,7 @@ def delete(document_id, api_token=None, password=None):
     )
 
 
-def verify(api_token):
+def verify(api_token: str):
     """
     Validate API token from https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken
