@@ -1,4 +1,5 @@
 from .utils import client
+from .utils.checks import ensure_api_token
 from .utils.hostname import https
 
 
@@ -137,6 +138,7 @@ class Document:
         :param code: Code from any programming language, capped at 512KB per request (type: str).
         :return: ImperialBin API response (type: dict).
         """
+        ensure_api_token(self.api_token)
         json = client.edit(code, document_id=self.id, password=self.password, api_token=self.api_token)
         if json["success"]:
             self.__document_dict["views"] = json.get("document", {}).get("views", 0)

@@ -5,6 +5,7 @@ import os
 
 from .utils import client
 from .document import Document
+from .utils.checks import ensure_api_token
 
 
 class Imperial:
@@ -16,6 +17,7 @@ class Imperial:
         """
         # set token overrides path set token
         self.__api_token = api_token or os.environ.get("IMPERIAL_TOKEN")
+        ensure_api_token(self.api_token)
 
     @property
     def api_token(self):
@@ -23,6 +25,7 @@ class Imperial:
 
     @api_token.setter
     def api_token(self, new_token):
+        ensure_api_token(new_token)
         self.__api_token = new_token
 
     def create_document(self,
