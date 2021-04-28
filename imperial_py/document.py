@@ -57,7 +57,7 @@ class Document:
     # extra properties
 
     @property
-    def token(self):
+    def api_token(self):
         return self.__api_token
 
     @property
@@ -137,7 +137,7 @@ class Document:
         :param code: Code from any programming language, capped at 512KB per request (type: str).
         :return: ImperialBin API response (type: dict).
         """
-        json = client.edit(code, document_id=self.id, password=self.password, api_token=self.__api_token)
+        json = client.edit(code, document_id=self.id, password=self.password, api_token=self.api_token)
         if json["success"]:
             self.__document_dict["views"] = json.get("document", {}).get("views", 0)
             self.__document_dict["content"] = code
@@ -151,4 +151,4 @@ class Document:
                                       expiration=5,
                                       encrypted=self.encrypted,
                                       password=self.password,
-                                      api_token=self.__api_token), api_token=self.__api_token)
+                                      api_token=self.api_token), api_token=self.api_token)
