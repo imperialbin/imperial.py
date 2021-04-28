@@ -15,7 +15,15 @@ class Imperial:
         15 requests max every 15 minutes; unlimited with an api token.
         """
         # set token overrides path set token
-        self.api_token = api_token or os.environ.get("IMPERIAL_TOKEN")
+        self.__api_token = api_token or os.environ.get("IMPERIAL_TOKEN")
+
+    @property
+    def api_token(self):
+        return self.__api_token
+
+    @api_token.setter
+    def api_token(self, new_token):
+        self.__api_token = new_token
 
     def create_document(self,
                         code: str,
