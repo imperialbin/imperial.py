@@ -2,13 +2,11 @@ import requests
 
 # utils
 from .hostname import https
-from .parser import parse_request, ensure_json, parse_response
-from .checks import check_code, check_document_id, check_api_token, check_params
+from .parser import parse_request, parse_response
+from .checks import ensure_code, ensure_document_id, ensure_api_token
 
 
 def request(*, method: str, url: str, api_token: str = None, **kwargs):
-    # check_params is what throws the errors, so parse_body assumes everything is fine
-    check_params(method, api_token, **kwargs)
     resp = requests.request(
         method=method,
         url=url,
@@ -40,7 +38,7 @@ def create(code: str,
     :param password: the document password (only if document is encrypted)123
     :return: ImperialBin API response (type: dict).
     """
-    check_code(code)
+    ensure_code(code)
 
     return request(
         method="POST",
@@ -67,7 +65,7 @@ def get(document_id: str, api_token: str = None, password: str = None):
     :param password: ImperialBin Document password
     :return: ImperialBin API response (type: dict).
     """
-    check_document_id(document_id)
+    ensure_document_id(document_id)
 
     return request(
         method="GET",
@@ -88,8 +86,8 @@ def edit(code: str, document_id: str, api_token: str = None, password: str = Non
     :param password: ImperialBin Document password
     :return: ImperialBin API response (type: dict).
     """
-    check_code(code)
-    check_document_id(document_id)
+    ensure_code(code)
+    ensure_document_id(document_id)
 
     return request(
         method="PATCH",
@@ -112,7 +110,7 @@ def delete(document_id: str, api_token: str = None, password: str = None):
     :param password: ImperialBin Document password
     :return: ImperialBin API response (type: dict).
     """
-    check_document_id(document_id)
+    ensure_document_id(document_id)
 
     return request(
         method="DELETE",
@@ -129,7 +127,7 @@ def verify(api_token: str):
     :param api_token: ImperialBin API token
     :return: ImperialBin API response (type: dict).
     """
-    check_api_token(api_token)
+    ensure_api_token(api_token)
 
     return request(
         method="GET",

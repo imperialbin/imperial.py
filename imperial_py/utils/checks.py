@@ -9,23 +9,24 @@ api_token_regex = re.compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-
 
 
 def throw_if_invalid(value: str, message: str, status: int = None):
-    if not (isinstance(value, str) and value):
+    if not (value and isinstance(value, str)):
         raise ImperialError(message=message, status=status)  # hardcoded caught error
 
 
-def check_code(code: str):
+def ensure_code(code: str):
     throw_if_invalid(code, message="You need to give text in the `code` parameter!", status=400)
 
 
-def check_document_id(document_id: str):
+def ensure_document_id(document_id: str):
     throw_if_invalid(document_id, message="We couldn't find that document!", status=404)
 
 
-def check_api_token(api_token: str = None):
-    throw_if_invalid(api_token, message="No token to verify!", status=404)
+def ensure_api_token(api_token: str = None):
+    # does not actually make api req to validate api token
+    throw_if_invalid(api_token, message="API token is invalid!", status=401)
 
     if not re.match(api_token_regex, api_token):
-        raise ImperialError("API token is invalid!", status=401)  # hardcoded caught error
+        raise ImperialError(message="API token is invalid!", status=401)  # hardcoded caught error
 
 
 # optional params
@@ -42,35 +43,20 @@ default_params = {
 }
 
 
-def check_params(method: str, api_token: str, **kwargs):
-    for key, value in kwargs.items():
-        if is_required(key):
-            continue
-        default_value = default_params[key]
-        if not api_token and value != default_value and method != "GET":
-            # for right now, GET requests get a pass because they have public params
-            raise ImperialError(
-                message="You must be authenticated to pass, `{param}`".format(param=key)
-            )
-        # i hate how I have to do this in python
-        # lmk if there is a better way to check for nullables + types
-        expected_types = {type(default_value)} if default_value is not None else {type(None), str}
-        if type(value) not in expected_types:
-            # this is ugly i know
-            raise ImperialError(
-                message="{param} expects type(s) {expected} not '{recieved}'".format(
-                    param=key,
-                    expected=", ".join("'" + str(_type).split("'")[1] + "'" for _type in expected_types),
-                    # ex. {NoneType, str} -> 'NoneType', 'str'
-                    # quite hacky with the split not sure if theres a better way to convert "<class 'str'>" to "str"
-                    recieved=str(type(value)).split("'")[1]
-                )
-            )
+def is_valid(key: str, value: str):
+    # check for mandatory and defaults
+    if key not in default_params:
+        return True
+    default_value = default_params[key]
+    default_type = type(default_value)
+    if default_value == value:
+        return False
+    # check types
+    if isinstance(value, default_type):
+        # is expected type
+        return True
 
-
-def is_default(key: str, value: str):
-    return key in default_params and default_params[key] == value
-
-
-def is_required(key: str):
-    return key not in default_params
+    if default_value is None and isinstance(value, str):
+        # is string when expected type is None
+        # could be a problem in the future if we need to pass a non-string into a param with a default value of None
+        return True
