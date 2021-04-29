@@ -100,15 +100,15 @@ class Imperial:
         :param document_id: ImperialBin Document ID.
         :param password: ImperialBin Document password
         """
-        return client.delete(document_id, password=password, api_token=self.api_token)
+        client.delete(document_id, password=password, api_token=self.api_token)
 
     def verify(self):
         """
         Validate API token from https://imperialb.in
         GET https://imperialb.in/api/checkApiToken/:apiToken
-        :return: ImperialBin API response (type: dict).
+        :rtype: None
         """
-        return client.verify(self.api_token)
+        client.verify(self.api_token)
 
 
 # shorthand functions
@@ -180,9 +180,9 @@ def delete_document(document_id: str, password: str = None, api_token: str = Non
     :param document_id: ImperialBin Document ID.
     :param password: ImperialBin Document password
     :param api_token: ImperialBin API token.
-    :return: ImperialBin API response (type: dict).
+    :rtype: None
     """
-    return Imperial(api_token).delete_document(document_id=document_id, password=password)
+    Imperial(api_token).delete_document(document_id=document_id, password=password)
 
 
 def verify(api_token: str = None):
@@ -190,7 +190,7 @@ def verify(api_token: str = None):
     Validate API token from https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken
     :param api_token: ImperialBin API token.
-    :return: ImperialBin API response (type: dict).
+    :rtype: None
     """
     # p.s. `api_token` isn't required because it can be set by an environment variable :)
-    return Imperial(api_token).verify()
+    Imperial(api_token).verify()

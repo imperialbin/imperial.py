@@ -143,7 +143,6 @@ class Document:
         if json["success"]:
             self.__document_dict["views"] = json.get("document", {}).get("views", 0)
             self.__document_dict["content"] = code
-        return self
 
     def duplicate(self):
         return Document(client.create(code=self.code,
