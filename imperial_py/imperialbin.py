@@ -96,14 +96,13 @@ class Imperial:
             api_token=self.api_token
         )
 
-    def delete_document(self, document_id: str, password: str = None):
+    def delete_document(self, document_id: str):
         """
         Deletes document from https://imperialb.in
         DELETE https://imperialb.in/api/document/:documentID
         :param document_id: ImperialBin Document ID.
-        :param password: ImperialBin Document password
         """
-        client.delete(document_id, password=password, api_token=self.api_token)
+        client.delete(document_id, api_token=self.api_token)
 
     def verify(self):
         """
@@ -176,16 +175,15 @@ def edit_document(code: str, document_id: str, api_token: str = None):
     return Imperial(api_token).edit_document(code=code, document_id=document_id)
 
 
-def delete_document(document_id: str, password: str = None, api_token: str = None):
+def delete_document(document_id: str, api_token: str = None):
     """
     Deletes document from https://imperialb.in
     DELETE https://imperialb.in/api/document/:documentID
     :param document_id: ImperialBin Document ID.
-    :param password: ImperialBin Document password
     :param api_token: ImperialBin API token.
     :rtype: None
     """
-    Imperial(api_token).delete_document(document_id=document_id, password=password)
+    Imperial(api_token).delete_document(document_id=document_id)
 
 
 def verify(api_token: str = None):
