@@ -19,6 +19,9 @@ class Imperial:
         self.__api_token = api_token or os.environ.get("IMPERIAL_TOKEN")
         ensure_api_token(self.api_token)
 
+    def __repr__(self):
+        return "<Imperial api_token={api_token}>".format(api_token=self.api_token)
+
     @property
     def api_token(self):
         return self.__api_token
