@@ -3,9 +3,9 @@ __author__ = "Hexiro"
 
 import os
 
-from .utils import client
-from .document import Document
-from .utils.checks import ensure_api_token
+from imperial_py import client
+from imperial_py.document import Document
+from imperial_py.utils.checks import ensure_api_token
 
 
 class Imperial:
@@ -53,7 +53,7 @@ class Imperial:
         :param password: the document password (only if document is encrypted)
         """
 
-        resp = client.create(
+        resp = client.create_document(
             code=code,
             longer_urls=longer_urls,
             language=language,
@@ -79,7 +79,7 @@ class Imperial:
         :param password: ImperialBin Document password
         """
         return Document(
-            document_dict=client.get(document_id=document_id, password=password, api_token=self.api_token),
+            document_dict=client.get_document(document_id=document_id, password=password, api_token=self.api_token),
             api_token=self.api_token
         )
 
@@ -91,7 +91,7 @@ class Imperial:
         :param document_id: ImperialBin Document ID.
         """
         return Document(
-            document_dict=client.edit(code=code, document_id=document_id, api_token=self.api_token),
+            document_dict=client.edit_document(code=code, document_id=document_id, api_token=self.api_token),
             code=code,
             api_token=self.api_token
         )
@@ -102,7 +102,7 @@ class Imperial:
         DELETE https://imperialb.in/api/document/:documentID
         :param document_id: ImperialBin Document ID.
         """
-        client.delete(document_id, api_token=self.api_token)
+        client.delete_document(document_id, api_token=self.api_token)
 
     def verify(self):
         """
@@ -110,7 +110,7 @@ class Imperial:
         GET https://imperialb.in/api/checkApiToken/:apiToken
         :rtype: None
         """
-        client.verify(self.api_token)
+        client.check_api_token(self.api_token)
 
 
 # shorthand functions

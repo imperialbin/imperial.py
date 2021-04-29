@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from .utils import client
-from .utils.checks import ensure_api_token
-from .utils.hostname import https
+from imperial_py import client
+from imperial_py.utils.checks import ensure_api_token
+from imperial_py.utils.hostname import https
 
 
 class Document:
@@ -18,7 +18,7 @@ class Document:
             elif code:
                 self.__document_dict["content"] = code
             elif not self.instant_delete or not self.__document_dict.get("content"):
-                self.__document_dict["content"] = client.get(self.id, password=self.password).get("content")
+                self.__document_dict["content"] = client.get_document(self.id, password=self.password).get("content")
             # this should cover all cases but just in case
             else:
                 self.__document_dict["content"] = None
@@ -142,17 +142,17 @@ class Document:
         :return: ImperialBin API response (type: dict).
         """
         ensure_api_token(self.api_token)
-        json = client.edit(code, document_id=self.id, password=self.password, api_token=self.api_token)
+        json = client.edit_document(code, document_id=self.id, password=self.password, api_token=self.api_token)
         if json["success"]:
             self.__document_dict["views"] = json.get("document", {}).get("views", 0)
             self.__document_dict["content"] = code
 
     def duplicate(self):
-        return Document(client.create(code=self.code,
-                                      longer_urls=self.longer_urls,
-                                      instant_delete=self.instant_delete,
-                                      image_embed=self.image_embed,
-                                      expiration=5,
-                                      encrypted=self.encrypted,
-                                      password=self.password,
-                                      api_token=self.api_token), api_token=self.api_token)
+        return Document(client.create_document(code=self.code,
+                                               longer_urls=self.longer_urls,
+                                               instant_delete=self.instant_delete,
+                                               image_embed=self.image_embed,
+                                               expiration=5,
+                                               encrypted=self.encrypted,
+                                               password=self.password,
+                                               api_token=self.api_token), api_token=self.api_token)

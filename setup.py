@@ -16,7 +16,7 @@ setup(
     author="Hexiro",
     author_email="realhexiro@gmail.com",
     url="https://github.com/imperialbin/imperial-py",
-    packages=["imperial_py", "imperial_py.utils"],
+    packages=["imperial_py", "imperial_py.client", "imperial_py.utils"],
     python_requires=">=3.5",
     install_requires=requirements,
     license="MPL2",
