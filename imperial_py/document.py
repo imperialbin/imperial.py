@@ -8,26 +8,9 @@ from imperial_py.utils.hostname import https
 class Document:
 
     def __init__(self, document_dict: dict, code: str = None, api_token: str = None):
-        self.__document_dict = {}
-        if isinstance(document_dict, dict) and document_dict.get("success", False):
-            self.__api_token = api_token
-            self.__document_dict = document_dict["document"]
-
-            if "content" in document_dict:
-                self.__document_dict["content"] = document_dict["content"]
-            elif code:
-                self.__document_dict["content"] = code
-            elif not self.instant_delete or not self.__document_dict.get("content"):
-                self.__document_dict["content"] = client.get_document(self.id, password=self.password).get("content")
-            # this should cover all cases but just in case
-            else:
-                self.__document_dict["content"] = None
-
-    def __eq__(self, other):
-        return isinstance(other, Document) and (self.id == other.id or self.code == other.code)
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
+        self.__api_token = api_token
+        self.__document_dict = document_dict["document"]
+        self.__document_dict["content"] = document_dict.get("content") or code
 
     def __repr__(self):
         representation = "<Document id={self.id}"
@@ -42,6 +25,12 @@ class Document:
         # meaning that who ever controls the formatting can access object attrs getters etc
         # this should pose no risk here with self=self though
         return (representation + ">").format(self=self)
+
+    def __eq__(self, other):
+        return isinstance(other, Document) and (self.id == other.id or self.code == other.code)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     def __getitem__(self, item: str):
         return self.__document_dict.get(item)
