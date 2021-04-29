@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from .utils import client
 from .utils.checks import ensure_api_token
 from .utils.hostname import https
@@ -30,14 +32,15 @@ class Document:
     def __repr__(self):
         representation = "<Document id={self.id}"
         if self.id:
-            if hasattr(self.expiration, "strftime"):
-                # due to a bug expiration was unable to be converted into a datetime obj so now we have this check
-                # kind of a hacky way of seeing if it's a datetime obj w/o needing to import datetime for a type check
+            if isinstance(self.expiration, datetime):
                 representation += " expiration={self.expiration:%x}"
             if self.language:
                 representation += " language={self.language}"
             if self.password:
                 representation += " password={self.password}"
+        # this is formatting an insecure string
+        # meaning that who ever controls the formatting can access object attrs getters etc
+        # this should pose no risk here with self=self though
         return (representation + ">").format(self=self)
 
     def __getitem__(self, item: str):
