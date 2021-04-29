@@ -3,13 +3,12 @@ from ..utils.checks import ensure_document_id
 from ..utils.hostname import https
 
 
-def delete_document(document_id: str, api_token: str = None, password: str = None):
+def delete_document(document_id: str, api_token: str = None):
     """
     Deletes document on https://imperialb.in
     DELETE https://imperialb.in/api/document/:document_id
     :param document_id: ImperialBin Document ID.
     :param api_token: ImperialBin API token
-    :param password: ImperialBin Document password
     :return: ImperialBin API response (type: dict).
     """
     ensure_document_id(document_id)
@@ -18,5 +17,4 @@ def delete_document(document_id: str, api_token: str = None, password: str = Non
         method="DELETE",
         url=https.imperialbin / "api" / "document" / document_id,
         api_token=api_token,
-        password=password
     )
