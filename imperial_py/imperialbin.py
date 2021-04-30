@@ -17,7 +17,8 @@ class Imperial:
         """
         # set token overrides path set token
         self.__api_token = api_token or os.environ.get("IMPERIAL_TOKEN")
-        ensure_api_token(self.api_token)
+        if self.api_token is not None:
+            ensure_api_token(self.api_token)
 
     def __repr__(self):
         return "<Imperial api_token={api_token}>".format(api_token=self.api_token)
@@ -28,7 +29,8 @@ class Imperial:
 
     @api_token.setter
     def api_token(self, new_token):
-        ensure_api_token(new_token)
+        if new_token is not None:
+            ensure_api_token(new_token)
         self.__api_token = new_token
 
     def create_document(self,
