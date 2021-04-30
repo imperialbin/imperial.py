@@ -68,9 +68,9 @@ class Imperial:
         )
 
         return Document(
-            document_dict=resp,
             code=code,
-            api_token=self.api_token
+            api_token=self.api_token,
+            **resp["document"]
         )
 
     def get_document(self, document_id: str, password: str = None):
@@ -80,9 +80,15 @@ class Imperial:
         :param document_id: ImperialBin Document ID.
         :param password: ImperialBin Document password
         """
-        return Document(
-            document_dict=client.get_document(document_id=document_id, password=password, api_token=self.api_token),
+        resp = client.get_document(
+            document_id=document_id,
+            password=password,
             api_token=self.api_token
+        )
+
+        return Document(
+            api_token=self.api_token,
+            **resp["document"]
         )
 
     def edit_document(self, code: str, document_id: str):
@@ -92,10 +98,16 @@ class Imperial:
         :param code: Code from any programming language, capped at 512KB per request (type: str).
         :param document_id: ImperialBin Document ID.
         """
-        return Document(
-            document_dict=client.edit_document(code=code, document_id=document_id, api_token=self.api_token),
+        resp = client.edit_document(
             code=code,
+            document_id=document_id,
             api_token=self.api_token
+        )
+
+        return Document(
+            code=code,
+            api_token=self.api_token,
+            **resp["document"]
         )
 
     def delete_document(self, document_id: str):

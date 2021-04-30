@@ -7,10 +7,24 @@ from imperial_py.utils.hostname import https
 
 class Document:
 
-    def __init__(self, document_dict: dict, code: str = None, api_token: str = None):
+    def __init__(self, code: str = None, api_token: str = None, **kwargs):
         self.__api_token = api_token
-        self.__document_dict = document_dict["document"]
-        self.__document_dict["content"] = document_dict.get("content") or code
+        self.__content = code or kwargs.get("content", None)
+        # **kwargs
+        self.__id = kwargs.get("document_id", None)
+        self.__language = kwargs.get("language", "auto")
+        self.__image_embed = kwargs.get("image_embed", False)
+        self.__instant_delete = kwargs.get("instant_delete", False)
+        self.__creation = kwargs.get("creation_date", None)
+        self.__expiration = kwargs.get("expiration_date", None)
+        self.__editors = kwargs.get("allowedEditors", [])
+        self.__encrypted = kwargs.get("encrypted", None)
+        self.__password = kwargs.get("password", None)
+        self.__views = kwargs.get("views", 0)
+        # success isn't needed,
+        # message isn't needed
+        # longer_urls is generated dynamically
+        # link is generated dynamically
 
     def __repr__(self):
         representation = "<Document id={self.id}"
@@ -33,19 +47,32 @@ class Document:
         return not self.__eq__(other)
 
     def __getitem__(self, item: str):
-        return self.__document_dict.get(item)
+        return getattr(self, item)
 
     def __setitem__(self, key: str, value: str):
+        # reminds me of javascript with dot notation and bracket syntax
         if key == "code":
-            # reminds me of javascript with . and [""] syntax for dicts
             self.edit(value)
 
     def __len__(self):
         return len(self.code)
 
     def __iter__(self):
-        for item, key in self.__document_dict.items():
-            yield item, key
+        # explicitly yield
+        for getter, value in {
+            "content": self.code,
+            "id": self.id,
+            "language": self.language,
+            "image_embed": self.image_embed,
+            "instant_delete": self.instant_delete,
+            "creation": self.creation,
+            "expiration": self.expiration,
+            "editors": self.editors,
+            "encrypted": self.encrypted,
+            "password": self.password,
+            "views": self.views
+        }.items():
+            yield getter, value
 
     # extra properties
 
@@ -55,7 +82,7 @@ class Document:
 
     @property
     def code(self):
-        return self.__document_dict.get("content", "")
+        return self.__content
 
     @code.setter
     def code(self, value: str):
@@ -79,43 +106,43 @@ class Document:
 
     @property
     def id(self):
-        return self.__document_dict.get("document_id")
+        return self.__id
 
     @property
     def language(self):
-        return self.__document_dict.get("language", "auto")
+        return self.__language
 
     @property
     def image_embed(self):
-        return self.__document_dict.get("image_embed", False)
+        return self.__image_embed
 
     @property
     def instant_delete(self):
-        return self.__document_dict.get("instant_delete", False)
+        return self.__instant_delete
 
     @property
     def creation(self):
-        return self.__document_dict.get("creation_date")
+        return self.__creation
 
     @property
     def expiration(self):
-        return self.__document_dict.get("expiration_date")
+        return self.__expiration
 
     @property
     def editors(self):
-        return self.__document_dict.get("allowed_editors", [])
+        return self.__editors
 
     @property
     def encrypted(self):
-        return self.__document_dict.get("encrypted", False)
+        return self.__encrypted
 
     @property
     def password(self):
-        return self.__document_dict.get("password")
+        return self.__password
 
     @property
     def views(self):
-        return self.__document_dict.get("views", 0)
+        return self.__views
 
     # aliases (i won't be using these)
     document_id = id
@@ -133,8 +160,8 @@ class Document:
         ensure_api_token(self.api_token)
         json = client.edit_document(code, document_id=self.id, password=self.password, api_token=self.api_token)
         if json["success"]:
-            self.__document_dict["views"] = json.get("document", {}).get("views", 0)
-            self.__document_dict["content"] = code
+            self.__views = json.get("document", {}).get("views", 0)
+            self.__content = code
 
     def duplicate(self):
         return Document(client.create_document(code=self.code,
