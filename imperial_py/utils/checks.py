@@ -13,8 +13,8 @@ def throw_if_invalid(value: str, message: str, status: int = None):
         raise ImperialError(message=message, status=status)  # hardcoded caught error
 
 
-def ensure_code(code: str):
-    throw_if_invalid(code, message="You need to give text in the `code` parameter!", status=400)
+def ensure_content(content: str):
+    throw_if_invalid(content, message="You need to give text in the `code` parameter!", status=400)
 
 
 def ensure_document_id(document_id: str):

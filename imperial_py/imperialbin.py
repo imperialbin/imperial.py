@@ -34,7 +34,7 @@ class Imperial:
         self.__api_token = new_token
 
     def create_document(self,
-                        code: str,
+                        content: str,
                         longer_urls: bool = False,
                         language: str = None,
                         instant_delete: bool = False,
@@ -45,7 +45,7 @@ class Imperial:
         """
         Uploads code to https://imperialb.in
         POST https://imperialb.in/api/document
-        :param code: Code from any programming language, capped at 512KB per request.
+        :param content: Code from any programming language, capped at 512KB per request.
         :param longer_urls: increases the length of the random document id by 3x.
         :param language: the programming language of the code (or plain)
         :param instant_delete: makes the paste delete on its first visit.
@@ -56,7 +56,8 @@ class Imperial:
         """
 
         resp = client.create_document(
-            code=code,
+            # I can't wait to replace `code` with `content` here
+            content=content,
             longer_urls=longer_urls,
             language=language,
             instant_delete=instant_delete,
@@ -68,7 +69,7 @@ class Imperial:
         )
 
         return Document(
-            code=code,
+            content=content,
             api_token=self.api_token,
             **resp["document"]
         )
@@ -91,21 +92,21 @@ class Imperial:
             **resp["document"]
         )
 
-    def edit_document(self, code: str, document_id: str):
+    def edit_document(self, content: str, document_id: str):
         """
         Edits document code on https://imperialb.in
         PATCH https://imperialb.in/api/document
-        :param code: Code from any programming language, capped at 512KB per request (type: str).
+        :param content: Code from any programming language, capped at 512KB per request (type: str).
         :param document_id: ImperialBin Document ID.
         """
         resp = client.edit_document(
-            code=code,
+            content=content,
             document_id=document_id,
             api_token=self.api_token
         )
 
         return Document(
-            code=code,
+            content=content,
             api_token=self.api_token,
             **resp["document"]
         )
@@ -130,7 +131,7 @@ class Imperial:
 # shorthand functions
 
 
-def create_document(code: str,
+def create_document(content: str,
                     api_token: str = None,
                     longer_urls: bool = False,
                     language: str = None,
@@ -142,7 +143,7 @@ def create_document(code: str,
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/postCode
-    :param code: Code from any programming language, capped at 512KB per request.
+    :param content: Code from any programming language, capped at 512KB per request.
     :param api_token: ImperialBin API token
     :param longer_urls: increases the length of the random document id by 3x.
     :param language: the programming language of the code (or plain)
@@ -154,7 +155,7 @@ def create_document(code: str,
     :return: ImperialBin API response (type: dict).
     """
     return Imperial(api_token).create_document(
-        code=code,
+        content=content,
         longer_urls=longer_urls,
         language=language,
         instant_delete=instant_delete,
@@ -177,16 +178,16 @@ def get_document(document_id: str, password: str = None, api_token: str = None):
     return Imperial(api_token).get_document(document_id, password=password)
 
 
-def edit_document(code: str, document_id: str, api_token: str = None):
+def edit_document(content: str, document_id: str, api_token: str = None):
     """
     Edits document code on https://imperialb.in
     PATCH https://imperialb.in/api/document
-    :param code: Code from any programming language, capped at 512KB per request.
+    :param content: Code from any programming language, capped at 512KB per request.
     :param document_id: ImperialBin Document ID.
     :param api_token: ImperialBin API token.
     :return: ImperialBin API response (type: dict).
     """
-    return Imperial(api_token).edit_document(code=code, document_id=document_id)
+    return Imperial(api_token).edit_document(content=content, document_id=document_id)
 
 
 def delete_document(document_id: str, api_token: str = None):

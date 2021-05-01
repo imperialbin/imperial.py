@@ -7,9 +7,9 @@ from imperial_py.utils.hostname import https
 
 class Document:
 
-    def __init__(self, code: str = None, api_token: str = None, **kwargs):
+    def __init__(self, content: str = None, api_token: str = None, **kwargs):
         self.__api_token = api_token
-        self.__content = code or kwargs.get("content", None)
+        self.__content = content or kwargs.get("content", None)
         # **kwargs
         self.__id = kwargs.get("document_id", None)
         self.__language = kwargs.get("language", "auto")
@@ -41,7 +41,7 @@ class Document:
         return (representation + ">").format(self=self)
 
     def __eq__(self, other):
-        return isinstance(other, Document) and (self.id == other.id or self.code == other.code)
+        return isinstance(other, Document) and (self.id == other.id or self.content == other.content)
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -55,12 +55,12 @@ class Document:
             self.edit(value)
 
     def __len__(self):
-        return len(self.code)
+        return len(self.content)
 
     def __iter__(self):
         # explicitly yield
         for getter, value in {
-            "content": self.code,
+            "content": self.content,
             "id": self.id,
             "language": self.language,
             "image_embed": self.image_embed,
@@ -98,11 +98,11 @@ class Document:
         return self.__api_token
 
     @property
-    def code(self):
+    def content(self):
         return self.__content
 
-    @code.setter
-    def code(self, value: str):
+    @content.setter
+    def content(self, value: str):
         self.edit(value)
 
     @property
@@ -165,7 +165,7 @@ class Document:
             self.__content = code
 
     def duplicate(self):
-        return Document(client.create_document(code=self.code,
+        return Document(client.create_document(content=self.content,
                                                longer_urls=self.longer_urls,
                                                instant_delete=self.instant_delete,
                                                image_embed=self.image_embed,

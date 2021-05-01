@@ -1,9 +1,9 @@
 from .request import request
-from ..utils.checks import ensure_code
+from ..utils.checks import ensure_content
 from ..utils.hostname import https
 
 
-def create_document(code: str,
+def create_document(content: str,
                     api_token: str = None,
                     longer_urls: bool = False,
                     language: str = None,
@@ -15,7 +15,7 @@ def create_document(code: str,
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/document
-    :param code: Code from any programming language, capped at 512KB per request.
+    :param content: Code from any programming language, capped at 512KB per request.
     :param api_token: ImperialBin API token
     :param longer_urls: increases the length of the random document id by 3x.
     :param language: the programming language of the code (or plain)
@@ -26,12 +26,12 @@ def create_document(code: str,
     :param password: the document password (only if document is encrypted)123
     :return: ImperialBin API response (type: dict).
     """
-    ensure_code(code)
+    ensure_content(content)
 
     return request(
         method="POST",
         url=https.imperialbin / "api" / "document",
-        code=code,
+        code=content,
         api_token=api_token,
         # optional
         longer_urls=longer_urls,
