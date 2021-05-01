@@ -84,6 +84,13 @@ class Document:
     def link(self):
         return str(https.imperialbin / "p" / self.id)
 
+    @property
+    def days_left(self):
+        # always rounds down
+        # ex. 7 days 86399 seconds means 7 days left
+        days = (self.expiration - datetime.now()).days
+        return days if days > 0 else None
+
     # getters of private attrs
 
     @property
