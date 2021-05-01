@@ -5,7 +5,7 @@ from .utils.checks import ensure_api_token
 from .utils.hostname import https
 
 __all__ = (
-    "Document"
+    "Document",
 )
 
 
