@@ -1,5 +1,9 @@
 from http.client import responses
 
+__all__ = (
+    "ImperialError"
+)
+
 
 class ImperialError(Exception):
 

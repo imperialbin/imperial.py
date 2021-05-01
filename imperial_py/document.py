@@ -1,8 +1,12 @@
 from datetime import datetime
 
-from imperial_py import client
-from imperial_py.utils.checks import ensure_api_token
-from imperial_py.utils.hostname import https
+from . import client
+from .utils.checks import ensure_api_token
+from .utils.hostname import https
+
+__all__ = (
+    "Document"
+)
 
 
 class Document:

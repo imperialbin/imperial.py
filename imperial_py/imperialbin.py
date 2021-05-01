@@ -3,9 +3,18 @@ __author__ = "Hexiro"
 
 import os
 
-from imperial_py import client
-from imperial_py.document import Document
-from imperial_py.utils.checks import ensure_api_token
+from . import client
+from .document import Document
+from .utils.checks import ensure_api_token
+
+__all__ = (
+    "Imperial",
+    "create_document",
+    "get_document",
+    "edit_document",
+    "delete_document",
+    "verify"
+)
 
 
 class Imperial:

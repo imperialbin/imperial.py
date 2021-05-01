@@ -10,6 +10,15 @@ from ..exceptions import ImperialError
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 
+__all__ = (
+    "ensure_json",
+    "to_snake_case",
+    "to_camel_case",
+    "parse_dates",
+    "parse_response",
+    "parse_request"
+)
+
 
 def ensure_json(response: Response):
     if response.text.lower().startswith("<!doctype html"):
@@ -35,8 +44,10 @@ def to_snake_case(json: dict):
 
 def to_camel_case(json: dict):
     # please don't make fun of my minified-looking comps
-    json = {("".join((word.capitalize() if num != 0 else word.lower()) for num, word in enumerate(key.split("_")))): value
-            for key, value in json.items()}
+    json = {
+        ("".join((word.capitalize() if num != 0 else word.lower()) for num, word in enumerate(key.split("_")))): value
+        for key, value in json.items()
+    }
     for key, value in json.items():
         if isinstance(value, dict):
             json[key] = to_camel_case(value)

@@ -1,3 +1,8 @@
+__all__ = (
+    "https"
+)
+
+
 class https:
     # just so pycharm doesn't yell at me :/
     imperialbin = None
