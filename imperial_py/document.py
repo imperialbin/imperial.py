@@ -80,13 +80,13 @@ class Document:
         # explicitly yield
         for getter, value in {
             "content": self.content,
-            "id": self.id,
+            "document_id": self.id,
             "language": self.language,
             "image_embed": self.image_embed,
             "instant_delete": self.instant_delete,
-            "creation": self.creation,
-            "expiration": self.expiration,
-            "editors": self.editors,
+            "creation_date": self.creation,
+            "expiration_date": self.expiration,
+            "allowed_editors": self.editors,
             "encrypted": self.encrypted,
             "password": self.password,
             "views": self.views
@@ -164,7 +164,7 @@ class Document:
     def views(self):
         return self.__views
 
-    # aliases (I won't be using these, and I recommend you don't)
+    # aliases (to match api response keys)
     document_id = id
     allowed_editors = editors
     creation_date = creation
