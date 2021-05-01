@@ -185,11 +185,21 @@ class Document:
             self.__content = code
 
     def duplicate(self):
-        return Document(client.create_document(content=self.content,
-                                               longer_urls=self.longer_urls,
-                                               instant_delete=self.instant_delete,
-                                               image_embed=self.image_embed,
-                                               expiration=5,
-                                               encrypted=self.encrypted,
-                                               password=self.password,
-                                               api_token=self.api_token), api_token=self.api_token)
+        # similar to `create_document` in Imperial
+        # using predetermined values instead of params
+        resp = client.create_document(
+            content=self.content,
+            longer_urls=self.longer_urls,
+            instant_delete=self.instant_delete,
+            image_embed=self.image_embed,
+            expiration=5,
+            encrypted=self.encrypted,
+            password=self.password,
+            api_token=self.api_token
+        )
+
+        return Document(
+            content=self.content,
+            api_token=self.api_token,
+            **resp["document"]
+        )
