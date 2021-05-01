@@ -178,7 +178,8 @@ class Document:
         :return: ImperialBin API response (type: dict).
         """
         ensure_api_token(self.api_token)
-        json = client.edit_document(code, document_id=self.id, password=self.password, api_token=self.api_token)
+        # in the future, `password` might be available as a kwarg
+        json = client.edit_document(code, document_id=self.id, api_token=self.api_token)
         if json["success"]:
             self.__views = json.get("document", {}).get("views", 0)
             self.__content = code
