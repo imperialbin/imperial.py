@@ -19,6 +19,10 @@ __all__ = (
 
 class Imperial:
 
+    __slots__ = (
+        "__api_token",
+    )
+
     def __init__(self, api_token: str = None):
         """
         :param api_token: ImperialBin API token

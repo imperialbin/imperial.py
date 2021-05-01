@@ -11,6 +11,21 @@ __all__ = (
 
 class Document:
 
+    __slots__ = (
+        "__api_token",
+        "__content",
+        "__id",
+        "__language",
+        "__image_embed",
+        "__instant_delete",
+        "__creation",
+        "__expiration",
+        "__editors",
+        "__encrypted",
+        "__password",
+        "__views"
+    )
+
     def __init__(self, content: str = None, api_token: str = None, **kwargs):
         self.__api_token = api_token
         self.__content = content or kwargs.get("content", None)
