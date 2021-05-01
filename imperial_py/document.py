@@ -74,7 +74,17 @@ class Document:
         }.items():
             yield getter, value
 
-    # extra properties
+    # dynamic getters
+
+    @property
+    def longer_urls(self):
+        return len(self.id) == 26
+
+    @property
+    def link(self):
+        return str(https.imperialbin / "p" / self.id)
+
+    # getters of private attrs
 
     @property
     def api_token(self):
@@ -87,22 +97,6 @@ class Document:
     @code.setter
     def code(self, value: str):
         self.edit(value)
-
-    # properties that might get added to the api response in the future
-
-    @property
-    def longer_urls(self):
-        return len(self.id) == 26
-
-    # properties directly from the api
-
-    # general
-
-    @property
-    def link(self):
-        return str(https.imperialbin / "p" / self.id)
-
-    # nested inside `document` key
 
     @property
     def id(self):
@@ -144,7 +138,7 @@ class Document:
     def views(self):
         return self.__views
 
-    # aliases (i won't be using these)
+    # aliases (I won't be using these, and I recommend you don't)
     document_id = id
     allowed_editors = editors
     creation_date = creation
