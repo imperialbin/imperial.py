@@ -31,6 +31,7 @@ def create_document(content: str,
     return request(
         method="POST",
         url=https.imperialbin / "api" / "document",
+        # I can't wait to replace `code` with `content` here
         code=content,
         api_token=api_token,
         # optional

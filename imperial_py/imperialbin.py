@@ -69,7 +69,6 @@ class Imperial:
         """
 
         resp = client.create_document(
-            # I can't wait to replace `code` with `content` here
             content=content,
             longer_urls=longer_urls,
             language=language,
@@ -101,6 +100,7 @@ class Imperial:
         )
 
         return Document(
+            content=resp["content"],
             api_token=self.api_token,
             **resp["document"]
         )
