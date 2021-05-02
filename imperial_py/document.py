@@ -65,14 +65,6 @@ class Document:
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def __getitem__(self, item: str):
-        return getattr(self, item)
-
-    def __setitem__(self, key: str, value: str):
-        # reminds me of javascript with dot notation and bracket syntax
-        if key == "code":
-            self.edit(value)
-
     def __len__(self):
         return len(self.content)
 
