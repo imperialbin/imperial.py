@@ -11,6 +11,8 @@ from ..exceptions import ImperialError
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
 
 __all__ = (
+    "remove_leading_slash",
+    "remove_tailing_slash",
     "ensure_json",
     "to_snake_case",
     "to_camel_case",
@@ -18,6 +20,14 @@ __all__ = (
     "parse_response",
     "parse_request"
 )
+
+
+def remove_leading_slash(text: str):
+    return text[1:] if text.startswith("/") else text
+
+
+def remove_tailing_slash(text: str):
+    return text[:-1] if text.endswith("/") else text
 
 
 def ensure_json(response: Response):

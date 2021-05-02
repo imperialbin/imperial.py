@@ -2,26 +2,20 @@ __all__ = (
     "https",
 )
 
+from imperial_py.utils.parser import remove_tailing_slash, remove_leading_slash
+
 
 class https:
     # just so pycharm doesn't yell at me :/
     imperialbin = None
 
-    @staticmethod
-    def remove_leading_slash(text: str):
-        return text[1:] if text.startswith("/") else text
-
-    @staticmethod
-    def remove_tailing_slash(text: str):
-        return text[:-1] if text.endswith("/") else text
-
     def __init__(self, name: str):
-        self.path = self.remove_tailing_slash(name)
+        self.path = remove_tailing_slash(name)
 
     def __truediv__(self, endpoint: str):
         # handle / operator
-        endpoint = self.remove_leading_slash(endpoint)
-        endpoint = self.remove_tailing_slash(endpoint)
+        endpoint = remove_leading_slash(endpoint)
+        endpoint = remove_tailing_slash(endpoint)
         return https(self.path + "/" + endpoint)
 
     def __repr__(self):
