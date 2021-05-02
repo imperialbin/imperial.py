@@ -5,7 +5,6 @@ from datetime import datetime
 # (there's no good way to do this unfortunately)
 from requests import Response
 
-from ..checks import is_valid_param
 from ..exceptions import ImperialError
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
@@ -17,8 +16,6 @@ __all__ = (
     "to_snake_case",
     "to_camel_case",
     "parse_dates",
-    "parse_response",
-    "parse_request"
 )
 
 
@@ -72,19 +69,3 @@ def parse_dates(json: dict):
         document["creation_date"] = datetime.fromtimestamp(document["creation_date"] / 1000)
         document["expiration_date"] = datetime.fromtimestamp(document["expiration_date"] / 1000)
     return json
-
-
-def parse_response(response: Response):
-    # probably not good that i just nest three funcs here :shrug:
-    return parse_dates(to_snake_case(ensure_json(response)))
-
-
-def parse_request(method: str, api_token: str, **kwargs):
-    return {
-        # I don't think you're supposed to pass bare mutable types into requests
-        # ex. passing json={} could cause issues
-        # if it wasn't this way, I could remove the ternary expressions, which would be optimal.
-        "headers": {"authorization": api_token} if api_token else None,
-        "params": {"password": kwargs.pop("password")} if ("password" in kwargs and method == "GET") else None,
-        "json": to_camel_case({key: value for key, value in kwargs.items() if is_valid_param(key, value)}) if kwargs else None
-    }
