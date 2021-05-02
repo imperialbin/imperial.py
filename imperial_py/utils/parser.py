@@ -16,6 +16,7 @@ __all__ = (
     "to_snake_case",
     "to_camel_case",
     "parse_dates",
+    "get_date_difference"
 )
 
 
@@ -69,3 +70,9 @@ def parse_dates(json: dict):
         document["creation_date"] = datetime.fromtimestamp(document["creation_date"] / 1000)
         document["expiration_date"] = datetime.fromtimestamp(document["expiration_date"] / 1000)
     return json
+
+
+def get_date_difference(now, later):
+    # assumes now and later are datetime objects
+    days = (later - now).days
+    return days if days > 0 else None

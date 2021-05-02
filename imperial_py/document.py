@@ -2,7 +2,7 @@ from datetime import datetime
 
 from . import client
 from .checks import ensure_api_token
-from .utils import https
+from .utils import https, get_date_difference
 
 __all__ = (
     "Document",
@@ -97,10 +97,9 @@ class Document:
 
     @property
     def days_left(self):
-        # always rounds down
-        # ex. 7 days 86399 seconds means 7 days left
-        days = (self.expiration - datetime.now()).days
-        return days if days > 0 else None
+        # number of FULL DAYS left
+        # 7 days 86399 seconds means 7 days left
+        return get_date_difference(datetime.now(), self.expiration)
 
     # getters of private attrs
 
@@ -179,12 +178,15 @@ class Document:
     def duplicate(self):
         # similar to `create_document` in Imperial
         # using predetermined values instead of params
+
+        expiration = get_date_difference(self.creation, self.expiration)
+
         resp = client.create_document(
             content=self.content,
             longer_urls=self.longer_urls,
             instant_delete=self.instant_delete,
             image_embed=self.image_embed,
-            expiration=5,
+            expiration=expiration,
             encrypted=self.encrypted,
             password=self.password,
             api_token=self.api_token
