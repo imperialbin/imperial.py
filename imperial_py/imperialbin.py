@@ -47,7 +47,7 @@ class Imperial:
         self.__api_token = new_token
 
     def create_document(self,
-                        content: str,
+                        content: str, *,
                         longer_urls: bool = False,
                         language: str = None,
                         instant_delete: bool = False,
@@ -86,7 +86,7 @@ class Imperial:
             **resp["document"]
         )
 
-    def get_document(self, document_id: str, password: str = None):
+    def get_document(self, document_id: str, *, password: str = None):
         """
         Gets code from https://imperialb.in
         GET https://imperialb.in/api/document/:documentID
@@ -144,7 +144,7 @@ class Imperial:
 # shorthand functions
 
 
-def create_document(content: str,
+def create_document(content: str, *,
                     api_token: str = None,
                     longer_urls: bool = False,
                     language: str = None,
@@ -179,7 +179,7 @@ def create_document(content: str,
     )
 
 
-def get_document(document_id: str, password: str = None, api_token: str = None):
+def get_document(document_id: str, *, password: str = None, api_token: str = None):
     """
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/getCode/:documentID
@@ -191,7 +191,7 @@ def get_document(document_id: str, password: str = None, api_token: str = None):
     return Imperial(api_token).get_document(document_id, password=password)
 
 
-def edit_document(content: str, document_id: str, api_token: str = None):
+def edit_document(content: str, document_id: str, *, api_token: str = None):
     """
     Edits document code on https://imperialb.in
     PATCH https://imperialb.in/api/document
@@ -203,7 +203,7 @@ def edit_document(content: str, document_id: str, api_token: str = None):
     return Imperial(api_token).edit_document(content=content, document_id=document_id)
 
 
-def delete_document(document_id: str, api_token: str = None):
+def delete_document(document_id: str, *, api_token: str = None):
     """
     Deletes document from https://imperialb.in
     DELETE https://imperialb.in/api/document/:documentID

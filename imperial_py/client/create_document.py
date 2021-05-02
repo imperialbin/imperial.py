@@ -3,7 +3,7 @@ from ..utils.checks import ensure_content
 from ..utils.hostname import https
 
 
-def create_document(content: str,
+def create_document(content: str, *,
                     api_token: str = None,
                     longer_urls: bool = False,
                     language: str = None,

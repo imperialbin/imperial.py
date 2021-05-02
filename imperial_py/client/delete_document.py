@@ -3,7 +3,7 @@ from ..utils.checks import ensure_document_id
 from ..utils.hostname import https
 
 
-def delete_document(document_id: str, api_token: str = None):
+def delete_document(document_id: str, *, api_token: str = None):
     """
     Deletes document on https://imperialb.in
     DELETE https://imperialb.in/api/document/:document_id

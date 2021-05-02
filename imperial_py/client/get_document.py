@@ -3,7 +3,7 @@ from ..utils.checks import ensure_document_id
 from ..utils.hostname import https
 
 
-def get_document(document_id: str, api_token: str = None, password: str = None):
+def get_document(document_id: str, *, api_token: str = None, password: str = None):
     """
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/document/:documentID
