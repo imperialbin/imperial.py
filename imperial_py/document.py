@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from . import client
-from .utils.checks import ensure_api_token
-from .utils.hostname import https
+from .checks import ensure_api_token
+from .utils import https
 
 __all__ = (
     "Document",

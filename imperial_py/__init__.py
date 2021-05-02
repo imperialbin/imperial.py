@@ -15,5 +15,7 @@ __all__ = (
     # from client
     "client",
     # from exceptions
-    "exceptions"
+    "exceptions",
+    # from checks
+    "checks"
 )

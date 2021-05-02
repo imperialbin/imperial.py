@@ -1,6 +1,6 @@
 from .request import request
-from ..utils.checks import ensure_api_token
-from ..utils.hostname import https
+from ..checks import ensure_api_token
+from ..utils import https
 
 
 def check_api_token(api_token: str):

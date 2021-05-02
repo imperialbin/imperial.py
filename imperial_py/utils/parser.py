@@ -5,7 +5,7 @@ from datetime import datetime
 # (there's no good way to do this unfortunately)
 from requests import Response
 
-from .checks import is_valid
+from ..checks import is_valid_param
 from ..exceptions import ImperialError
 
 snake_regex = re.compile(r"(?<!^)(?<![A-Z])(?=[A-Z])")
@@ -86,5 +86,5 @@ def parse_request(method: str, api_token: str, **kwargs):
         # if it wasn't this way, I could remove the ternary expressions, which would be optimal.
         "headers": {"authorization": api_token} if api_token else None,
         "params": {"password": kwargs.pop("password")} if ("password" in kwargs and method == "GET") else None,
-        "json": to_camel_case({key: value for key, value in kwargs.items() if is_valid(key, value)}) if kwargs else None
+        "json": to_camel_case({key: value for key, value in kwargs.items() if is_valid_param(key, value)}) if kwargs else None
     }

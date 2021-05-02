@@ -1,6 +1,6 @@
 from .request import request
-from ..utils.checks import ensure_document_id
-from ..utils.hostname import https
+from ..checks import ensure_document_id
+from ..utils import https
 
 
 def delete_document(document_id: str, *, api_token: str = None):

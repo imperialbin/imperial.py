@@ -1,6 +1,6 @@
 import requests
 
-from ..utils.parser import parse_request, parse_response
+from ..utils import parse_request, parse_response
 
 
 def request(*, method: str, url: str, api_token: str = None, **kwargs):

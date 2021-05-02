@@ -1,6 +1,6 @@
 from .request import request
-from ..utils.checks import ensure_content, ensure_document_id
-from ..utils.hostname import https
+from ..checks import ensure_content, ensure_document_id
+from ..utils import https
 
 
 def edit_document(content: str, document_id: str, *, api_token: str = None):

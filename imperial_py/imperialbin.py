@@ -5,7 +5,7 @@ import os
 
 from . import client
 from .document import Document
-from .utils.checks import ensure_api_token
+from .checks import ensure_api_token
 
 __all__ = (
     "Imperial",

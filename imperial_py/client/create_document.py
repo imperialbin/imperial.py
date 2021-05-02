@@ -1,6 +1,6 @@
 from .request import request
-from ..utils.checks import ensure_content
-from ..utils.hostname import https
+from ..checks import ensure_content
+from ..utils import https
 
 
 def create_document(content: str, *,
