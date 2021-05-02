@@ -8,5 +8,5 @@ api_token_regex = re.compile(r"^IMPERIAL-[a-zA-Z\d]{8}(-[a-zA-Z\d]{4}){3}-[a-zA-
 def ensure_api_token(api_token: str = None):
     # does not actually make api req to validate api token
     # short circuiting if statements mean that
-    if not (api_token and isinstance(api_token, str) and re.match(api_token_regex, api_token)):
+    if not api_token or not isinstance(api_token, str) or not re.match(api_token_regex, api_token):
         raise ImperialError(message="API token is invalid!", status=401)

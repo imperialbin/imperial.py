@@ -1,7 +1,9 @@
-from .is_invalid_string import is_invalid_string
 from ..exceptions import ImperialError
 
 
 def ensure_document_id(document_id: str):
-    if is_invalid_string(document_id):
+    # document_id has to be a string, and has to be a valid length for a document id
+    # 8 is standard; 26 with longer_urls enabled
+    # `if not document_id` check is redundant, as it will be determined by len
+    if not isinstance(document_id, str) or not (len(document_id) == 8 or len(document_id) == 26):
         raise ImperialError(message="We couldn't find that document!", status=404)
