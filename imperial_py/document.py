@@ -168,7 +168,6 @@ class Document:
         :param code: Code from any programming language, capped at 512KB per request (type: str).
         :return: ImperialBin API response (type: dict).
         """
-        ensure_api_token(self.api_token)
         # in the future, `password` might be available as a kwarg
         json = client.edit_document(code, document_id=self.id, api_token=self.api_token)
         if json["success"]:

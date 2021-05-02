@@ -1,3 +1,5 @@
+from imperial_py.checks import ensure_api_token
+
 from .request import request
 from ..checks import ensure_content
 from ..utils import https
@@ -27,6 +29,8 @@ def create_document(content: str, *,
     :return: ImperialBin API response (type: dict).
     """
     ensure_content(content)
+    if api_token:
+        ensure_api_token(api_token)
 
     return request(
         method="POST",

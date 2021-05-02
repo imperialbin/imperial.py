@@ -1,3 +1,5 @@
+from imperial_py.checks import ensure_api_token
+
 from .request import request
 from ..checks import ensure_document_id
 from ..utils import https
@@ -12,6 +14,8 @@ def delete_document(document_id: str, *, api_token: str = None):
     :return: ImperialBin API response (type: dict).
     """
     ensure_document_id(document_id)
+    if api_token:
+        ensure_api_token(api_token)
 
     return request(
         method="DELETE",

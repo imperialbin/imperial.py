@@ -1,5 +1,5 @@
 from .request import request
-from ..checks import ensure_content, ensure_document_id
+from ..checks import ensure_content, ensure_document_id, ensure_api_token
 from ..utils import https
 
 
@@ -14,6 +14,8 @@ def edit_document(content: str, document_id: str, *, api_token: str = None):
     """
     ensure_content(content)
     ensure_document_id(document_id)
+    if api_token:
+        ensure_api_token(api_token)
 
     return request(
         method="PATCH",
