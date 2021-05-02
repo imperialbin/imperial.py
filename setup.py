@@ -1,5 +1,5 @@
 __author__ = "Hexiro"
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("README.md", encoding="utf-8") as readme_file:
     readme = readme_file.read()
@@ -16,7 +16,7 @@ setup(
     author="Hexiro",
     author_email="realhexiro@gmail.com",
     url="https://github.com/imperialbin/imperial-py",
-    packages=["imperial_py", "imperial_py.client", "imperial_py.utils", "imperial_py.checks"],
+    packages=["imperial_py"] + [("imperial_py." + x) for x in find_packages(where="imperial_py")],
     python_requires=">=3.5",
     install_requires=requirements,
     license="MPL2",
