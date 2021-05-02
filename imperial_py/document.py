@@ -66,7 +66,7 @@ class Document:
         return not self.__eq__(other)
 
     def __len__(self):
-        return len(self.content)
+        return len(self.content) if self.content else 0
 
     def __iter__(self):
         # explicitly yield
