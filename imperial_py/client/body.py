@@ -35,7 +35,9 @@ class Body:
         if api_token:
             self.__headers = {"authorization": api_token}
 
-        if password and method == "GET":
+        if not password:
+            pass
+        elif method == "GET":
             self.update_params("password", password)
         else:  # method isn't GET; password goes to json body instead
             self.update_json("password", password)
