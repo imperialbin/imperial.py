@@ -3,15 +3,16 @@ from imperial_py.utils import to_camel_case
 
 class Body:
 
-    __default_params = {
-        "api_token": None,
-        "longer_urls": False,
-        "language": None,
-        "instant_delete": False,
-        "image_embed": False,
-        "expiration": 5,
-        "encrypted": False,
-        "password": None
+    __expected_params = {
+        # in format: default, expected type
+        "api_token": (None, str),
+        "longer_urls": (False, bool),
+        "language": (None, str),
+        "instant_delete": (False, bool),
+        "image_embed": (False, bool),
+        "expiration": (5, int),
+        "encrypted": (False, bool),
+        "password": (None, str)
     }
 
     __slots__ = (
@@ -48,24 +49,16 @@ class Body:
 
     def handle_kwarg(self, key, value):
 
-        if key not in self.__default_params:
+        if key not in self.__expected_params:
+            # mandatory; always set with type string
             self.update_json(key, str(value))
             return
 
-        default_value = self.__default_params[key]
-        default_type = type(default_value)
+        default_value, expected_type = self.__expected_params[key]
 
-        if default_value == value:
-            return
-        if isinstance(value, default_type):
-            # is expected type
+        if value != default_value and isinstance(value, expected_type):
+            # unique value w/ correct typing
             self.update_json(key, value)
-            return
-        if default_value is None and isinstance(value, str):
-            # is string when expected type is None. could be a problem in the future if we need to pass a
-            # non-string into a param with a default value of None
-            self.update_json(key, value)
-            return
 
     def update_json(self, key, value):
         if self.__json is None:
