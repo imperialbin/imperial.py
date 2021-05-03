@@ -1,6 +1,9 @@
 .idea/
 __pycache__/
-*.pyc
 build/
 dist/
 imperial_py.egg-info/
+.pytest_cache/
+imperial_py/tests/
+*.pyc
+reinstall.bat
