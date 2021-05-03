@@ -36,7 +36,7 @@ class Document:
         self.__instant_delete = kwargs.get("instant_delete", False)
         self.__creation = kwargs.get("creation_date", None)
         self.__expiration = kwargs.get("expiration_date", None)
-        self.__editors = kwargs.get("allowedEditors", [])
+        self.__editors = kwargs.get("allowed_editors", [])
         self.__encrypted = kwargs.get("encrypted", None)
         self.__password = kwargs.get("password", None)
         self.__views = kwargs.get("views", 0)

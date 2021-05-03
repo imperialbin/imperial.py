@@ -12,7 +12,8 @@ class Body:
         "image_embed": (False, bool),
         "expiration": (5, int),
         "encrypted": (False, bool),
-        "password": (None, str)
+        "password": (None, str),
+        "editors": (None, list)
     }
 
     __slots__ = (

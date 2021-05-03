@@ -1,3 +1,5 @@
+from typing import List
+
 from imperial_py.checks import ensure_api_token
 
 from .request import request
@@ -13,7 +15,8 @@ def create_document(content: str, *,
                     image_embed: bool = False,
                     expiration: int = 5,
                     encrypted: bool = False,
-                    password: str = None):
+                    password: str = None,
+                    editors: List[str] = None):
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/document
@@ -25,7 +28,8 @@ def create_document(content: str, *,
     :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
     :param expiration: sets the number of days before the paste deletes (overwritten by instant_delete)
     :param encrypted: whether the document gets encrypted or not
-    :param password: the document password (only if document is encrypted)123
+    :param password: the document password (only if document is encrypted)
+    :param editors: list of users who're allowed to edit a document
     :return: ImperialBin API response (type: dict).
     """
     ensure_content(content)
@@ -46,4 +50,5 @@ def create_document(content: str, *,
         expiration=expiration,
         encrypted=encrypted,
         password=password,
+        editors=editors
     )
