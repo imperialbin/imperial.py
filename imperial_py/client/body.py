@@ -22,9 +22,9 @@ class Body:
     )
 
     def __init__(self, *, method, **kwargs):
-        self.__headers = None
-        self.__params = None
-        self.__json = None
+        self.__headers = {}
+        self.__params = {}
+        self.__json = {}
         # handle param validity
 
         api_token = kwargs.pop("api_token") if "api_token" in kwargs else None
@@ -39,50 +39,33 @@ class Body:
         if not password:
             pass
         elif method == "GET":
-            self.update_params("password", password)
+            self.__params["password"] = password
         else:  # method isn't GET; password goes to json body instead
-            self.update_json("password", password)
-
-        # last thing, convert to camel case
-        if self.json:
-            self.__json = to_camel_case(self.json)
+            self.__json["password"] = password
 
     def handle_kwarg(self, key, value):
 
         if key not in self.__expected_params:
             # mandatory; always set with type string
-            self.update_json(key, str(value))
+            self.__json[key] = str(value)
             return
 
         default_value, expected_type = self.__expected_params[key]
 
         if value != default_value and isinstance(value, expected_type):
             # unique value w/ correct typing
-            self.update_json(key, value)
-
-    def update_json(self, key, value):
-        if self.__json is None:
-            self.__json = {}
-        self.__json[key] = value
-
-    def update_params(self, key, value):
-        if self.__params is None:
-            self.__params = {}
-        self.__params[key] = value
+            self.__json[key] = value
 
     # getters of parsed data
-    # by default they're all None,
-    # but will get switched to a mutable data type
-    # if they get data to hold
 
     @property
     def headers(self):
-        return self.__headers
+        return self.__headers if self.__headers else None
 
     @property
     def params(self):
-        return self.__params
+        return self.__params if self.__params else None
 
     @property
     def json(self):
-        return self.__json
+        return to_camel_case(self.__json) if self.__json else None
