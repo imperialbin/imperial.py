@@ -30,15 +30,15 @@ def remove_tailing_slash(text: str):
 
 def ensure_json(response: Response):
     if response.text.lower().startswith("<!doctype html"):
-        raise ImperialError("Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py")
+        raise ImperialError()
 
     json = response.json()
     if json.get("success", False):
         return json
     elif json.get("message"):
-        raise ImperialError(json["message"], status=response.status_code)
+        raise ImperialError(json["message"])
     else:
-        raise ImperialError("Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py")
+        raise ImperialError()
 
 
 def to_snake_case(json: dict):

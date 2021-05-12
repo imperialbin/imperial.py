@@ -1,4 +1,4 @@
-from ..exceptions import ImperialError
+from ..exceptions import DocumentNotFound
 
 
 def ensure_document_id(document_id: str):
@@ -6,4 +6,4 @@ def ensure_document_id(document_id: str):
     # 8 is standard; 26 with longer_urls enabled
     # `if not document_id` check is redundant, as it will be determined by len
     if not isinstance(document_id, str) or not (len(document_id) == 8 or len(document_id) == 26):
-        raise ImperialError(message="We couldn't find that document!", status=404)
+        raise DocumentNotFound(document_id)
