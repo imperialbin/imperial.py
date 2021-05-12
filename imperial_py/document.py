@@ -111,10 +111,6 @@ class Document:
     def content(self):
         return self.__content
 
-    @content.setter
-    def content(self, value: str):
-        self.edit(value)
-
     @property
     def id(self):
         return self.__id
