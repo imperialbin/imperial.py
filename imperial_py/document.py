@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from . import client
-from .checks import ensure_api_token
+from .exceptions import DocumentNotFound
 from .utils import https, get_date_difference
 
 __all__ = (
@@ -10,7 +10,6 @@ __all__ = (
 
 
 class Document:
-
     __slots__ = (
         "__api_token",
         "__content",
@@ -23,10 +22,15 @@ class Document:
         "__editors",
         "__encrypted",
         "__password",
-        "__views"
+        "__views",
+        "__deleted"
     )
 
     def __init__(self, content: str = None, api_token: str = None, **kwargs):
+        # success isn't needed,
+        # message isn't needed
+        # longer_urls is generated dynamically
+        # link is generated dynamically
         self.__api_token = api_token
         self.__content = content or kwargs.get("content", None)
         # **kwargs
@@ -40,10 +44,8 @@ class Document:
         self.__encrypted = kwargs.get("encrypted", None)
         self.__password = kwargs.get("password", None)
         self.__views = kwargs.get("views", 0)
-        # success isn't needed,
-        # message isn't needed
-        # longer_urls is generated dynamically
-        # link is generated dynamically
+        # not from api
+        self.__deleted = False
 
     def __repr__(self):
         representation = "<Document id={self.id}"
@@ -54,7 +56,10 @@ class Document:
                 representation += " language={self.language}"
             if self.password:
                 representation += " password={self.password}"
-        # this is formatting an insecure string
+            if self.deleted:
+                # self.deleted should always be true here
+                representation += " deleted={self.deleted}"
+                # this is formatting an insecure string
         # meaning that who ever controls the formatting can access object attrs getters etc
         # this should pose no risk here with self=self though
         return (representation + ">").format(self=self)
@@ -67,6 +72,9 @@ class Document:
 
     def __len__(self):
         return len(self.content) if self.content else 0
+
+    def __del__(self):
+        self.delete()
 
     def __iter__(self):
         # explicitly yield
@@ -151,6 +159,14 @@ class Document:
     def views(self):
         return self.__views
 
+    @property
+    def deleted(self):
+        return self.__deleted
+
+    @property
+    def editable(self):
+        return self.api_token and not self.deleted
+
     # aliases (to match api response keys)
     document_id = id
     allowed_editors = editors
@@ -164,6 +180,9 @@ class Document:
         :param code: Code from any programming language, capped at 512KB per request (type: str).
         :return: ImperialBin API response (type: dict).
         """
+        if not self.editable:
+            raise DocumentNotFound(self.id)
+
         # in the future, `password` might be available as a kwarg
         json = client.edit_document(code, document_id=self.id, api_token=self.api_token)
         if json["success"]:
@@ -192,3 +211,10 @@ class Document:
             api_token=self.api_token,
             **resp["document"]
         )
+
+    def delete(self):
+        if self.deleted:
+            raise DocumentNotFound(self.id)
+        client.delete_document(document_id=self.id, api_token=self.api_token)
+        # if it doesn't raise then it succeeded
+        self.__deleted = True
