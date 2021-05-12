@@ -14,12 +14,12 @@ __all__ = (
     "get_document",
     "edit_document",
     "delete_document",
-    "verify"
+    "verify",
+    "purge_documents"
 )
 
 
 class Imperial:
-
     __slots__ = (
         "__api_token",
     )
@@ -144,6 +144,15 @@ class Imperial:
         """
         client.check_api_token(self.api_token)
 
+    def purge_documents(self):
+        """
+        Deletes all documents associated with an account (by API token)
+        DELETE https://imperialb.in/api/purgeDocuments
+        :return: number of accounts deleted
+        :rtype: int
+        """
+        return client.purge_documents(api_token=self.api_token)["number_deleted"]
+
 
 # shorthand functions
 
@@ -230,3 +239,14 @@ def verify(api_token: str = None):
     """
     # p.s. `api_token` isn't required because it can be set by an environment variable :)
     Imperial(api_token).verify()
+
+
+def purge_documents(api_token: str = None):
+    """
+    Deletes all documents associated with an account (by API token)
+    DELETE https://imperialb.in/api/purgeDocuments
+    :param api_token: ImperialBin API token.
+    :return: number of accounts deleted
+    :rtype: int
+    """
+    return Imperial(api_token).purge_documents()
