@@ -48,7 +48,7 @@ class Body:
 
         if key not in self.__expected_params:
             # mandatory; always set with type string
-            self.__json[key] = str(value)
+            self.__json[key] = value
             return
 
         default_value, expected_type = self.__expected_params[key]
