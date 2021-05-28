@@ -199,25 +199,43 @@ class Document:
             self.__views = json.get("document", {}).get("views", 0)
             self.__content = code
 
-    def duplicate(self):
-        # similar to `create_document` in Imperial
-        # using predetermined values instead of params
+    def duplicate(self,
+                  content: str = None,
+                  *,
+                  short_urls: bool = False,
+                  longer_urls: bool = False,
+                  language: str = None,
+                  public: bool = False,
+                  instant_delete: bool = False,
+                  image_embed: bool = False,
+                  expiration: int = 5,
+                  encrypted: bool = False,
+                  password: str = None,
+                  editors: list[str] = None):
 
-        expiration = get_date_difference(self.creation, self.expiration)
+        # similar to `create_document` in Imperial
+        # using predetermined values or params
+
+        content = content or self.content
+        expiration_ = get_date_difference(self.creation, self.expiration)
 
         resp = client.create_document(
-            content=self.content,
-            longer_urls=self.longer_urls,
-            instant_delete=self.instant_delete,
-            image_embed=self.image_embed,
-            expiration=expiration,
-            encrypted=self.encrypted,
-            password=self.password,
+            content=content,
+            short_urls=short_urls or self.short_urls,
+            longer_urls=longer_urls or self.longer_urls,
+            language=language or self.language,
+            public=public or self.public,
+            instant_delete=instant_delete or self.instant_delete,
+            image_embed=image_embed or self.image_embed,
+            expiration=expiration or expiration_,
+            encrypted=encrypted or self.encrypted,
+            password=password or self.password,
+            editors=editors or self.editors,
             api_token=self.api_token
         )
 
         return Document(
-            content=self.content,
+            content=content,
             api_token=self.api_token,
             **resp["document"]
         )
