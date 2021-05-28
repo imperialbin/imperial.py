@@ -52,6 +52,7 @@ class Imperial:
                         short_urls: bool = False,
                         longer_urls: bool = False,
                         language: str = None,
+                        public: bool = False,
                         instant_delete: bool = False,
                         image_embed: bool = False,
                         expiration: int = 5,
@@ -65,6 +66,7 @@ class Imperial:
         :param short_urls: increases the length of the random document id from 8 to 4
         :param longer_urls: increases the length of the random document id from 8 to 26
         :param language: the programming language of the code (or plain)
+        :param public: makes the document publicly viewable on an imperial public page
         :param instant_delete: makes the paste delete on its first visit.
         :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
         :param expiration: sets the number of days before the paste deletes (overwritten by instant_delete)
@@ -78,6 +80,7 @@ class Imperial:
             short_urls=short_urls,
             longer_urls=longer_urls,
             language=language,
+            public=public,
             instant_delete=instant_delete,
             image_embed=image_embed,
             expiration=expiration,
@@ -165,6 +168,7 @@ def create_document(content: str, *,
                     short_urls: bool = False,
                     longer_urls: bool = False,
                     language: str = None,
+                    public: bool = False,
                     instant_delete: bool = False,
                     image_embed: bool = False,
                     expiration: int = 5,
@@ -179,6 +183,7 @@ def create_document(content: str, *,
     :param short_urls: increases the length of the random document id from 8 to 4
     :param longer_urls: increases the length of the random document id from 8 to 26
     :param language: the programming language of the code (or plain)
+    :param public: makes the document publicly viewable on an imperial public page
     :param instant_delete: makes the paste delete on its first visit.
     :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
     :param expiration: sets the number of days before the paste deletes (overwritten by instant_delete)
@@ -192,6 +197,7 @@ def create_document(content: str, *,
         short_urls=short_urls,
         longer_urls=longer_urls,
         language=language,
+        public=public,
         instant_delete=instant_delete,
         image_embed=image_embed,
         expiration=expiration,

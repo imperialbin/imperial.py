@@ -9,6 +9,7 @@ class Body:
         "short_urls": (False, bool),
         "longer_urls": (False, bool),
         "language": (None, str),
+        "public": (False, bool),
         "instant_delete": (False, bool),
         "image_embed": (False, bool),
         "expiration": (5, int),

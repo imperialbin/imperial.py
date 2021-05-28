@@ -37,6 +37,7 @@ class Document:
         # **kwargs
         self.__id = kwargs.get("document_id", None)
         self.__language = kwargs.get("language", "auto")
+        self.__public = kwargs.get("public", False)
         self.__image_embed = kwargs.get("image_embed", False)
         self.__instant_delete = kwargs.get("instant_delete", False)
         self.__creation = kwargs.get("creation_date", None)
@@ -131,6 +132,10 @@ class Document:
     @property
     def language(self):
         return self.__language
+
+    @property
+    def public(self):
+        return self.__public
 
     @property
     def image_embed(self):
