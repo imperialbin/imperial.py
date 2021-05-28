@@ -14,6 +14,7 @@ class Document:
         "__api_token",
         "__content",
         "__id",
+        "__public",
         "__language",
         "__image_embed",
         "__instant_delete",
@@ -94,6 +95,10 @@ class Document:
             yield getter, value
 
     # dynamic getters
+    
+    @property
+    def short_urls(self):
+        return len(self.id) == 4
 
     @property
     def longer_urls(self):

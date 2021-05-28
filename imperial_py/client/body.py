@@ -6,6 +6,7 @@ class Body:
     __expected_params = {
         # in format: default, expected type
         "api_token": (None, str),
+        "short_urls": (False, bool),
         "longer_urls": (False, bool),
         "language": (None, str),
         "instant_delete": (False, bool),

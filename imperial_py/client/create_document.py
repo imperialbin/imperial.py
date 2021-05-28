@@ -9,6 +9,7 @@ from ..utils import https
 
 def create_document(content: str, *,
                     api_token: str = None,
+                    short_urls: bool = False,
                     longer_urls: bool = False,
                     language: str = None,
                     instant_delete: bool = False,
@@ -22,7 +23,8 @@ def create_document(content: str, *,
     POST https://imperialb.in/api/document
     :param content: Code from any programming language, capped at 512KB per request.
     :param api_token: ImperialBin API token
-    :param longer_urls: increases the length of the random document id by 3x.
+    :param short_urls: increases the length of the random document id from 8 to 4
+    :param longer_urls: increases the length of the random document id from 8 to 26
     :param language: the programming language of the code (or plain)
     :param instant_delete: makes the paste delete on its first visit.
     :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
@@ -43,6 +45,7 @@ def create_document(content: str, *,
         code=content,
         api_token=api_token,
         # optional
+        short_urls=short_urls,
         longer_urls=longer_urls,
         language=language,
         instant_delete=instant_delete,
