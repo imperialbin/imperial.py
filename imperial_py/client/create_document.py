@@ -1,5 +1,3 @@
-from typing import List
-
 from imperial_py.checks import ensure_api_token
 
 from .request import request
@@ -18,7 +16,7 @@ def create_document(content: str, *,
                     expiration: int = 5,
                     encrypted: bool = False,
                     password: str = None,
-                    editors: List[str] = None):
+                    editors: list[str] = None):
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/document
