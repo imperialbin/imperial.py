@@ -1,3 +1,5 @@
+import json
+
 from imperial_py.utils import to_camel_case
 
 
@@ -34,6 +36,12 @@ class Body:
         password = kwargs.pop("password") if "password" in kwargs else None
 
         for key, value in kwargs.items():
+            if isinstance(value, bytes):
+                value = value.decode("utf8", "replace")
+            elif isinstance(value, dict) or isinstance(value, list):
+                value = json.dumps(value)
+            elif not isinstance(value, str):
+                value = str(value)
             self.handle_kwarg(key, value)
 
         if api_token:
