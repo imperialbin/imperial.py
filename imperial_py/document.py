@@ -104,7 +104,8 @@ class Document:
 
     @property
     def link(self):
-        return str(https.imperialbin / "p" / self.id)
+        if self.id:
+            return str(https.imperialbin / "p" / self.id)
 
     @property
     def days_left(self):

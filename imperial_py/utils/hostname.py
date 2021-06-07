@@ -14,6 +14,7 @@ class https:
 
     def __truediv__(self, endpoint: str):
         # handle / operator
+        endpoint = str(endpoint)
         endpoint = remove_leading_slash(endpoint)
         endpoint = remove_tailing_slash(endpoint)
         return https(self.path + "/" + endpoint)
