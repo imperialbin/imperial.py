@@ -17,7 +17,7 @@ setup(
     author_email="realhexiro@gmail.com",
     url="https://github.com/imperialbin/imperial-py",
     packages=["imperial_py"] + [("imperial_py." + x) for x in find_packages(where="imperial_py")],
-    python_requires=">=3.5",
+    python_requires=">=3.6",
     install_requires=requirements,
     license="MPL2",
     classifiers=[
