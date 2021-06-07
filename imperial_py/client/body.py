@@ -1,6 +1,6 @@
 import json
 
-from imperial_py.utils import to_camel_case
+from ..utils import to_camel_case
 
 
 class Body:

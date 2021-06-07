@@ -1,7 +1,5 @@
-from imperial_py.checks import ensure_api_token
-
 from .request import request
-from ..checks import ensure_document_id
+from ..checks import ensure_document_id, ensure_api_token
 from ..utils import https
 
 
