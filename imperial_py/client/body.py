@@ -32,15 +32,15 @@ class Body:
         self.__json = {}
         # handle param validity
 
-        api_token = kwargs.pop("api_token") if "api_token" in kwargs else None
-        password = kwargs.pop("password") if "password" in kwargs else None
+        api_token = kwargs.pop("api_token", None)
+        password = kwargs.pop("password", None)
 
         for key, value in kwargs.items():
             if isinstance(value, bytes):
                 value = value.decode("utf8", "replace")
             elif isinstance(value, dict) or isinstance(value, list):
                 value = json.dumps(value)
-            elif not isinstance(value, str):
+            elif key not in self.__expected_params and not isinstance(value, str):
                 value = str(value)
             self.handle_kwarg(key, value)
 
@@ -51,13 +51,13 @@ class Body:
             pass
         elif method == "GET":
             self.__params["password"] = password
-        else:  # method isn't GET; password goes to json body instead
+        else:  # if method isn't GET, password goes to json body instead
             self.__json["password"] = password
 
     def handle_kwarg(self, key, value):
 
         if key not in self.__expected_params:
-            # mandatory; always set with type string
+            # mandatory
             self.__json[key] = value
             return
 
