@@ -75,9 +75,6 @@ class Document:
     def __len__(self):
         return len(self.content) if self.content else 0
 
-    def __del__(self):
-        self.delete()
-
     def __iter__(self):
         # explicitly yield
         for getter, value in {
@@ -96,7 +93,7 @@ class Document:
             yield getter, value
 
     # dynamic getters
-    
+
     @property
     def short_urls(self):
         return len(self.id) == 4
