@@ -74,21 +74,17 @@ class Document:
         return len(self.content) if self.content else 0
 
     def __iter__(self):
-        # explicitly yield
-        for getter, value in {
-            "content": self.content,
-            "document_id": self.id,
-            "language": self.language,
-            "image_embed": self.image_embed,
-            "instant_delete": self.instant_delete,
-            "creation_date": self.creation,
-            "expiration_date": self.expiration,
-            "allowed_editors": self.editors,
-            "encrypted": self.encrypted,
-            "password": self.password,
-            "views": self.views
-        }.items():
-            yield getter, value
+        yield "content", self.content
+        yield "document_id", self.id
+        yield "language", self.language
+        yield "image_embed", self.image_embed
+        yield "instant_delete", self.instant_delete
+        yield "creation_date", self.creation
+        yield "expiration_date", self.expiration
+        yield "allowed_editors", self.editors
+        yield "encrypted", self.encrypted
+        yield "password", self.password
+        yield "views", self.views
 
     # dynamic getters
 
