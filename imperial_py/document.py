@@ -31,9 +31,9 @@ class Document:
         # success isn't needed,
         # message isn't needed
         # longer_urls is generated dynamically
-        # link is generated dynamically
+        # formatted_link and raw_link are generated dynamically
         self.__api_token = api_token
-        self.__content = content or kwargs.get("content", None)
+        self.__content = content
         # **kwargs
         self.__id = kwargs.get("document_id", None)
         self.__language = kwargs.get("language", "auto")
@@ -50,21 +50,18 @@ class Document:
         self.__deleted = False
 
     def __repr__(self):
-        representation = "<Document id={self.id}"
+        representation = f"<Document id={self.id}"
         if self.id:
             if isinstance(self.expiration, datetime):
-                representation += " expiration={self.expiration:%x}"
+                representation += f" expiration={self.expiration:%x}"
             if self.language:
-                representation += " language={self.language}"
+                representation += f" language={self.language}"
             if self.password:
-                representation += " password={self.password}"
+                representation += f" password={self.password}"
             if self.deleted:
-                # self.deleted should always be true here
-                representation += " deleted={self.deleted}"
-                # this is formatting an insecure string
-        # meaning that who ever controls the formatting can access object attrs getters etc
-        # this should pose no risk here with self=self though
-        return (representation + ">").format(self=self)
+                # self.deleted will always be true here
+                representation += " deleted=True"
+        return representation + ">"
 
     def __eq__(self, other):
         return isinstance(other, Document) and (self.id == other.id or self.content == other.content)

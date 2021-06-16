@@ -8,19 +8,15 @@ __all__ = (
 
 class ImperialError(Exception):
 
-    def __init__(self, message=None):
-        if not message:
-            message = "Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py"
+    def __init__(self, message: str = None):
+        message = message or "Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py"
         super().__init__(message)
 
 
 class DocumentNotFound(ImperialError):
 
     def __init__(self, document_id=None):
-        if document_id:
-            message = "We couldn't find a document with id, {}!".format(document_id)
-        else:
-            message = "We couldn't find that document!"
+        message = f"We couldn't find a document with id, {document_id}!" if document_id else "We couldn't find that document!"
         super().__init__(message)
 
 
@@ -31,8 +27,5 @@ class ContentRequired(ImperialError):
 
 class InvalidAuthorization(ImperialError):
     def __init__(self, api_token=None):
-        if api_token:
-            message = "The API token, {} is invalid!".format(api_token)
-        else:
-            message = "API token is invalid!"
+        message = f"The API token, {api_token} is invalid!" if api_token else "API token is invalid!"
         super().__init__(message)

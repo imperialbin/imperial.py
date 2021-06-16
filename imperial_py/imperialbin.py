@@ -35,7 +35,7 @@ class Imperial:
             ensure_api_token(self.api_token)
 
     def __repr__(self):
-        return "<Imperial api_token={api_token}>".format(api_token=self.api_token)
+        return f"<Imperial api_token={self.api_token}>"
 
     @property
     def api_token(self):
