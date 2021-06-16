@@ -103,9 +103,14 @@ class Document:
         return len(self.id) == 26
 
     @property
-    def link(self):
+    def formatted_link(self):
         if self.id:
             return str(https.imperialbin / "p" / self.id)
+
+    @property
+    def raw_link(self):
+        if self.id:
+            return str(https.imperialbin / "r" / self.id)
 
     @property
     def days_left(self):
@@ -180,6 +185,8 @@ class Document:
     allowed_editors = editors
     creation_date = creation
     expiration_date = expiration
+    # aliases because cool
+    link = formatted_link
 
     def edit(self, content: str):
         """
