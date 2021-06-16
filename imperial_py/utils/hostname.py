@@ -2,7 +2,7 @@ __all__ = (
     "https",
 )
 
-from imperial_py.utils.parser import remove_tailing_slash, remove_leading_slash
+from .parser import remove_tailing_slash, remove_leading_slash
 
 
 class https:
