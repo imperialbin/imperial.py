@@ -28,7 +28,7 @@ class Document:
         "__deleted"
     )
 
-    def __init__(self, content: str = None, api_token: str = None, **kwargs):
+    def __init__(self, content: str, api_token: str = None, **kwargs):
         # success isn't needed,
         # message isn't needed
         # longer_urls is generated dynamically
@@ -123,7 +123,7 @@ class Document:
         return self.__api_token
 
     @property
-    def content(self) -> Optional[str]:
+    def content(self) -> str:
         return self.__content
 
     @property
