@@ -2,6 +2,7 @@ import re
 from datetime import datetime
 # this is required so pycharm recognized the type
 # (there's no good way to do this unfortunately)
+from json import JSONDecodeError
 from typing import Optional
 
 from requests import Response
@@ -20,15 +21,10 @@ __all__ = (
 
 
 def ensure_json(response: Response) -> dict:
-    if response.text.lower().startswith("<!doctype html"):
-        raise ImperialError()
-
-    json = response.json()
-    if json.get("success", False):
-        return json
-    elif json.get("message"):
-        raise ImperialError(json["message"])
-    else:
+    # success: False can get through, but not invalid json
+    try:
+        return response.json()
+    except JSONDecodeError:
         raise ImperialError()
 
 
