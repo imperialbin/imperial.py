@@ -5,10 +5,10 @@ from ..utils import https
 
 def delete_document(document_id: str, *, api_token: str = None) -> dict:
     """
-    Deletes document on https://imperialb.in
-    DELETE https://imperialb.in/api/document/:document_id
-    :param document_id: ImperialBin Document ID.
-    :param api_token: ImperialBin API token
+    Deletes document from https://imperialb.in
+    DELETE https://imperialb.in/api/document/:documentID
+    :param document_id: the id associated with the imperialbin document
+    :param api_token: the API token linked with your imperial account
     """
     ensure_document_id(document_id)
     if api_token:

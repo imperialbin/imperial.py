@@ -5,9 +5,9 @@ from ..utils import https
 
 def check_api_token(api_token: str) -> dict:
     """
-    Validate API token on https://imperialb.in
+    Validate API token from https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken
-    :param api_token: ImperialBin API token
+    :param api_token: the API token linked with your imperial account
     """
     ensure_api_token(api_token)
 

@@ -5,11 +5,11 @@ from ..utils import https
 
 def edit_document(content: str, document_id: str, *, api_token: str = None) -> dict:
     """
-    Edits document code on https://imperialb.in
+    Edits document content on https://imperialb.in
     PATCH https://imperialb.in/api/document
-    :param content: Code from any programming language, capped at 512KB per request (type: str).
-    :param document_id: ImperialBin Document ID.
-    :param api_token: ImperialBin API token
+    :param content: the text content to store on imperialbin
+    :param document_id: the id associated with the imperialbin document
+    :param api_token: the API token linked with your imperial account
     """
     ensure_content(content)
     ensure_document_id(document_id)

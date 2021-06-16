@@ -60,19 +60,19 @@ class Imperial:
                         password: str = None,
                         editors: List[str] = None) -> Document:
         """
-        Uploads code to https://imperialb.in
+        Uploads content to https://imperialb.in
         POST https://imperialb.in/api/document
-        :param content: Code from any programming language, capped at 512KB per request.
-        :param short_urls: increases the length of the random document id from 8 to 4
-        :param longer_urls: increases the length of the random document id from 8 to 26
-        :param language: the programming language of the code (or plain)
-        :param public: makes the document publicly viewable on an imperial public page
-        :param instant_delete: makes the paste delete on its first visit.
-        :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
+        :param content: the text content to store on imperialbin
+        :param short_urls: creates 4 character URLs instead of 8
+        :param longer_urls: creates 26 character URLs instead of 8
+        :param language: the programming language of the content (or plain text)
+        :param public: makes the document publicly viewable on the imperial public page
+        :param instant_delete: instantly deletes the document after being viewed once.
+        :param image_embed: have a sneak peak with an image through Open Graph embeds
         :param expiration: sets the number of days before the paste deletes (overwritten by instant_delete)
-        :param encrypted: whether the document gets encrypted or not
-        :param password: the document password (only if document is encrypted)
-        :param editors: list of users who're allowed to edit a document
+        :param encrypted: encrypts the document with a password and aes256 encryption
+        :param password: the password if a document is encrypted
+        :param editors: a list of users who are allowed to edit a document
         """
 
         resp = client.create_document(
@@ -98,10 +98,10 @@ class Imperial:
 
     def get_document(self, document_id: str, *, password: str = None) -> Document:
         """
-        Gets code from https://imperialb.in
+        Gets document from https://imperialb.in
         GET https://imperialb.in/api/document/:documentID
-        :param document_id: ImperialBin Document ID.
-        :param password: ImperialBin Document password
+        :param document_id: the id associated with the imperialbin document
+        :param password: the password if a document is encrypted
         """
         resp = client.get_document(
             document_id=document_id,
@@ -117,10 +117,10 @@ class Imperial:
 
     def edit_document(self, content: str, document_id: str) -> Document:
         """
-        Edits document code on https://imperialb.in
+        Edits document content on https://imperialb.in
         PATCH https://imperialb.in/api/document
-        :param content: Code from any programming language, capped at 512KB per request (type: str).
-        :param document_id: ImperialBin Document ID.
+        :param content: the text content to store on imperialbin
+        :param document_id: the id associated with the imperialbin document
         """
         resp = client.edit_document(
             content=content,
@@ -151,7 +151,7 @@ class Imperial:
 
     def purge_documents(self) -> int:
         """
-        Deletes all documents associated with an account (by API token)
+        Deletes all documents created by an API token
         DELETE https://imperialb.in/api/purgeDocuments
         :return: number of accounts deleted
         """
@@ -174,21 +174,20 @@ def create_document(content: str, *,
                     password: str = None,
                     editors: List[str] = None) -> Document:
     """
-    Uploads code to https://imperialb.in
-    POST https://imperialb.in/api/postCode
-    :param content: Code from any programming language, capped at 512KB per request.
-    :param api_token: ImperialBin API token
-    :param short_urls: increases the length of the random document id from 8 to 4
-    :param longer_urls: increases the length of the random document id from 8 to 26
-    :param language: the programming language of the code (or plain)
-    :param public: makes the document publicly viewable on an imperial public page
-    :param instant_delete: makes the paste delete on its first visit.
-    :param image_embed: changes embed content from text to an image (overwritten by instant_delete)
+    Uploads content to https://imperialb.in
+    POST https://imperialb.in/api/document
+    :param content: the text content to store on imperialbin
+    :param api_token: the API token linked with your imperial account
+    :param short_urls: creates 4 character URLs instead of 8
+    :param longer_urls: creates 26 character URLs instead of 8
+    :param language: the programming language of the content (or plain text)
+    :param public: makes the document publicly viewable on the imperial public page
+    :param instant_delete: instantly deletes the document after being viewed once.
+    :param image_embed: have a sneak peak with an image through Open Graph embeds
     :param expiration: sets the number of days before the paste deletes (overwritten by instant_delete)
-    :param encrypted: whether the document gets encrypted or not
-    :param password: the document password (only if document is encrypted)
-    :param editors: list of users who're allowed to edit a document
-    :return: ImperialBin API response (type: dict).
+    :param encrypted: encrypts the document with a password and aes256 encryption
+    :param password: the password if a document is encrypted
+    :param editors: a list of users who are allowed to edit a document
     """
     return Imperial(api_token).create_document(
         content=content,
@@ -207,24 +206,22 @@ def create_document(content: str, *,
 
 def get_document(document_id: str, *, password: str = None, api_token: str = None) -> Document:
     """
-    Gets code from https://imperialb.in
-    GET https://imperialb.in/api/getCode/:documentID
-    :param document_id: ImperialBin Document ID.
-    :param api_token: ImperialBin API token.
-    :param password: ImperialBin Document password.
-    :return: ImperialBin API response (type: dict).
+    Gets document from https://imperialb.in
+    GET https://imperialb.in/api/document/:documentID
+    :param document_id: the id associated with the imperialbin document
+    :param password: the password if a document is encrypted
+    :param api_token: the API token linked with your imperial account
     """
     return Imperial(api_token).get_document(document_id, password=password)
 
 
 def edit_document(content: str, document_id: str, *, api_token: str = None) -> Document:
     """
-    Edits document code on https://imperialb.in
+    Edits document content on https://imperialb.in
     PATCH https://imperialb.in/api/document
-    :param content: Code from any programming language, capped at 512KB per request.
-    :param document_id: ImperialBin Document ID.
-    :param api_token: ImperialBin API token.
-    :return: ImperialBin API response (type: dict).
+    :param content: the text content to store on imperialbin
+    :param document_id: the id associated with the imperialbin document
+    :param api_token: the API token linked with your imperial account
     """
     return Imperial(api_token).edit_document(content=content, document_id=document_id)
 
@@ -233,8 +230,8 @@ def delete_document(document_id: str, *, api_token: str = None) -> None:
     """
     Deletes document from https://imperialb.in
     DELETE https://imperialb.in/api/document/:documentID
-    :param document_id: ImperialBin Document ID.
-    :param api_token: ImperialBin API token.
+    :param document_id: the id associated with the imperialbin document
+    :param api_token: the API token linked with your imperial account
     """
     Imperial(api_token).delete_document(document_id=document_id)
 
@@ -243,7 +240,7 @@ def verify(api_token: str = None) -> None:
     """
     Validate API token from https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken
-    :param api_token: ImperialBin API token.
+    :param api_token: the API token linked with your imperial account
     """
     # p.s. `api_token` isn't required because it can be set by an environment variable :)
     Imperial(api_token).verify()
@@ -251,9 +248,9 @@ def verify(api_token: str = None) -> None:
 
 def purge_documents(api_token: str = None) -> int:
     """
-    Deletes all documents associated with an account (by API token)
+    Deletes all documents created by an API token
     DELETE https://imperialb.in/api/purgeDocuments
-    :param api_token: ImperialBin API token.
+    :param api_token: the API token linked with your imperial account
     :return: number of accounts deleted
     """
     return Imperial(api_token).purge_documents()

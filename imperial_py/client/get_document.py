@@ -5,11 +5,11 @@ from ..utils import https
 
 def get_document(document_id: str, *, api_token: str = None, password: str = None) -> dict:
     """
-    Gets code from https://imperialb.in
+    Gets document from https://imperialb.in
     GET https://imperialb.in/api/document/:documentID
-    :param document_id: ImperialBin Document ID.
-    :param api_token: ImperialBin API token
-    :param password: ImperialBin Document password
+    :param document_id: the id associated with the imperialbin document
+    :param password: the password if a document is encrypted
+    :param api_token: the API token linked with your imperial account
     """
     ensure_document_id(document_id)
     if api_token:

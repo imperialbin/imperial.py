@@ -5,10 +5,9 @@ from ..utils import https
 
 def purge_documents(api_token: str) -> dict:
     """
-    Deletes all documents associated with an account (by API token)
+    Deletes all documents created by an API token
     DELETE https://imperialb.in/api/purgeDocuments
-    :param api_token: ImperialBin API token
-    :return: ImperialBin API response (type: dict).
+    :param api_token: the API token linked with your imperial account
     """
     ensure_api_token(api_token)
 
