@@ -98,13 +98,19 @@ class Document:
 
     @property
     def formatted_link(self) -> Optional[str]:
-        if self.id:
-            return str(https.imperialbin / "p" / self.id)
+        if not self.id:
+            return
+        if self.short_urls:
+            return str(https.impbin / "p" / self.id)
+        return str(https.imperialbin / "p" / self.id)
 
     @property
     def raw_link(self) -> Optional[str]:
-        if self.id:
-            return str(https.imperialbin / "r" / self.id)
+        if not self.id:
+            return
+        if self.short_urls:
+            return str(https.impbin / "r" / self.id)
+        return str(https.imperialbin / "r" / self.id)
 
     @property
     def days_left(self) -> Optional[int]:

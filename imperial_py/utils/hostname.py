@@ -6,6 +6,7 @@ __all__ = (
 class https:
     # just so pycharm doesn't yell at me :/
     imperialbin = None
+    impbin = None
 
     def __init__(self, name: str):
         self.path = str(name).removesuffix("/")
@@ -25,3 +26,4 @@ class https:
 # and I don't want the ()
 # used as https.imperialbin / "whatever"
 https.imperialbin = https("https://imperialb.in")
+https.impbin = https("https://impb.in")
