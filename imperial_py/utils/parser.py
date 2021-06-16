@@ -53,7 +53,7 @@ def to_snake_case(json: dict):
 def to_camel_case(json: dict):
     # please don't make fun of my minified-looking comps
     json = {
-        ("".join((word.capitalize() if num != 0 else word.lower()) for num, word in enumerate(key.split("_")))): value
+        ("".join((word.capitalize() if i != 0 else word.lower()) for i, word in enumerate(key.split("_")))): value
         for key, value in json.items()
     }
     for key, value in json.items():
@@ -66,7 +66,7 @@ def parse_dates(json: dict):
     # this just creates a more specific pointer
     document = json.get("document")
     # this super weird syntax just checks if both those keys exist in the document
-    if document and {"creation_date", "expiration_date"} <= set(document):
+    if document and "creation_date" in document and "expiration_date" in document:
         document["creation_date"] = datetime.fromtimestamp(document["creation_date"] / 1000)
         document["expiration_date"] = datetime.fromtimestamp(document["expiration_date"] / 1000)
     return json

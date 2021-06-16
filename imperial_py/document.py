@@ -181,21 +181,21 @@ class Document:
     creation_date = creation
     expiration_date = expiration
 
-    def edit(self, code: str):
+    def edit(self, content: str):
         """
         Edits document code on https://imperialb.in
         PATCH https://imperialb.in/api/document
-        :param code: Code from any programming language, capped at 512KB per request (type: str).
+        :param content: Code from any programming language, capped at 512KB per request (type: str).
         :return: ImperialBin API response (type: dict).
         """
         if not self.editable:
             raise DocumentNotFound(self.id)
 
         # in the future, `password` might be available as a kwarg
-        json = client.edit_document(code, document_id=self.id, api_token=self.api_token)
+        json = client.edit_document(content, document_id=self.id, api_token=self.api_token)
         if json["success"]:
             self.__views = json.get("document", {}).get("views", 0)
-            self.__content = code
+            self.__content = content
 
     def duplicate(self,
                   content: str = None,
