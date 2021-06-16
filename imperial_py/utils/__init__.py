@@ -9,8 +9,6 @@ __all__ = (
     # hostname
     "https",
     # parser
-    "remove_leading_slash",
-    "remove_tailing_slash",
     "ensure_json",
     "to_snake_case",
     "to_camel_case",

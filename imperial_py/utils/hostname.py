@@ -2,21 +2,19 @@ __all__ = (
     "https",
 )
 
-from .parser import remove_tailing_slash, remove_leading_slash
-
 
 class https:
     # just so pycharm doesn't yell at me :/
     imperialbin = None
 
     def __init__(self, name: str):
-        self.path = remove_tailing_slash(name)
+        self.path = str(name).removesuffix("/")
 
     def __truediv__(self, endpoint: str):
         # handle / operator
         endpoint = str(endpoint)
-        endpoint = remove_leading_slash(endpoint)
-        endpoint = remove_tailing_slash(endpoint)
+        endpoint = endpoint.removeprefix("/")
+        endpoint = endpoint.removesuffix("/")
         return https(self.path + "/" + endpoint)
 
     def __repr__(self):
