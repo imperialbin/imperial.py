@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from . import client
-from .exceptions import DocumentNotFound
+from .exceptions import DocumentNotFound, ImperialError
 from .utils import https, get_date_difference
 
 __all__ = (
@@ -181,6 +181,24 @@ class Document:
     expiration_date = expiration
     # aliases because cool
     link = formatted_link
+
+    def sync(self):
+        if self.deleted:
+            raise DocumentNotFound(self.id)
+        try:
+            updated_doc = client.get_document(document_id=self.id, password=self.password, api_token=self.api_token)
+        except ImperialError as exc:
+            self.__deleted = True
+            raise exc
+        self.__content = updated_doc["content"]
+        self.__language = updated_doc["document"]["language"]
+        self.__public = updated_doc["document"]["public"]
+        self.__image_embed = updated_doc["document"]["image_embed"]
+        self.__instant_delete = updated_doc["document"]["instant_delete"]
+        self.__expiration = updated_doc["document"]["expiration_date"]
+        self.__editors = updated_doc["document"]["allowed_editors"]
+        self.__encrypted = updated_doc["document"]["encrypted"]
+        self.__views = updated_doc["document"]["views"]
 
     def edit(self, content: str) -> None:
         """
