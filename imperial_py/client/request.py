@@ -4,7 +4,7 @@ from ..utils import ensure_json, to_snake_case, parse_dates
 from ..client.body import Body
 
 
-def request(*, method: str, url: str, api_token: str = None, **kwargs):
+def request(*, method: str, url: str, api_token: str = None, **kwargs) -> dict:
     # url is a hostname obj with a repr of the url
     # not sure where, but somewhere it gets converted to string,
     # but this could possibly cause issues on other versions

@@ -3,6 +3,8 @@ from datetime import datetime
 
 # this is required so pycharm recognized the type
 # (there's no good way to do this unfortunately)
+from typing import Optional
+
 from requests import Response
 
 from ..exceptions import ImperialError
@@ -20,15 +22,15 @@ __all__ = (
 )
 
 
-def remove_leading_slash(text: str):
+def remove_leading_slash(text: str) -> str:
     return text[1:] if text.startswith("/") else text
 
 
-def remove_tailing_slash(text: str):
+def remove_tailing_slash(text: str) -> str:
     return text[:-1] if text.endswith("/") else text
 
 
-def ensure_json(response: Response):
+def ensure_json(response: Response) -> dict:
     if response.text.lower().startswith("<!doctype html"):
         raise ImperialError()
 
@@ -41,7 +43,7 @@ def ensure_json(response: Response):
         raise ImperialError()
 
 
-def to_snake_case(json: dict):
+def to_snake_case(json: dict) -> dict:
     json = {(key if key.islower() else snake_regex.sub("_", key).lower()): value for key, value in json.items()}
     # note: in python 3.8+ this can be done with list comprehension with the := operator
     for key, value in json.items():
@@ -50,7 +52,7 @@ def to_snake_case(json: dict):
     return json
 
 
-def to_camel_case(json: dict):
+def to_camel_case(json: dict) -> dict:
     # please don't make fun of my minified-looking comps
     json = {
         ("".join((word.capitalize() if i != 0 else word.lower()) for i, word in enumerate(key.split("_")))): value
@@ -62,7 +64,7 @@ def to_camel_case(json: dict):
     return json
 
 
-def parse_dates(json: dict):
+def parse_dates(json: dict) -> dict:
     # this just creates a more specific pointer
     document = json.get("document")
     # this super weird syntax just checks if both those keys exist in the document
@@ -72,7 +74,7 @@ def parse_dates(json: dict):
     return json
 
 
-def get_date_difference(now, later):
+def get_date_difference(now, later) -> Optional[int]:
     # assumes now and later are datetime objects
     days = (later - now).days
     return days if days > 0 else None

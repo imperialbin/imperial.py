@@ -2,7 +2,7 @@ __title__ = "Imperialb.in simple API wrapper"
 __author__ = "Hexiro"
 
 import os
-from typing import List
+from typing import List, Optional
 
 from . import client
 from .document import Document
@@ -38,7 +38,7 @@ class Imperial:
         return f"<Imperial api_token={self.api_token}>"
 
     @property
-    def api_token(self):
+    def api_token(self) -> Optional[str]:
         return self.__api_token
 
     @api_token.setter
@@ -58,7 +58,7 @@ class Imperial:
                         expiration: int = 5,
                         encrypted: bool = False,
                         password: str = None,
-                        editors: List[str] = None):
+                        editors: List[str] = None) -> Document:
         """
         Uploads code to https://imperialb.in
         POST https://imperialb.in/api/document
@@ -96,7 +96,7 @@ class Imperial:
             **resp["document"]
         )
 
-    def get_document(self, document_id: str, *, password: str = None):
+    def get_document(self, document_id: str, *, password: str = None) -> Document:
         """
         Gets code from https://imperialb.in
         GET https://imperialb.in/api/document/:documentID
@@ -115,7 +115,7 @@ class Imperial:
             **resp["document"]
         )
 
-    def edit_document(self, content: str, document_id: str):
+    def edit_document(self, content: str, document_id: str) -> Document:
         """
         Edits document code on https://imperialb.in
         PATCH https://imperialb.in/api/document
@@ -134,7 +134,7 @@ class Imperial:
             **resp["document"]
         )
 
-    def delete_document(self, document_id: str):
+    def delete_document(self, document_id: str) -> None:
         """
         Deletes document from https://imperialb.in
         DELETE https://imperialb.in/api/document/:documentID
@@ -142,20 +142,18 @@ class Imperial:
         """
         client.delete_document(document_id, api_token=self.api_token)
 
-    def verify(self):
+    def verify(self) -> None:
         """
         Validate API token from https://imperialb.in
         GET https://imperialb.in/api/checkApiToken/:apiToken
-        :rtype: None
         """
         client.check_api_token(self.api_token)
 
-    def purge_documents(self):
+    def purge_documents(self) -> int:
         """
         Deletes all documents associated with an account (by API token)
         DELETE https://imperialb.in/api/purgeDocuments
         :return: number of accounts deleted
-        :rtype: int
         """
         return client.purge_documents(api_token=self.api_token)["number_deleted"]
 
@@ -174,7 +172,7 @@ def create_document(content: str, *,
                     expiration: int = 5,
                     encrypted: bool = False,
                     password: str = None,
-                    editors: List[str] = None):
+                    editors: List[str] = None) -> Document:
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/postCode
@@ -207,7 +205,7 @@ def create_document(content: str, *,
     )
 
 
-def get_document(document_id: str, *, password: str = None, api_token: str = None):
+def get_document(document_id: str, *, password: str = None, api_token: str = None) -> Document:
     """
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/getCode/:documentID
@@ -219,7 +217,7 @@ def get_document(document_id: str, *, password: str = None, api_token: str = Non
     return Imperial(api_token).get_document(document_id, password=password)
 
 
-def edit_document(content: str, document_id: str, *, api_token: str = None):
+def edit_document(content: str, document_id: str, *, api_token: str = None) -> Document:
     """
     Edits document code on https://imperialb.in
     PATCH https://imperialb.in/api/document
@@ -231,34 +229,31 @@ def edit_document(content: str, document_id: str, *, api_token: str = None):
     return Imperial(api_token).edit_document(content=content, document_id=document_id)
 
 
-def delete_document(document_id: str, *, api_token: str = None):
+def delete_document(document_id: str, *, api_token: str = None) -> None:
     """
     Deletes document from https://imperialb.in
     DELETE https://imperialb.in/api/document/:documentID
     :param document_id: ImperialBin Document ID.
     :param api_token: ImperialBin API token.
-    :rtype: None
     """
     Imperial(api_token).delete_document(document_id=document_id)
 
 
-def verify(api_token: str = None):
+def verify(api_token: str = None) -> None:
     """
     Validate API token from https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken
     :param api_token: ImperialBin API token.
-    :rtype: None
     """
     # p.s. `api_token` isn't required because it can be set by an environment variable :)
     Imperial(api_token).verify()
 
 
-def purge_documents(api_token: str = None):
+def purge_documents(api_token: str = None) -> int:
     """
     Deletes all documents associated with an account (by API token)
     DELETE https://imperialb.in/api/purgeDocuments
     :param api_token: ImperialBin API token.
     :return: number of accounts deleted
-    :rtype: int
     """
     return Imperial(api_token).purge_documents()

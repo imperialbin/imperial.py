@@ -14,7 +14,7 @@ def create_document(content: str, *,
                     expiration: int = 5,
                     encrypted: bool = False,
                     password: str = None,
-                    editors: list[str] = None):
+                    editors: list[str] = None) -> dict:
     """
     Uploads code to https://imperialb.in
     POST https://imperialb.in/api/document
@@ -30,7 +30,6 @@ def create_document(content: str, *,
     :param encrypted: whether the document gets encrypted or not
     :param password: the document password (only if document is encrypted)
     :param editors: list of users who're allowed to edit a document
-    :return: ImperialBin API response (type: dict).
     """
     ensure_content(content)
     if api_token:

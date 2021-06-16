@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from . import client
 from .exceptions import DocumentNotFound
@@ -32,8 +33,8 @@ class Document:
         # message isn't needed
         # longer_urls is generated dynamically
         # formatted_link and raw_link are generated dynamically
-        self.__api_token = api_token
         self.__content = content
+        self.__api_token = api_token
         # **kwargs
         self.__id = kwargs.get("document_id", None)
         self.__language = kwargs.get("language", "auto")
@@ -92,25 +93,25 @@ class Document:
     # dynamic getters
 
     @property
-    def short_urls(self):
+    def short_urls(self) -> bool:
         return len(self.id) == 4
 
     @property
-    def longer_urls(self):
+    def longer_urls(self) -> bool:
         return len(self.id) == 26
 
     @property
-    def formatted_link(self):
+    def formatted_link(self) -> Optional[str]:
         if self.id:
             return str(https.imperialbin / "p" / self.id)
 
     @property
-    def raw_link(self):
+    def raw_link(self) -> Optional[str]:
         if self.id:
             return str(https.imperialbin / "r" / self.id)
 
     @property
-    def days_left(self):
+    def days_left(self) -> Optional[int]:
         # number of FULL DAYS left
         # 7 days 86399 seconds means 7 days left
         return get_date_difference(datetime.now(), self.expiration)
@@ -118,63 +119,63 @@ class Document:
     # getters of private attrs
 
     @property
-    def api_token(self):
+    def api_token(self) -> Optional[str]:
         return self.__api_token
 
     @property
-    def content(self):
+    def content(self) -> Optional[str]:
         return self.__content
 
     @property
-    def id(self):
+    def id(self) -> Optional[str]:
         return self.__id
 
     @property
-    def language(self):
+    def language(self) -> str:
         return self.__language
 
     @property
-    def public(self):
+    def public(self) -> bool:
         return self.__public
 
     @property
-    def image_embed(self):
+    def image_embed(self) -> bool:
         return self.__image_embed
 
     @property
-    def instant_delete(self):
+    def instant_delete(self) -> bool:
         return self.__instant_delete
 
     @property
-    def creation(self):
+    def creation(self) -> Optional[datetime]:
         return self.__creation
 
     @property
-    def expiration(self):
+    def expiration(self) -> Optional[datetime]:
         return self.__expiration
 
     @property
-    def editors(self):
+    def editors(self) -> list[str]:
         return self.__editors
 
     @property
-    def encrypted(self):
+    def encrypted(self) -> Optional[bool]:
         return self.__encrypted
 
     @property
-    def password(self):
+    def password(self) -> Optional[str]:
         return self.__password
 
     @property
-    def views(self):
+    def views(self) -> int:
         return self.__views
 
     @property
-    def deleted(self):
+    def deleted(self) -> bool:
         return self.__deleted
 
     @property
-    def editable(self):
+    def editable(self) -> bool:
         return self.api_token and not self.deleted
 
     # aliases (to match api response keys)
@@ -185,7 +186,7 @@ class Document:
     # aliases because cool
     link = formatted_link
 
-    def edit(self, content: str):
+    def edit(self, content: str) -> None:
         """
         Edits document code on https://imperialb.in
         PATCH https://imperialb.in/api/document
@@ -214,6 +215,9 @@ class Document:
                   encrypted: bool = False,
                   password: str = None,
                   editors: list[str] = None):
+        """
+        :rtype: Document
+        """
 
         # similar to `create_document` in Imperial
         # using predetermined values or params
@@ -242,7 +246,7 @@ class Document:
             **resp["document"]
         )
 
-    def delete(self):
+    def delete(self) -> None:
         if self.deleted:
             raise DocumentNotFound(self.id)
         client.delete_document(document_id=self.id, api_token=self.api_token)

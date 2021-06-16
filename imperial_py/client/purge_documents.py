@@ -3,7 +3,7 @@ from ..checks import ensure_api_token
 from ..utils import https
 
 
-def purge_documents(api_token: str):
+def purge_documents(api_token: str) -> dict:
     """
     Deletes all documents associated with an account (by API token)
     DELETE https://imperialb.in/api/purgeDocuments

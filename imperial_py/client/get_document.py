@@ -3,14 +3,13 @@ from ..checks import ensure_document_id, ensure_api_token
 from ..utils import https
 
 
-def get_document(document_id: str, *, api_token: str = None, password: str = None):
+def get_document(document_id: str, *, api_token: str = None, password: str = None) -> dict:
     """
     Gets code from https://imperialb.in
     GET https://imperialb.in/api/document/:documentID
     :param document_id: ImperialBin Document ID.
     :param api_token: ImperialBin API token
     :param password: ImperialBin Document password
-    :return: ImperialBin API response (type: dict).
     """
     ensure_document_id(document_id)
     if api_token:

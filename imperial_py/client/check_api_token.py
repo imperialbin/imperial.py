@@ -3,12 +3,11 @@ from ..checks import ensure_api_token
 from ..utils import https
 
 
-def check_api_token(api_token: str):
+def check_api_token(api_token: str) -> dict:
     """
     Validate API token on https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken
     :param api_token: ImperialBin API token
-    :return: ImperialBin API response (type: dict).
     """
     ensure_api_token(api_token)
 
