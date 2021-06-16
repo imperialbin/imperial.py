@@ -1,6 +1,7 @@
 import json
 
 from ..checks import ensure_content, ensure_document_id
+from ..exceptions import ImperialError
 from ..utils import to_camel_case
 
 
@@ -37,7 +38,7 @@ class Body:
         password = kwargs.pop("password", None)
 
         for key, value in kwargs.items():
-            value = self.parse_value(value)
+            value = self.parse_value(key, value)
             if key not in self.__expected_params:
                 self.handle_mandatory_param(key, value)
             else:
@@ -54,12 +55,16 @@ class Body:
             self.__json["password"] = password
 
     @staticmethod
-    def parse_value(value):
-        if isinstance(value, bytes):
-            value = value.decode("utf8", "replace")
-        elif isinstance(value, dict) or isinstance(value, list):
-            value = json.dumps(value)
-        return value
+    def parse_value(key: str, value):
+        try:
+            if isinstance(value, bytes):
+                value = value.decode("utf8")
+            elif isinstance(value, dict) or isinstance(value, list):
+                value = json.dumps(value)
+            return value
+        except (TypeError, UnicodeDecodeError):
+            raise ImperialError(f"failed to convert {key} to type str")
+
 
     def handle_mandatory_param(self, key, value):
         # checks for expected keys
