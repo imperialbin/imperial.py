@@ -1,5 +1,6 @@
 import json
 
+from ..checks import ensure_content, ensure_document_id
 from ..utils import to_camel_case
 
 
@@ -36,16 +37,14 @@ class Body:
         password = kwargs.pop("password", None)
 
         for key, value in kwargs.items():
-            if isinstance(value, bytes):
-                value = value.decode("utf8", "replace")
-            elif isinstance(value, dict) or isinstance(value, list):
-                value = json.dumps(value)
-            elif key not in self.__expected_params and not isinstance(value, str):
-                value = str(value)
-            self.handle_kwarg(key, value)
+            value = self.parse_value(value)
+            if key not in self.__expected_params:
+                self.handle_mandatory_param(key, value)
+            else:
+                self.handle_optional_param(key, value)
 
         if api_token:
-            self.__headers = {"authorization": api_token}
+            self.__headers["authorization"] = api_token
 
         if not password:
             pass
@@ -54,15 +53,26 @@ class Body:
         else:  # if method isn't GET, password goes to json body instead
             self.__json["password"] = password
 
-    def handle_kwarg(self, key, value):
+    @staticmethod
+    def parse_value(value):
+        if isinstance(value, bytes):
+            value = value.decode("utf8", "replace")
+        elif isinstance(value, dict) or isinstance(value, list):
+            value = json.dumps(value)
+        return value
 
-        if key not in self.__expected_params:
-            # mandatory
-            self.__json[key] = value
-            return
+    def handle_mandatory_param(self, key, value):
+        # checks for expected keys
+        # if these keys are changed in the future this won't be an issue,
+        # it just won't be able to check them before they hit the server
+        if key == "code":
+            ensure_content(value)
+        elif key == "document_id":
+            ensure_document_id(value)
+        self.__json[key] = value
 
+    def handle_optional_param(self, key, value):
         default_value, expected_type = self.__expected_params[key]
-
         if value != default_value and isinstance(value, expected_type):
             # unique value w/ correct typing
             self.__json[key] = value
