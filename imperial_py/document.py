@@ -67,9 +67,6 @@ class Document:
     def __eq__(self, other):
         return isinstance(other, Document) and (self.id == other.id or self.content == other.content)
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     def __len__(self):
         return len(self.content) if self.content else 0
 
