@@ -9,7 +9,12 @@ __all__ = (
 class ImperialError(Exception):
 
     def __init__(self, message: str = None):
-        message = message or "Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py"
+        message = message or ""
+        if message:
+            message += " ("
+        message += "Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py"
+        if message:
+            message += ")"
         super().__init__(message)
 
 
