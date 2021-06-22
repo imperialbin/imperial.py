@@ -188,6 +188,17 @@ class Document:
     # aliases because cool
     link = formatted_link
 
+    def __sync(self, **kwargs):
+        self.__content = kwargs.get("content", self.__content)
+        self.__language = kwargs.get("language", self.__language)
+        self.__public = kwargs.get("public", self.__public)
+        self.__image_embed = kwargs.get("image_embed", self.__image_embed)
+        self.__instant_delete = kwargs.get("instant_delete", self.__instant_delete)
+        self.__expiration_date = kwargs.get("expiration_date", self.__expiration_date)
+        self.__allowed_editors = kwargs.get("allowed_editors", self.__allowed_editors)
+        self.__encrypted = kwargs.get("encrypted", self.__encrypted)
+        self.__views = kwargs.get("views", self.__views)
+
     def sync(self):
         if self.deleted:
             raise DocumentNotFound(self.id)
@@ -196,15 +207,8 @@ class Document:
         except DocumentNotFound as exc:
             self.__deleted = True
             raise exc
-        self.__content = updated_doc["content"]
-        self.__language = updated_doc["document"]["language"]
-        self.__public = updated_doc["document"]["public"]
-        self.__image_embed = updated_doc["document"]["image_embed"]
-        self.__instant_delete = updated_doc["document"]["instant_delete"]
-        self.__expiration_date = updated_doc["document"]["expiration_date"]
-        self.__allowed_editors = updated_doc["document"]["allowed_editors"]
-        self.__encrypted = updated_doc["document"]["encrypted"]
-        self.__views = updated_doc["document"]["views"]
+        self.__sync(**updated_doc["document"])
+        self.__content = updated_doc.get("content", self.__content)
 
     def edit(self, content: str) -> None:
         """
@@ -219,7 +223,7 @@ class Document:
         # in the future, `password` might be available as a kwarg
         json = client.edit_document(content, document_id=self.id, api_token=self.api_token)
         # if we make it this far w/o exception then req succeeded.
-        self.__views = json["document"]["views"]
+        self.__sync(**json["document"])
         self.__content = content
 
     def duplicate(self,
