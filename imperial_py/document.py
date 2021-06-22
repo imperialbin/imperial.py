@@ -14,14 +14,14 @@ class Document:
     __slots__ = (
         "__api_token",
         "__content",
-        "__id",
+        "__document_id",
         "__public",
         "__language",
         "__image_embed",
         "__instant_delete",
-        "__creation",
-        "__expiration",
-        "__editors",
+        "__creation_date",
+        "__expiration_date",
+        "__allowed_editors",
         "__encrypted",
         "__password",
         "__views",
@@ -36,14 +36,14 @@ class Document:
         self.__content = content
         self.__api_token = api_token
         # **kwargs
-        self.__id = kwargs.get("document_id", None)
+        self.__document_id = kwargs.get("document_id", None)
         self.__language = kwargs.get("language", "auto")
         self.__public = kwargs.get("public", False)
         self.__image_embed = kwargs.get("image_embed", False)
         self.__instant_delete = kwargs.get("instant_delete", False)
-        self.__creation = kwargs.get("creation_date", None)
-        self.__expiration = kwargs.get("expiration_date", None)
-        self.__editors = kwargs.get("allowed_editors", [])
+        self.__creation_date = kwargs.get("creation_date", None)
+        self.__expiration_date = kwargs.get("expiration_date", None)
+        self.__allowed_editors = kwargs.get("allowed_editors", [])
         self.__encrypted = kwargs.get("encrypted", False)
         self.__password = kwargs.get("password", None)
         self.__views = kwargs.get("views", 0)
@@ -130,7 +130,7 @@ class Document:
 
     @property
     def id(self) -> Optional[str]:
-        return self.__id
+        return self.__document_id
 
     @property
     def language(self) -> str:
@@ -150,15 +150,15 @@ class Document:
 
     @property
     def creation(self) -> Optional[datetime]:
-        return self.__creation
+        return self.__creation_date
 
     @property
     def expiration(self) -> Optional[datetime]:
-        return self.__expiration
+        return self.__expiration_date
 
     @property
     def editors(self) -> List[str]:
-        return self.__editors
+        return self.__allowed_editors
 
     @property
     def encrypted(self) -> bool:
@@ -201,8 +201,8 @@ class Document:
         self.__public = updated_doc["document"]["public"]
         self.__image_embed = updated_doc["document"]["image_embed"]
         self.__instant_delete = updated_doc["document"]["instant_delete"]
-        self.__expiration = updated_doc["document"]["expiration_date"]
-        self.__editors = updated_doc["document"]["allowed_editors"]
+        self.__expiration_date = updated_doc["document"]["expiration_date"]
+        self.__allowed_editors = updated_doc["document"]["allowed_editors"]
         self.__encrypted = updated_doc["document"]["encrypted"]
         self.__views = updated_doc["document"]["views"]
 
