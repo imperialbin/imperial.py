@@ -24,8 +24,8 @@ def ensure_json(response: Response) -> dict:
     # success: False can get through, but not invalid json
     try:
         return response.json()
-    except JSONDecodeError:
-        raise ImperialError()
+    except JSONDecodeError as exc:
+        raise ImperialError(str(exc))
 
 
 def to_snake_case(json: dict) -> dict:
