@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional, List
 
 from . import client
-from .exceptions import DocumentNotFound, ImperialError
+from .exceptions import DocumentNotFound
 from .utils import https, get_date_difference
 
 __all__ = (
@@ -193,7 +193,7 @@ class Document:
             raise DocumentNotFound(self.id)
         try:
             updated_doc = client.get_document(document_id=self.id, password=self.password, api_token=self.api_token)
-        except ImperialError as exc:
+        except DocumentNotFound as exc:
             self.__deleted = True
             raise exc
         self.__content = updated_doc["content"]
