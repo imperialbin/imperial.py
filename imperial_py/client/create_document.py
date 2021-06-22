@@ -1,3 +1,5 @@
+from typing import List
+
 from .request import request
 from ..checks import ensure_content, ensure_api_token
 from ..utils import https
@@ -14,7 +16,7 @@ def create_document(content: str, *,
                     expiration: int = 5,
                     encrypted: bool = False,
                     password: str = None,
-                    editors: list[str] = None) -> dict:
+                    editors: List[str] = None) -> dict:
     """
     Uploads content to https://imperialb.in
     POST https://imperialb.in/api/document

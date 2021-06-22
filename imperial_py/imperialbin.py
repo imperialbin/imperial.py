@@ -2,7 +2,7 @@ __title__ = "Imperialb.in simple API wrapper"
 __author__ = "Hexiro"
 
 import os
-from typing import Optional
+from typing import Optional, List
 
 from . import client
 from .checks import ensure_api_token
@@ -58,7 +58,7 @@ class Imperial:
                         expiration: int = 5,
                         encrypted: bool = False,
                         password: str = None,
-                        editors: list[str] = None) -> Document:
+                        editors: List[str] = None) -> Document:
         """
         Uploads content to https://imperialb.in
         POST https://imperialb.in/api/document
@@ -172,7 +172,7 @@ def create_document(content: str, *,
                     expiration: int = 5,
                     encrypted: bool = False,
                     password: str = None,
-                    editors: list[str] = None) -> Document:
+                    editors: List[str] = None) -> Document:
     """
     Uploads content to https://imperialb.in
     POST https://imperialb.in/api/document

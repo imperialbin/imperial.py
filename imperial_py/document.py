@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from . import client
 from .exceptions import DocumentNotFound, ImperialError
@@ -157,7 +157,7 @@ class Document:
         return self.__expiration
 
     @property
-    def editors(self) -> list[str]:
+    def editors(self) -> List[str]:
         return self.__editors
 
     @property
@@ -234,7 +234,7 @@ class Document:
                   expiration: int = 5,
                   encrypted: bool = False,
                   password: str = None,
-                  editors: list[str] = None):
+                  editors: List[str] = None):
         """
         :rtype: Document
         """
