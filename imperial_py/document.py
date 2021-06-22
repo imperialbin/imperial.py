@@ -77,6 +77,7 @@ class Document:
         yield "content", self.content
         yield "document_id", self.id
         yield "language", self.language
+        yield "public", self.public
         yield "image_embed", self.image_embed
         yield "instant_delete", self.instant_delete
         yield "creation_date", self.creation
