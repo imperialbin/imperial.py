@@ -218,9 +218,9 @@ class Document:
 
         # in the future, `password` might be available as a kwarg
         json = client.edit_document(content, document_id=self.id, api_token=self.api_token)
-        if json["success"]:
-            self.__views = json.get("document", {}).get("views", 0)
-            self.__content = content
+        # if we make it this far w/o exception then req succeeded.
+        self.__views = json["document"]["views"]
+        self.__content = content
 
     def duplicate(self,
                   content: str = None,
