@@ -130,7 +130,7 @@ class Document:
         return self.__content
 
     @property
-    def id(self) -> Optional[str]:
+    def document_id(self) -> Optional[str]:
         return self.__document_id
 
     @property
@@ -150,15 +150,15 @@ class Document:
         return self.__instant_delete
 
     @property
-    def creation(self) -> Optional[datetime]:
+    def creation_date(self) -> Optional[datetime]:
         return self.__creation_date
 
     @property
-    def expiration(self) -> Optional[datetime]:
+    def expiration_date(self) -> Optional[datetime]:
         return self.__expiration_date
 
     @property
-    def editors(self) -> List[str]:
+    def allowed_editors(self) -> List[str]:
         return self.__allowed_editors
 
     @property
@@ -181,12 +181,11 @@ class Document:
     def editable(self) -> bool:
         return self.api_token and not self.deleted
 
-    # aliases (to match api response keys)
-    document_id = id
-    allowed_editors = editors
-    creation_date = creation
-    expiration_date = expiration
-    # aliases because cool
+    # aliases
+    id = document_id
+    editors = allowed_editors
+    creation = creation_date
+    expiration = expiration_date
     link = formatted_link
 
     def __sync(self, **kwargs):
