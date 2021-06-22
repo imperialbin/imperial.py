@@ -9,13 +9,13 @@ class https:
     impbin = None
 
     def __init__(self, name: str):
-        self.path = str(name).removesuffix("/")
+        self.path = str(name).rstrip("/")
 
     def __truediv__(self, endpoint: str):
         # handle / operator
         endpoint = str(endpoint)
-        endpoint = endpoint.removeprefix("/")
-        endpoint = endpoint.removesuffix("/")
+        endpoint = endpoint.lstrip("/")
+        endpoint = endpoint.rstrip("/")
         return https(self.path + "/" + endpoint)
 
     def __repr__(self):
