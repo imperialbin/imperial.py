@@ -29,8 +29,10 @@ class ContentRequired(ImperialError):
 class InvalidAuthorization(ImperialError):
 
     def __init__(self, message: str = None, api_token: str = None):
-        if not (message or api_token):
+        if message:
+            pass
+        elif api_token:
+            message = f"The API token, {api_token} is invalid!"
+        else:
             message = "Your authorization is invalid"
-        elif api_token and not message:
-            message = f"The API token, {api_token} is invalid!" if api_token else "API token is invalid!"
         super().__init__(message)
