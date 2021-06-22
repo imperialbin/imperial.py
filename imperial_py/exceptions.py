@@ -12,7 +12,7 @@ class ImperialError(Exception):
         message = message or ""
         if message:
             message += " ("
-        message += "Uncaught Exception. Report Here: https://github.com/imperialbin/imperial-py"
+        message += "Uncaught Exception. Report Issues Here: https://github.com/imperialbin/imperial-py"
         if message:
             message += ")"
         super().__init__(message)
