@@ -203,12 +203,12 @@ class Document:
         if self.deleted:
             raise DocumentNotFound(self.id)
         try:
-            updated_doc = client.get_document(document_id=self.id, password=self.password, api_token=self.api_token)
+            resp = client.get_document(document_id=self.id, password=self.password, api_token=self.api_token)
         except DocumentNotFound as exc:
             self.__deleted = True
             raise exc
-        self.__sync(**updated_doc["document"])
-        self.__content = updated_doc.get("content", self.__content)
+        self.__sync(**resp["document"])
+        self.__content = resp.get("content", self.__content)
 
     def edit(self, content: str) -> None:
         """
@@ -221,9 +221,9 @@ class Document:
             raise DocumentNotFound(self.id)
 
         # in the future, `password` might be available as a kwarg
-        json = client.edit_document(content, document_id=self.id, api_token=self.api_token)
+        resp = client.edit_document(content, document_id=self.id, api_token=self.api_token)
         # if we make it this far w/o exception then req succeeded.
-        self.__sync(**json["document"])
+        self.__sync(**resp["document"])
         self.__content = content
 
     def duplicate(self,
