@@ -39,18 +39,18 @@ class Body:
         for key, value in kwargs.items():
             if key not in self.__expected_params:
                 self.handle_mandatory_param(key, value)
-            else:
+            elif api_token:
                 self.handle_optional_param(key, value)
 
         if api_token:
             self.__headers["authorization"] = api_token
 
-        if not password:
-            pass
-        elif method == "GET":
-            self.__params["password"] = password
-        else:  # if method isn't GET, password goes to json body instead
-            self.__json["password"] = password
+            if not password:
+                pass
+            elif method == "GET":
+                self.__params["password"] = password
+            else:  # if method isn't GET, password goes to json body instead
+                self.__json["password"] = password
 
     @staticmethod
     def parse_content(value):
