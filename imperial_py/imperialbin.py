@@ -134,7 +134,7 @@ class Imperial:
             **resp["document"]
         )
 
-    def delete_document(self, document_id: str) -> None:
+    def delete_document(self, document_id: str):
         """
         Deletes document from https://imperialb.in
         DELETE https://imperialb.in/api/document/:documentID
@@ -142,7 +142,7 @@ class Imperial:
         """
         client.delete_document(document_id, api_token=self.api_token)
 
-    def verify(self) -> None:
+    def verify(self):
         """
         Validate API token from https://imperialb.in
         GET https://imperialb.in/api/checkApiToken/:apiToken
@@ -226,7 +226,7 @@ def edit_document(content: str, document_id: str, *, api_token: str = None) -> D
     return Imperial(api_token).edit_document(content=content, document_id=document_id)
 
 
-def delete_document(document_id: str, *, api_token: str = None) -> None:
+def delete_document(document_id: str, *, api_token: str = None):
     """
     Deletes document from https://imperialb.in
     DELETE https://imperialb.in/api/document/:documentID
@@ -236,7 +236,7 @@ def delete_document(document_id: str, *, api_token: str = None) -> None:
     Imperial(api_token).delete_document(document_id=document_id)
 
 
-def verify(api_token: str = None) -> None:
+def verify(api_token: str = None):
     """
     Validate API token from https://imperialb.in
     GET https://imperialb.in/api/checkApiToken/:apiToken

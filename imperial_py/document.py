@@ -207,7 +207,7 @@ class Document:
         self.__sync(**resp["document"])
         self.__content = resp.get("content", self.__content)
 
-    def edit(self, content: str) -> None:
+    def edit(self, content: str):
         """
         Edits document code on https://imperialb.in
         PATCH https://imperialb.in/api/document
@@ -269,7 +269,7 @@ class Document:
             **resp["document"]
         )
 
-    def delete(self) -> None:
+    def delete(self):
         if self.deleted:
             raise DocumentNotFound(self.id)
         client.delete_document(document_id=self.id, api_token=self.api_token)
