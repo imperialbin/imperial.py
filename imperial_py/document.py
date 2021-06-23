@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional, List
 
 from . import client
-from .exceptions import DocumentNotFound
+from .exceptions import DocumentNotFound, InvalidAuthorization
 from .utils import https, get_date_difference
 
 __all__ = (
@@ -214,8 +214,10 @@ class Document:
         :param content: Code from any programming language, capped at 512KB per request (type: str).
         :return: ImperialBin API response (type: dict).
         """
-        if not self.editable:
+        if self.deleted:
             raise DocumentNotFound(self.id)
+        if not self.editable:
+            raise InvalidAuthorization()
 
         # in the future, `password` might be available as a kwarg
         resp = client.edit_document(content, document_id=self.id, api_token=self.api_token)
