@@ -2,6 +2,10 @@
 
 > [imperialbin](https://imperialb.in) is a code/text sharing site with the user experience in mind, it has feautures such as editing, encryption and integration with github gists and discord.
 
+[![BUILT WITH SWAG](https://forthebadge.com/images/badges/built-with-swag.svg)](https://forthebadge.com)
+[![MADE WITH PYTHON](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com)
+[![FIXED BUGS](https://forthebadge.com/images/badges/fixed-bugs.svg)](https://forthebadge.com)
+
 ## API Token
 
 An API Token is not required, but you can't do most things without one. Add `IMPERIAL-TOKEN` to path to set it
