@@ -8,7 +8,7 @@
 
 ## API Token
 
-An API Token is not required, but you can't do most things without one. Add `IMPERIAL-TOKEN` to path to set it
+An API Token is not required, but you can't do most things without one. Add `IMPERIAL_TOKEN` to path to set it
 automatically; this will get overwritten by setting one manually.
 
 ## Example Usage
