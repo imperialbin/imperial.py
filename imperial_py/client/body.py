@@ -63,7 +63,7 @@ class Body:
                 value = json.dumps(value)
             return value
         except (TypeError, UnicodeDecodeError):
-            raise ImperialError(f"failed to convert content to type str")
+            raise ImperialError("failed to convert content to type str")
 
     def handle_mandatory_param(self, key, value):
         # checks for expected keys
