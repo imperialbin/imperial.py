@@ -51,6 +51,8 @@ class Document:
         self.__deleted = False
 
     def __repr__(self):
+        """Returns the representation of the document, always including id with expiration, language, password,
+        and deleted being optional """
         representation = f"<Document id={self.id}"
         if self.id:
             if isinstance(self.expiration, datetime):
@@ -65,12 +67,15 @@ class Document:
         return representation + ">"
 
     def __eq__(self, other):
+        """Two documents are equal if they share an id or if they share the same content"""
         return isinstance(other, Document) and (self.id == other.id or self.content == other.content)
 
     def __len__(self):
+        """Returns length of the document's content"""
         return len(self.content) if self.content else 0
 
     def __iter__(self):
+        """yields data from document"""
         yield "content", self.content
         yield "document_id", self.id
         yield "language", self.language
