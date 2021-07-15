@@ -41,15 +41,15 @@ document = imp.create_document("Hello, World!")
 # etc...
 ```
 
-# Documentation
+## Documentation
 
 Refer to [imperial documentation](https://docs.imperialb.in) for full docs.<br/>To see what goes on with imperial-py,
 view the full code. All important functions have docstrings and a description.
 
-# Contributing
+## Contributing
 
-1. Fork the repo on GitHub
-2. Clone the project to your own machine
-3. Commit changes to your own branch
-4. Push your work to your fork
-5. Submit a Pull request so that I can review your changes
+1.  Fork the repo on GitHub
+2.  Clone the project to your own machine
+3.  Commit changes to your own branch
+4.  Push your work to your fork
+5.  Submit a Pull request so that I can review your changes

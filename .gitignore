@@ -7,3 +7,4 @@ imperial_py.egg-info/
 imperial_py/tests/
 *.pyc
 reinstall.bat
+build.bat
