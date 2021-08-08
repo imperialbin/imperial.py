@@ -12,11 +12,15 @@ def request(*, method: str, url: str, api_token: str = None, **kwargs) -> dict:
 
     # api_token gets mixed in with **kwargs inside Body constructor
     body = Body(method=method, api_token=api_token, **kwargs)
+    headers = body.headers.copy()
+    headers.update({
+        "User-Agent": "imperial-py; (+https://github.com/imperialbin/imperial-py)"
+    })
 
     resp = requests.request(
         method=method,
         url=url,
-        headers=body.headers,
+        headers=headers,
         params=body.params,
         json=body.json
     )
