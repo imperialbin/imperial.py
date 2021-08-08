@@ -59,7 +59,7 @@ class Body:
                 pass
             elif isinstance(value, bytes):
                 value = value.decode("utf8")
-            elif isinstance(value, dict) or isinstance(value, list):
+            elif isinstance(value, (dict, list)):
                 value = json.dumps(value)
             return value
         except (TypeError, UnicodeDecodeError):
@@ -83,11 +83,11 @@ class Body:
 
     @property
     def headers(self):
-        return self.__headers if self.__headers else None
+        return self.__headers or None
 
     @property
     def params(self):
-        return self.__params if self.__params else None
+        return self.__params or None
 
     @property
     def json(self):
