@@ -4,7 +4,7 @@ from datetime import datetime
 from .response_creator import Response
 from ..document import Document
 from ..utils.hostname import https
-from imperial_py import imperialbin as imperial_py
+from imperial import imperialbin as imperial_py
 from secrets import compare_digest
 
 api_token = "IMPERIAL-00000000-0000-0000-0000-000000000000"

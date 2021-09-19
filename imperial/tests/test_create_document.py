@@ -7,7 +7,7 @@ from .response_creator import Response
 from ..document import Document
 from ..utils.hostname import https
 from ..exceptions import ImperialError
-from imperial_py import imperialbin as imperial_py
+import imperial
 
 api_token = "IMPERIAL-00000000-0000-0000-0000-000000000000"
 
@@ -21,19 +21,19 @@ def test_create_document(requests_mock):
                          text=deletion_resp.json)
     content = "test"
 
-    create_doc = imperial_py.Imperial(api_token=api_token).create_document(content=content)
-    shorthand_doc = imperial_py.create_document(api_token=api_token, content=content)
+    create_doc = imperial.Imperial(api_token=api_token).create_document(content=content)
+    shorthand_doc = imperial.create_document(api_token=api_token, content=content)
     assert create_doc == shorthand_doc
     assert isinstance(create_doc, Document)
 
     # check invalid data for code
     for data in ["", 0, {}, [], None, False, True]:
         with pytest.raises(ImperialError):
-            imperial_py.create_document(content=data)
+            imperial.create_document(content=data)
 
     # check w/o api key
 
-    create_doc = imperial_py.create_document(content=content,
+    create_doc = imperial.create_document(content=content,
                                              longer_urls=True,
                                              language="python",
                                              instant_delete=True,

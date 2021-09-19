@@ -1,4 +1,4 @@
-# imperial-py
+# imperial.py
 
 > [imperialbin](https://imperialb.in) is a code/text sharing site with the user experience in mind, it has feautures such as editing, encryption and integration with github gists and discord.
 
@@ -18,9 +18,9 @@ Shorthand Functions are more optimal if you have your API token set as an enviro
 ### Shorthand Functions
 
 ```python
-import imperial_py
+import imperial
 
-document = imperial_py.create_document("Hello, World!")
+document = imperial.create_document("Hello, World!")
 # document.content is "Hello, World!"
 document.edit("Hello from Python!")
 # document.content is "Hello from Python!"
@@ -28,13 +28,13 @@ document.delete()
 # document is deleted off imperial servers,
 # but information about the document still lives in the object
 document.edit("This will raise an error!")
-# imperial_py.exceptions.DocumentNotFound("We couldn't find that document!")
+# imperial.exceptions.DocumentNotFound("We couldn't find that document!")
 ```
 
 ### Imperial Class
 
 ```python
-from imperial_py import Imperial
+from imperial import Imperial
 
 imp = Imperial("IMPERIAL-00000000-0000-0000-0000-000000000000")
 document = imp.create_document("Hello, World!")

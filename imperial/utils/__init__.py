@@ -1,7 +1,7 @@
 from .hostname import https
 from .parser import ensure_json, to_snake_case, to_camel_case, parse_dates, get_date_difference
 
-# read notes from imperial_py\__init__.py
+# read notes from imperial\__init__.py
 del hostname
 del parser
 

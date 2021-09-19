@@ -4,8 +4,6 @@ import secrets
 import string
 import time
 
-# from imperial_py.utils.hostname import https
-
 # duplicate from parser
 # not sure how to do this without this duplicate
 from pprint import pprint

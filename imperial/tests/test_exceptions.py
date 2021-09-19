@@ -1,6 +1,6 @@
 import pytest
 
-from imperial_py.exceptions import ImperialError, DocumentNotFound, ContentRequired, InvalidAuthorization
+from imperial.exceptions import ImperialError, DocumentNotFound, ContentRequired, InvalidAuthorization
 
 
 def test_imperial_error():
