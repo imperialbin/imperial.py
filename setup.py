@@ -10,7 +10,7 @@ with open("requirements.txt", encoding="utf-8") as req_file:
 setup(
     name="imperial.py",
     version="2.0.1",
-    description="ImperialBin is a hastebin alternative built with UI and user experience in mind.",
+    description="Official Python API wrapper for https://imperialb.in",
     long_description=readme,
     long_description_content_type="text/markdown",
     author="Hexiro",
