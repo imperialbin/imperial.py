@@ -2,9 +2,9 @@
 __pycache__/
 build/
 dist/
-imperial_py.egg-info/
+imperial.py.egg-info/
+imperial.py/tests/
 .pytest_cache/
-imperial_py/tests/
 *.pyc
 reinstall.bat
 build.bat
