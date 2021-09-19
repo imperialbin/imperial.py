@@ -15,7 +15,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Hexiro",
     author_email="realhexiro@gmail.com",
-    url="https://github.com/imperialbin/imperial-py",
+    url="https://github.com/imperialbin/imperial.py",
     packages=["imperial"] + [("imperial." + x) for x in find_packages(where="imperial")],
     python_requires=">=3.6",
     install_requires=requirements,
