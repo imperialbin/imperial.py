@@ -1,34 +1,26 @@
+from abc import ABC
+from types import Union
+
 import httpx
 
 from . import BaseClient
+from ..document import Settings
 
 
-class Client(BaseClient):
+class Client(BaseClient, ABC):
 
     def __init__(self):
-        super().__init__()
+        BaseClient.__init__(self)
         self._client = httpx.Client()
 
     def _request(self, *, method: str, url: str, data: dict):
-
         resp = self._client.request(
             method=method,
             url=url,
             data=data,
-            headers={
-                "User-Agent": "imperial-py; (+https://github.com/imperialbin/imperial-py)"
-            },
-
+            headers={"User-Agent": "imperial-py; (+https://github.com/imperialbin/imperial-py)"}
         )
+        return self._response(resp)
 
-        json = ensure_json(resp)
-        json = to_snake_case(json)
-        success = json.get("success", False)
-        message = json.get("message", None)
-
-        if resp.status_code == 401:
-            raise InvalidAuthorization()
-        if resp.status_code == 404:
-            raise DocumentNotFound()
-        if not success:
-            raise ImperialError(message)
+    def create_document(self, settings: Union[dict, Settings]):
+        pass

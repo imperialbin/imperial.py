@@ -3,8 +3,9 @@ from typing import Union, Optional
 
 import httpx
 
-from imperial.lib.common import MISSING
+from imperial.lib.common import MISSING, ensure_json, camel_dict_to_snake
 from imperial.lib.document import Settings
+from imperial.lib.exceptions import InvalidAuthorization, DocumentNotFound, ImperialError
 
 
 class BaseClient(ABC):
@@ -13,10 +14,6 @@ class BaseClient(ABC):
     def __init__(self, token: str = MISSING):
         self._token = token
         self._client: Optional[Union[httpx.Client, httpx.AsyncClient]]
-
-    @abstractmethod
-    def _request(self, *, method: str, url: str, data: dict):
-        pass
 
     @abstractmethod
     def create_document(self, settings: Union[dict, Settings]):
@@ -39,3 +36,22 @@ class BaseClient(ABC):
     @abstractmethod
     def delete_document(self, id: str):
         pass
+
+    @abstractmethod
+    def _request(self, *, method: str, url: str, data: dict):
+        pass
+
+    @staticmethod
+    def _response(resp):
+        json = ensure_json(resp)
+        json = camel_dict_to_snake(json)
+
+        success = json.get("success", False)
+        message = json.get("message", None)
+
+        if resp.status_code == 401:
+            raise InvalidAuthorization()
+        if resp.status_code == 404:
+            raise DocumentNotFound()
+        if not success:
+            raise ImperialError(message)
