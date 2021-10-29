@@ -11,7 +11,17 @@ httpx = "^0.20.0"
 dataclasses = { python = "3.6", version = "^0.8" }
 
 [tool.poetry.dev-dependencies]
+mypy = "^0.910"
+pytest = "^6.2.5"
+pytest-mypy = "^0.8.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+disable_error_code = "return-value"
+show_error_codes = true
+
+[tool.pytest.ini_options]
+addopts = "--mypy -vv"
