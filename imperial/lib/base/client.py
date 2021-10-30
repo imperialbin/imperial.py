@@ -8,15 +8,23 @@ from imperial.common import MISSING, ensure_json, camel_dict_to_snake, snake_dic
 from imperial.exceptions import InvalidAuthorization, DocumentNotFound, ImperialError
 
 if TYPE_CHECKING:
-    from imperial.documents import BaseDocument
+    from imperial.lib.base.document import BaseDocument
 
 
 class BaseClient(ABC):
     __slots__ = "_token",
+    USER_AGENT = "imperial-py; (+https://github.com/imperialbin/imperial-py)"
+    HOSTNAME = "https://staging-balls.impb.in"
+    API = "https://staging-balls-api.impb.in"
+    API_V1 = f"{API}/v1"
+    API_V1_DOCUMENT = f"{API_V1}/document"
 
     def __init__(self, token: Optional[str] = MISSING):  # type: ignore[assignment]
         # if None is explicitly passed, then no token will be used.
         self._token: Optional[str] = token if token is not MISSING else os.environ.get("IMPERIAL_TOKEN", default=None)
+        self._headers = {"User-Agent": self.USER_AGENT}
+        if self._token is not None:
+            self._headers["Authorization"] = self._token
 
     def __repr__(self):
         return f"<{self.__class__.__name__} token={self._token!r}>"
@@ -118,13 +126,6 @@ class BaseClient(ABC):
         Deletes document from https://imperialb.in
         DELETE https://staging-balls-api.impb.in/document
         """
-
-    @property
-    def headers(self) -> dict:
-        headers = {"User-Agent": "imperial-py; (+https://github.com/imperialbin/imperial-py)"}
-        if self._token:
-            headers["Authorization"] = self._token
-        return headers
 
     @abstractmethod
     def _request(self, *, method: str, url: str, data: Optional[dict] = None) -> dict:

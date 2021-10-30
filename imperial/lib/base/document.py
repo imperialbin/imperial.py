@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Any, Optional, List
 
-from imperial.clients import BaseClient
-from imperial.common import HOSTNAME, date_difference
+from imperial.lib.base.client import BaseClient
+from imperial.common import date_difference
 
 
 class BaseDocument(ABC):
@@ -132,11 +132,11 @@ class BaseDocument(ABC):
 
     @property
     def raw(self) -> str:
-        return f"{HOSTNAME}/r/{self.id}"
+        return f"{self._client.HOSTNAME}/r/{self.id}"
 
     @property
     def formatted(self) -> str:
-        return f"{HOSTNAME}/p/{self.id}"
+        return f"{self._client.HOSTNAME}/p/{self.id}"
 
     @property
     def expiration_days(self) -> int:

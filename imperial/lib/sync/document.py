@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import List, Optional
 
-from imperial.documents import BaseDocument
+from imperial.lib.base.document import BaseDocument
 from imperial.exceptions import DocumentNotFound, InvalidAuthorization
 
 

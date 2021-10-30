@@ -3,10 +3,9 @@ from typing import List, Optional
 
 import httpx
 
-from imperial.clients import BaseClient
-from imperial.common import API_V1_DOCUMENT
+from imperial.lib.base.client import BaseClient
 from imperial.common import MISSING
-from imperial.documents.io import Document
+from imperial.lib.sync.document import Document
 
 
 class Client(BaseClient, ABC):
@@ -46,7 +45,7 @@ class Client(BaseClient, ABC):
                        editors: List[str] = None) -> "Document":
         resp = self._patch_document(id, content, language=language, expiration=expiration, image_embed=image_embed,
                                     instant_delete=instant_delete, public=public, editors=editors)
-        return Document(client=self, **resp)
+        return Document(client=self, **resp["data"])
 
     def delete_document(self, id: str) -> None:
         self._delete_document(id)
@@ -73,10 +72,10 @@ class Client(BaseClient, ABC):
                          public: bool = False,
                          create_gist: bool = False,
                          editors: List[str] = None) -> dict:
-        return self._request(method="POST", url=API_V1_DOCUMENT, payload=locals())
+        return self._request(method="POST", url=self.API_V1_DOCUMENT, payload=locals())
 
     def _get_document(self, id: str) -> dict:
-        return self._request(method="GET", url=f"{API_V1_DOCUMENT}/{id}")
+        return self._request(method="GET", url=f"{self.API_V1_DOCUMENT}/{id}")
 
     def _patch_document(self, id: str, content: str, *,
                         language: Optional[str] = None,
@@ -85,16 +84,17 @@ class Client(BaseClient, ABC):
                         instant_delete: bool = False,
                         public: bool = False,
                         editors: List[str] = None) -> dict:
-        return self._request(method="PATCH", url=API_V1_DOCUMENT, payload=locals())
+        return self._request(method="PATCH", url=self.API_V1_DOCUMENT, payload=locals())
 
     def _delete_document(self, id: str) -> dict:
-        return self._request(method="DELETE", url=f"{API_V1_DOCUMENT}/{id}")
+        return self._request(method="DELETE", url=f"{self.API_V1_DOCUMENT}/{id}")
 
 
 if __name__ == "__main__":
     imp = Client()
-    doc = imp.create_document("yeah", short_urls=True)
-    print(f"{doc.language=}")
-    doc.edit(language="python")
-    print(doc)
-    print(f"{doc.language=}")
+    print(imp.token)
+    # doc = imp.create_document("yeah", short_urls=True)
+    # print(f"{doc.language=}")
+    # doc.edit(language="python")
+    # print(doc)
+    # print(f"{doc.language=}")
