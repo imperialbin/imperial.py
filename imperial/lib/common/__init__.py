@@ -1,4 +1,5 @@
 from json import JSONDecodeError
+from typing import Callable
 
 import httpx
 
@@ -20,7 +21,24 @@ def camel_to_snake(text: str) -> str:
 
 
 def camel_dict_to_snake(data: dict) -> dict:
-    return {camel_to_snake(k): v for k, v in data.items()}
+    return _format_dict(camel_to_snake, data)
+
+
+def snake_to_camel(text: str) -> str:
+    return "".join(t.lower() if i == 0 else t.capitalize() for i, t in enumerate(text.split("_")))
+
+
+def snake_dict_to_camel(data: dict) -> dict:
+    return _format_dict(snake_to_camel, data)
+
+
+def _format_dict(func: Callable, data: dict):
+    updated = {}
+    for k, v in data.items():
+        if isinstance(v, dict):
+            v = _format_dict(func, v)
+        updated[func(k)] = v
+    return updated
 
 
 def ensure_json(response: httpx.Response) -> dict:

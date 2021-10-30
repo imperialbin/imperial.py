@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Union, Optional
+from typing import Union, Optional, List
 
 import httpx
 
-from imperial.lib.common import MISSING, ensure_json, camel_dict_to_snake
-from imperial.lib.document import Settings
+from imperial.lib.common import MISSING, ensure_json, camel_dict_to_snake, snake_dict_to_camel
 from imperial.lib.exceptions import InvalidAuthorization, DocumentNotFound, ImperialError
 
 
@@ -15,8 +14,22 @@ class BaseClient(ABC):
         self._token = token
         self._client: Optional[Union[httpx.Client, httpx.AsyncClient]]
 
+    def __repr__(self):
+        return f"<{self.__class__.__name__} token={self._token!r}>"
+
     @abstractmethod
-    def create_document(self, settings: Union[dict, Settings]):
+    def create_document(self, content: str, *,
+                        language: Optional[str] = None,
+                        expiration: int = 5,
+                        short_urls: bool = False,
+                        long_urls: bool = False,
+                        image_embed: bool = False,
+                        instant_delete: bool = False,
+                        encrypted: bool = False,
+                        password: Optional[str] = None,
+                        public: bool = False,
+                        create_gist: bool = False,
+                        editors: List[str] = None):
         """
         Uploads content to https://imperialb.in
         POST https://staging-balls-api.impb.in/document
@@ -30,7 +43,15 @@ class BaseClient(ABC):
         """
 
     @abstractmethod
-    def patch_document(self, settings: Union[dict, Settings]):
+    def patch_document(self, id: str, content: str, *,
+                       language: Optional[str] = None,
+                       expiration: int = 5,
+                       short_urls: bool = False,
+                       long_urls: bool = False,
+                       image_embed: bool = False,
+                       instant_delete: bool = False,
+                       public: bool = False,
+                       editors: List[str] = None):
         pass
 
     @abstractmethod
@@ -44,10 +65,28 @@ class BaseClient(ABC):
         """
 
     @staticmethod
+    def _payload(data: dict):
+        """
+        Prepares data before it's sent in _request
+        """
+        data.pop("self", None)
+        new_data: dict = {"settings": {}}
+        for k, v in data.items():
+            if v is None:
+                continue
+            if k not in ("id", "content", "settings"):
+                new_data["settings"][k] = v
+            else:
+                new_data[k] = v
+        return snake_dict_to_camel(new_data)
+
+    @staticmethod
     def _response(resp: httpx.Response) -> dict:
         """
         Handles parsing response of request
         """
+        print(resp.text)
+
         json = ensure_json(resp)
         json = camel_dict_to_snake(json)
 

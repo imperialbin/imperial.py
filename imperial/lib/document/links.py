@@ -1,14 +1,15 @@
-from dataclasses import dataclass, InitVar, field
+from dataclasses import dataclass
 
 from imperial.lib.common import HOSTNAME
 
 
-@dataclass
+@dataclass(repr=False)
 class Links:
-    id: InitVar[str]
-    raw: str = field(init=False)
-    formatted: str = field(init=False)
+    id: str
 
-    def __post_init__(self, id: str):
-        self.raw = f"{HOSTNAME}/r/{id}"
-        self.formatted = f"{HOSTNAME}/p/{id}"
+    def __post_init__(self):
+        self.raw: str = f"{HOSTNAME}/r/{self.id}"
+        self.formatted: str = f"{HOSTNAME}/p/{self.id}"
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} raw='/r/{self.id}' formatted='/p/{self.id}'>"
