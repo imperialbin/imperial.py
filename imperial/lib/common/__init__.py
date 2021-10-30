@@ -1,5 +1,6 @@
+from datetime import datetime
 from json import JSONDecodeError
-from typing import Callable
+from typing import Callable, Optional
 
 import httpx
 
@@ -12,6 +13,10 @@ API_V1 = f"{API_HOSTNAME}/v1"
 API_V1_DOCUMENT = f"{API_V1}/document"
 
 MISSING = object()
+
+
+def date_difference(now: datetime, later: datetime) -> int:
+    return (later - now).days
 
 
 # reference: https://github.com/Hexiro/autorequests/blob/main/autorequests/utilities/case.py
