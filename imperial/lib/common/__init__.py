@@ -7,6 +7,9 @@ from imperial.lib.exceptions import ImperialError
 HOSTNAME = "https://staging-balls.impb.in"
 API_HOSTNAME = "https://staging-balls-api.impb.in"
 
+API_V1 = f"{API_HOSTNAME}/v1"
+API_V1_DOCUMENT = f"{API_V1}/document"
+
 MISSING = object()
 
 

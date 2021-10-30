@@ -11,7 +11,7 @@ from imperial.lib.exceptions import InvalidAuthorization, DocumentNotFound, Impe
 class BaseClient(ABC):
     __slots__ = ("_token", "_client")
 
-    def __init__(self, token: str = MISSING):
+    def __init__(self, token: str = MISSING):  # type: ignore[assignment]
         self._token = token
         self._client: Optional[Union[httpx.Client, httpx.AsyncClient]]
 
@@ -38,11 +38,16 @@ class BaseClient(ABC):
         pass
 
     @abstractmethod
-    def _request(self, *, method: str, url: str, data: dict):
-        pass
+    def _request(self, *, method: str, url: str, data: Optional[dict] = None) -> httpx.Response:
+        """
+        Handles the sending of requests
+        """
 
     @staticmethod
-    def _response(resp):
+    def _response(resp: httpx.Response) -> dict:
+        """
+        Handles parsing response of request
+        """
         json = ensure_json(resp)
         json = camel_dict_to_snake(json)
 
@@ -55,3 +60,4 @@ class BaseClient(ABC):
             raise DocumentNotFound()
         if not success:
             raise ImperialError(message)
+        return json

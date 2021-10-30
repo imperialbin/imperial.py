@@ -24,34 +24,3 @@ class Document:
             self.timestamps = Timestamps(**self.timestamps)
         if isinstance(self.settings, dict):
             self.settings = Settings(**camel_dict_to_snake(self.settings))
-
-
-data = {
-    "id": "hXXz",
-    "content": "test",
-    "creator": "jjj📅",
-    "views": 0,
-    "links": {
-        "raw": "https://staging-balls-api.impb.in/r/hXXz",
-        "formatted": "https://staging-balls-api.impb.in/p/hXXz"
-    },
-    "timestamps": {
-        "creation": 1633828206,
-        "expiration": 1634692206
-    },
-    "settings": {
-        "language": "typescript",
-        "imageEmbed": False,
-        "instantDelete": False,
-        "encrypted": False,
-        "password": "",
-        "public": True,
-        "editors": [
-            "cody",
-            "pxseu"
-        ]
-    }
-}
-
-a = Document(**data)
-print(a)
