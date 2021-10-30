@@ -8,7 +8,6 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.6"
 httpx = "^0.20.0"
-dataclasses = { python = "3.6", version = "^0.8" }
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.910"
