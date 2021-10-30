@@ -1,5 +1,6 @@
+import os
 from abc import ABC, abstractmethod
-from typing import Union, Optional, List
+from typing import Optional, List
 
 import httpx
 
@@ -8,25 +9,33 @@ from imperial.lib.exceptions import InvalidAuthorization, DocumentNotFound, Impe
 
 
 class BaseClient(ABC):
-    __slots__ = ("_token", "_client")
+    __slots__ = "_token",
 
     def __init__(self, token: str = MISSING):  # type: ignore[assignment]
-        self._token = token
-        self._client: Optional[Union[httpx.Client, httpx.AsyncClient]]
+        # if None is explicitly passed, then no token will be used.
+        self._token: Optional[str] = token if token is not MISSING else os.environ.get("IMPERIAL_TOKEN", default=None)
 
     def __repr__(self):
         return f"<{self.__class__.__name__} token={self._token!r}>"
 
+    @property
+    def token(self) -> Optional[str]:
+        return self._token
+
+    @token.setter
+    def token(self, new_token: str):
+        self._token = new_token
+
     @abstractmethod
     def create_document(self, content: str, *,
-                        language: Optional[str] = None,
+                        language: str = None,
                         expiration: int = 5,
                         short_urls: bool = False,
                         long_urls: bool = False,
                         image_embed: bool = False,
                         instant_delete: bool = False,
                         encrypted: bool = False,
-                        password: Optional[str] = None,
+                        password: str = None,
                         public: bool = False,
                         create_gist: bool = False,
                         editors: List[str] = None):
@@ -44,7 +53,7 @@ class BaseClient(ABC):
 
     @abstractmethod
     def patch_document(self, id: str, content: str, *,
-                       language: Optional[str] = None,
+                       language: str = None,
                        expiration: int = 5,
                        short_urls: bool = False,
                        long_urls: bool = False,
@@ -52,11 +61,24 @@ class BaseClient(ABC):
                        instant_delete: bool = False,
                        public: bool = False,
                        editors: List[str] = None):
-        pass
+        """
+        Edits document on https://imperialb.in
+        PATCH https://staging-balls-api.impb.in/document/:id
+        """
 
     @abstractmethod
     def delete_document(self, id: str):
-        pass
+        """
+        Deletes document from https://imperialb.in
+        DELETE https://staging-balls-api.impb.in/document
+        """
+
+    @property
+    def headers(self) -> dict:
+        headers = {"User-Agent": "imperial-py; (+https://github.com/imperialbin/imperial-py)"}
+        if self._token:
+            headers["Authorization"] = self._token
+        return headers
 
     @abstractmethod
     def _request(self, *, method: str, url: str, data: Optional[dict] = None) -> httpx.Response:

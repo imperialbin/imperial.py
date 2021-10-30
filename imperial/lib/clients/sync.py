@@ -8,9 +8,10 @@ from imperial.lib.common import API_V1_DOCUMENT
 
 
 class Client(BaseClient, ABC):
+    __slots__ = "_client",
 
     def __init__(self):
-        BaseClient.__init__(self)
+        super(Client, self).__init__()
         self._client: httpx.Client = httpx.Client()
 
     def _request(self, *, method, url, payload=None):
@@ -19,7 +20,7 @@ class Client(BaseClient, ABC):
             method=method,
             url=url,
             json=payload,
-            headers={"User-Agent": "imperial-py; (+https://github.com/imperialbin/imperial-py)"}
+            headers=self.headers
         )
         return self._response(resp)
 
