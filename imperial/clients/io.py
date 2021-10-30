@@ -3,10 +3,10 @@ from typing import List, Optional
 
 import httpx
 
-from imperial.lib.clients import BaseClient
-from imperial.lib.common import API_V1_DOCUMENT
-from imperial.lib.common import MISSING
-from imperial.lib.documents.io import Document
+from imperial.clients import BaseClient
+from imperial.common import API_V1_DOCUMENT
+from imperial.common import MISSING
+from imperial.documents.io import Document
 
 
 class Client(BaseClient, ABC):

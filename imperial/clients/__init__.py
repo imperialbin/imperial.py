@@ -4,11 +4,11 @@ from typing import TYPE_CHECKING, Optional, List
 
 import httpx
 
-from imperial.lib.common import MISSING, ensure_json, camel_dict_to_snake, snake_dict_to_camel
-from imperial.lib.exceptions import InvalidAuthorization, DocumentNotFound, ImperialError
+from imperial.common import MISSING, ensure_json, camel_dict_to_snake, snake_dict_to_camel
+from imperial.exceptions import InvalidAuthorization, DocumentNotFound, ImperialError
 
 if TYPE_CHECKING:
-    from imperial.lib.documents import BaseDocument
+    from imperial.documents import BaseDocument
 
 
 class BaseClient(ABC):

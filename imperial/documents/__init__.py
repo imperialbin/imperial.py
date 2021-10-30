@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Any, Optional, List
 
-from imperial.lib.clients import BaseClient
-from imperial.lib.common import HOSTNAME, date_difference
+from imperial.clients import BaseClient
+from imperial.common import HOSTNAME, date_difference
 
 
 class BaseDocument(ABC):

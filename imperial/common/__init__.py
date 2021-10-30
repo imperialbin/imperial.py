@@ -1,10 +1,10 @@
 from datetime import datetime
 from json import JSONDecodeError
-from typing import Callable, Optional
+from typing import Callable
 
 import httpx
 
-from imperial.lib.exceptions import ImperialError
+from imperial.exceptions import ImperialError
 
 HOSTNAME = "https://staging-balls.impb.in"
 API_HOSTNAME = "https://staging-balls-api.impb.in"

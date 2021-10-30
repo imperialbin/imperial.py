@@ -1,8 +1,8 @@
 from abc import ABC
 from typing import List, Optional
 
-from imperial.lib.documents import BaseDocument
-from imperial.lib.exceptions import DocumentNotFound, InvalidAuthorization
+from imperial.documents import BaseDocument
+from imperial.exceptions import DocumentNotFound, InvalidAuthorization
 
 
 class Document(BaseDocument, ABC):
