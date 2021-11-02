@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from imperial.lib.base.document_manager import BaseDocumentManager
 from imperial.lib.sync.document import Document
-
-if TYPE_CHECKING:
-    from imperial.lib.base.document import BaseDocument
 
 
 class DocumentManager(BaseDocumentManager):
@@ -22,7 +17,7 @@ class DocumentManager(BaseDocumentManager):
                password: str = None,
                public: bool = False,
                create_gist: bool = False,
-               editors: list[str] = None) -> BaseDocument:
+               editors: list[str] = None) -> Document:
         """
         Uploads content to https://imperialb.in
         POST https://staging-balls-api.impb.in/document
@@ -30,7 +25,7 @@ class DocumentManager(BaseDocumentManager):
         data = self.client.rest.request(method="POST", url="/document", payload=locals())
         return Document(client=self._client, **data)
 
-    def get(self, id: str) -> BaseDocument:
+    def get(self, id: str) -> Document:
         """
         Gets document from https://imperialb.in
         GET https://staging-balls-api.impb.in/document/:id
@@ -44,7 +39,7 @@ class DocumentManager(BaseDocumentManager):
               image_embed: bool = False,
               instant_delete: bool = False,
               public: bool = False,
-              editors: list[str] = None) -> BaseDocument:
+              editors: list[str] = None) -> Document:
         """
         Edits document on https://imperialb.in
         PATCH https://staging-balls-api.impb.in/document/:id

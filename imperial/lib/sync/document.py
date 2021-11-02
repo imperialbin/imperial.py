@@ -45,7 +45,7 @@ class Document(BaseDocument, ABC):
                   password: str | None = None,
                   public: bool = False,
                   create_gist: bool = False,
-                  editors: list[str] = None) -> BaseDocument:
+                  editors: list[str] = None) -> Document:
 
         payload = {
             "content": content or self.content,
