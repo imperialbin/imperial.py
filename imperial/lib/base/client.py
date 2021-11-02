@@ -12,8 +12,8 @@ from imperial.lib.base.document_manager import BaseDocumentManager
 class BaseClient(ABC):
     __slots__ = "_token", "_headers"
     USER_AGENT = "imperial-py; (+https://github.com/imperialbin/imperial-py)"
-    HOSTNAME = "https://staging-balls.impb.in"
-    API = "https://staging-balls-api.impb.in"
+    HOSTNAME = "https://staging.impb.in"
+    API = "https://staging-api.impb.in"
     API_V1 = f"{API}/v1"
     API_V1_DOCUMENT = f"{API_V1}/document"
 

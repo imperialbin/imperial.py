@@ -3,6 +3,7 @@ from typing import List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from imperial.lib.base.client import BaseClient
+    from imperial.lib.base.document import BaseDocument
 
 
 class BaseDocumentManager(ABC):
