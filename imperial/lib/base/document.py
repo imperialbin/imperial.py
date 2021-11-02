@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Optional, List
+from typing import TYPE_CHECKING
 
-from imperial.lib.base.client import BaseClient
 from imperial.common import date_difference
+
+if TYPE_CHECKING:
+    from imperial.lib.base.client import BaseClient
 
 
 class BaseDocument(ABC):
@@ -23,21 +27,21 @@ class BaseDocument(ABC):
         "_editors",
     )
 
-    def __init__(self, client: BaseClient, content: str, **kwargs: Any):
+    def __init__(self, client: BaseClient, content: str, **kwargs):
         self._client: BaseClient = client
         self._content: str = content
-        self._id: Optional[str] = None
+        self._id: str | None = None
         self._views: int = 0
         self._deleted: bool = False
-        self._creation: Optional[datetime] = None
-        self._expiration: Optional[datetime] = None
-        self._language: Optional[str] = None
+        self._creation: datetime | None = None
+        self._expiration: datetime | None = None
+        self._language: str | None = None
         self._image_embed: bool = False
         self._instant_delete: bool = False
         self._encrypted: bool = False
-        self._password: Optional[str] = None
+        self._password: str | None = None
         self._public: bool = False
-        self._editors: List[str] = []
+        self._editors: list[str] = []
         self._update(**kwargs)
 
     def __repr__(self):
@@ -66,19 +70,19 @@ class BaseDocument(ABC):
 
         settings = kwargs.get("settings", {})
         if "language" in settings:
-            self._language: Optional[str] = settings["language"]
+            self._language = settings["language"]
         if "image_embed" in settings:
-            self._image_embed: bool = settings["image_embed"]
+            self._image_embed = settings["image_embed"]
         if "instant_delete" in settings:
-            self._instant_delete: bool = settings["instant_delete"]
+            self._instant_delete = settings["instant_delete"]
         if "encrypted" in settings:
-            self._encrypted: bool = settings["encrypted"]
+            self._encrypted = settings["encrypted"]
         if "password" in settings:
-            self._password: Optional[str] = settings["password"]
+            self._password = settings["password"]
         if "public" in settings:
-            self._public: bool = settings["public"]
+            self._public = settings["public"]
         if "editors" in settings:
-            self._editors: List[str] = settings["editors"]
+            self._editors = settings["editors"]
 
     # signature should match patch_document (without id)
     @abstractmethod
@@ -88,24 +92,24 @@ class BaseDocument(ABC):
              image_embed: bool = False,
              instant_delete: bool = False,
              public: bool = False,
-             editors: List[str] = None) -> None:
+             editors: list[str] = None) -> None:
         """
         Edits document code on https://imperialb.in
         """
 
     @abstractmethod
     def duplicate(self, content: str, *,
-                  language: Optional[str] = None,
+                  language: str | None = None,
                   expiration: int = 5,
                   short_urls: bool = False,
                   long_urls: bool = False,
                   image_embed: bool = False,
                   instant_delete: bool = False,
                   encrypted: bool = False,
-                  password: Optional[str] = None,
+                  password: str | None = None,
                   public: bool = False,
                   create_gist: bool = False,
-                  editors: List[str] = None) -> "BaseDocument":
+                  editors: list[str] = None) -> "BaseDocument":
         """
         Duplicates document
         """
@@ -173,7 +177,7 @@ class BaseDocument(ABC):
         return self._expiration
 
     @property
-    def language(self) -> Optional[str]:
+    def language(self) -> str | None:
         return self._language
 
     @property
@@ -189,7 +193,7 @@ class BaseDocument(ABC):
         return self._encrypted
 
     @property
-    def password(self) -> Optional[str]:
+    def password(self) -> str | None:
         return self._password
 
     @property
@@ -197,5 +201,5 @@ class BaseDocument(ABC):
         return self._public
 
     @property
-    def editors(self) -> List[str]:
+    def editors(self) -> list[str]:
         return self._editors

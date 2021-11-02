@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from imperial.lib.base.client import BaseClient
@@ -24,7 +26,7 @@ class BaseDocumentManager(ABC):
                password: str = None,
                public: bool = False,
                create_gist: bool = False,
-               editors: List[str] = None) -> "BaseDocument":
+               editors: list[str] = None) -> "BaseDocument":
         """
         Uploads content to https://imperialb.in
         POST https://staging-balls-api.impb.in/document
@@ -44,7 +46,7 @@ class BaseDocumentManager(ABC):
               image_embed: bool = False,
               instant_delete: bool = False,
               public: bool = False,
-              editors: List[str] = None) -> "BaseDocument":
+              editors: list[str] = None) -> "BaseDocument":
         """
         Edits document on https://imperialb.in
         PATCH https://staging-balls-api.impb.in/document/:id

@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 from abc import ABC
-from typing import List, Optional
 
 from imperial.lib.base.document import BaseDocument
 from imperial.exceptions import DocumentNotFound, InvalidAuthorization
@@ -13,7 +14,7 @@ class Document(BaseDocument, ABC):
              image_embed: bool = False,
              instant_delete: bool = False,
              public: bool = False,
-             editors: List[str] = None) -> None:
+             editors: list[str] = None) -> None:
 
         if self.deleted:
             raise DocumentNotFound(self.id)
@@ -32,17 +33,17 @@ class Document(BaseDocument, ABC):
         self._update(**settings["data"])
 
     def duplicate(self, content: str, *,
-                  language: Optional[str] = None,
+                  language: str | None = None,
                   expiration: int = 5,
                   short_urls: bool = False,
                   long_urls: bool = False,
                   image_embed: bool = False,
                   instant_delete: bool = False,
                   encrypted: bool = False,
-                  password: Optional[str] = None,
+                  password: str | None = None,
                   public: bool = False,
                   create_gist: bool = False,
-                  editors: List[str] = None) -> BaseDocument:
+                  editors: list[str] = None) -> BaseDocument:
         return self._client.create_document(
             content=content or self.content,
             language=language or self.language,

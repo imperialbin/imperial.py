@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 from imperial.lib.base.document_manager import BaseDocumentManager
 from imperial.lib.sync.document import Document
@@ -17,7 +17,7 @@ class DocumentManager(BaseDocumentManager):
                password: str = None,
                public: bool = False,
                create_gist: bool = False,
-               editors: List[str] = None) -> "BaseDocument":
+               editors: list[str] = None) -> "BaseDocument":
         """
         Uploads content to https://imperialb.in
         POST https://staging-balls-api.impb.in/document

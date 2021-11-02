@@ -1,6 +1,6 @@
-from abc import ABC
-from typing import List, Optional
+from __future__ import annotations
 
+from abc import ABC
 import httpx
 
 from imperial.common import MISSING
@@ -11,7 +11,7 @@ from imperial.lib.sync.document_manager import DocumentManager
 class Client(BaseClient, ABC):
     __slots__ = "_client", "_document"
 
-    def __init__(self, token: Optional[str] = MISSING):  # type: ignore[assignment]
+    def __init__(self, token: str | None = MISSING):  # type: ignore[assignment]
         super().__init__(token)
         self._client: httpx.Client = httpx.Client()
         self._document = DocumentManager(self)
@@ -31,29 +31,29 @@ class Client(BaseClient, ABC):
         return self._response(resp)
 
     def _create_document(self, content: str, *,
-                         language: Optional[str] = None,
+                         language: str | None = None,
                          expiration: int = 5,
                          short_urls: bool = False,
                          long_urls: bool = False,
                          image_embed: bool = False,
                          instant_delete: bool = False,
                          encrypted: bool = False,
-                         password: Optional[str] = None,
+                         password: str | None = None,
                          public: bool = False,
                          create_gist: bool = False,
-                         editors: List[str] = None) -> dict:
+                         editors: list[str] = None) -> dict:
         return self._request(method="POST", url=self.API_V1_DOCUMENT, payload=locals())
 
     def _get_document(self, id: str) -> dict:
         return self._request(method="GET", url=f"{self.API_V1_DOCUMENT}/{id}")
 
     def _patch_document(self, id: str, content: str, *,
-                        language: Optional[str] = None,
+                        language: str | None = None,
                         expiration: int = 5,
                         image_embed: bool = False,
                         instant_delete: bool = False,
                         public: bool = False,
-                        editors: List[str] = None) -> dict:
+                        editors: list[str] = None) -> dict:
         return self._request(method="PATCH", url=self.API_V1_DOCUMENT, payload=locals())
 
     def _delete_document(self, id: str) -> dict:

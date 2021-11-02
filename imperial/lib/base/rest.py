@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 import httpx
 
@@ -26,7 +26,7 @@ class BaseRest(ABC):
         self._client = client
 
     @abstractmethod
-    def _request(self, *, method: str, url: str, data: Optional[dict] = None) -> dict:
+    def _request(self, *, method: str, url: str, data: dict | None = None) -> dict:
         """
         Handles the sending of requests
         """
