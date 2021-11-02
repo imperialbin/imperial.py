@@ -3,12 +3,11 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-import httpx
-
 from imperial.common import snake_dict_to_camel, ensure_json, camel_dict_to_snake
 from imperial.exceptions import InvalidAuthorization, ImperialError, DocumentNotFound
 
 if TYPE_CHECKING:
+    import httpx
     from imperial.lib.base.client import BaseClient
 
 
@@ -23,7 +22,13 @@ class BaseRest(ABC):
     API_V1_DOCUMENT = f"{API_V1}/document"
 
     def __init__(self, client: BaseClient):
-        self._client = client
+        self._client: BaseClient = client
+        self._http_client: httpx.Client | httpx.AsyncClient | None = None
+
+    @property
+    @abstractmethod
+    def http_client(self) -> httpx.Client | httpx.AsyncClient | None:
+        return self._http_client
 
     @abstractmethod
     def _request(self, *, method: str, url: str, data: dict | None = None) -> dict:

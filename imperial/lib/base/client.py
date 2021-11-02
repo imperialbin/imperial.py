@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import os
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 from imperial.common import MISSING
 from imperial.exceptions import InvalidAuthorization
-from imperial.lib.base.document_manager import BaseDocumentManager
+
+if TYPE_CHECKING:
+    from imperial.lib.base.document_manager import BaseDocumentManager
 
 
 class BaseClient(ABC):
