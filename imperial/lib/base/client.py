@@ -1,18 +1,16 @@
 import os
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Optional, List
+from typing import Optional, List
 
 import httpx
 
 from imperial.common import MISSING, ensure_json, camel_dict_to_snake, snake_dict_to_camel
 from imperial.exceptions import InvalidAuthorization, DocumentNotFound, ImperialError
-
-if TYPE_CHECKING:
-    from imperial.lib.base.document import BaseDocument
+from imperial.lib.base.document_manager import BaseDocumentManager
 
 
 class BaseClient(ABC):
-    __slots__ = "_token",
+    __slots__ = "_token", "_headers"
     USER_AGENT = "imperial-py; (+https://github.com/imperialbin/imperial-py)"
     HOSTNAME = "https://staging-balls.impb.in"
     API = "https://staging-balls-api.impb.in"
@@ -37,50 +35,10 @@ class BaseClient(ABC):
     def token(self, new_token: str):
         self._token = new_token
 
+    @property
     @abstractmethod
-    def create_document(self, content: str, *,
-                        language: str = None,
-                        expiration: int = 5,
-                        short_urls: bool = False,
-                        long_urls: bool = False,
-                        image_embed: bool = False,
-                        instant_delete: bool = False,
-                        encrypted: bool = False,
-                        password: str = None,
-                        public: bool = False,
-                        create_gist: bool = False,
-                        editors: List[str] = None) -> "BaseDocument":
-        """
-        Uploads content to https://imperialb.in
-        POST https://staging-balls-api.impb.in/document
-        """
-
-    @abstractmethod
-    def get_document(self, id: str) -> "BaseDocument":
-        """
-        Gets document from https://imperialb.in
-        GET https://staging-balls-api.impb.in/document/:id
-        """
-
-    @abstractmethod
-    def patch_document(self, id: str, content: str, *,
-                       language: str = None,
-                       expiration: int = 5,
-                       image_embed: bool = False,
-                       instant_delete: bool = False,
-                       public: bool = False,
-                       editors: List[str] = None) -> "BaseDocument":
-        """
-        Edits document on https://imperialb.in
-        PATCH https://staging-balls-api.impb.in/document/:id
-        """
-
-    @abstractmethod
-    def delete_document(self, id: str) -> None:
-        """
-        Deletes document from https://imperialb.in
-        DELETE https://staging-balls-api.impb.in/document
-        """
+    def document(self) -> BaseDocumentManager:
+        pass
 
     @abstractmethod
     def _create_document(self, content: str, *,

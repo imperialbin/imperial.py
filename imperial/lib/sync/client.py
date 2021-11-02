@@ -3,52 +3,22 @@ from typing import List, Optional
 
 import httpx
 
-from imperial.lib.base.client import BaseClient
 from imperial.common import MISSING
-from imperial.lib.sync.document import Document
+from imperial.lib.base.client import BaseClient
+from imperial.lib.sync.document_manager import DocumentManager
 
 
 class Client(BaseClient, ABC):
-    __slots__ = "_client",
+    __slots__ = "_client", "_document"
 
     def __init__(self, token: Optional[str] = MISSING):  # type: ignore[assignment]
-        super(Client, self).__init__(token)
+        super().__init__(token)
         self._client: httpx.Client = httpx.Client()
+        self._document = DocumentManager(self)
 
-    def create_document(self, content: str, *,
-                        language: str = None,
-                        expiration: int = 5,
-                        short_urls: bool = False,
-                        long_urls: bool = False,
-                        image_embed: bool = False,
-                        instant_delete: bool = False,
-                        encrypted: bool = False,
-                        password: str = None,
-                        public: bool = False,
-                        create_gist: bool = False,
-                        editors: List[str] = None) -> "Document":
-        resp = self._create_document(content=content, language=language, expiration=expiration, short_urls=short_urls,
-                                     long_urls=long_urls, image_embed=image_embed, instant_delete=instant_delete,
-                                     encrypted=encrypted, password=password, public=public, create_gist=create_gist,
-                                     editors=editors)
-        return Document(client=self, **resp["data"])
-
-    def get_document(self, id: str) -> "Document":
-        return Document(client=self, **self._get_document(id))
-
-    def patch_document(self, id: str, content: str, *,
-                       language: str = None,
-                       expiration: int = 5,
-                       image_embed: bool = False,
-                       instant_delete: bool = False,
-                       public: bool = False,
-                       editors: List[str] = None) -> "Document":
-        resp = self._patch_document(id, content, language=language, expiration=expiration, image_embed=image_embed,
-                                    instant_delete=instant_delete, public=public, editors=editors)
-        return Document(client=self, **resp["data"])
-
-    def delete_document(self, id: str) -> None:
-        self._delete_document(id)
+    @property
+    def document(self):
+        return self._document
 
     def _request(self, *, method, url, payload=None):
         payload = self._payload(payload) if payload else {}
@@ -56,7 +26,7 @@ class Client(BaseClient, ABC):
             method=method,
             url=url,
             json=payload,
-            headers=self.headers
+            headers=self._headers
         )
         return self._response(resp)
 
@@ -92,6 +62,7 @@ class Client(BaseClient, ABC):
 
 if __name__ == "__main__":
     imp = Client()
+    print(imp.document.create("yeah"))
     print(imp.token)
     # doc = imp.create_document("yeah", short_urls=True)
     # print(f"{doc.language=}")
