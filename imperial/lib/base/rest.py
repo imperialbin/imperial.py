@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING
 
 from imperial.common import snake_dict_to_camel, ensure_json, camel_dict_to_snake
 from imperial.exceptions import InvalidAuthorization, ImperialError, DocumentNotFound
-from imperial.lib.base.manager import Manager
+from imperial.lib.base.base import Base
 
 if TYPE_CHECKING:
     import httpx
     from imperial.lib.base.client import BaseClient
 
 
-class BaseRest(Manager, ABC):
+class BaseRest(Base, ABC):
     """
     Handles direct API interactions
     """

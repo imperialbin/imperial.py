@@ -5,13 +5,13 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 from imperial.common import date_difference
-from imperial.lib.base.manager import Manager
+from imperial.lib.base.base import Base
 
 if TYPE_CHECKING:
     from imperial.lib.base.client import BaseClient
 
 
-class BaseDocument(Manager, ABC):
+class BaseDocument(Base, ABC):
     __slots__ = (
         "_client",
         "_content",

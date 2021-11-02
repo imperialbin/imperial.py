@@ -3,13 +3,13 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from imperial.lib.base.manager import Manager
+from imperial.lib.base.base import Base
 
 if TYPE_CHECKING:
     from imperial.lib.base.document import BaseDocument
 
 
-class BaseDocumentManager(Manager, ABC):
+class BaseDocumentManager(Base, ABC):
 
     @abstractmethod
     def create(self, content: str, *,

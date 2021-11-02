@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from imperial.lib.base.client import BaseClient
 
 
-class Manager:
+class Base:
 
     def __init__(self, client: BaseClient):
         self._client: BaseClient = client
