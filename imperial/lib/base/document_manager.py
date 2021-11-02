@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 from typing import TYPE_CHECKING
 
 from imperial.lib.base.base import Base
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from imperial.lib.base.document import BaseDocument
 
 
-class BaseDocumentManager(Base, ABC):
+class BaseDocumentManager(Base, metaclass=ABCMeta):
 
     @abstractmethod
     def create(self, content: str, *,

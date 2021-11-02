@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 from typing import TYPE_CHECKING
 
 from imperial.common import MISSING
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from imperial.lib.base.document_manager import BaseDocumentManager
 
 
-class BaseClient(ABC):
+class BaseClient(metaclass=ABCMeta):
 
     def __init__(self, token: str | None = MISSING):  # type: ignore[assignment]
         # if None is explicitly passed, then no token will be used.

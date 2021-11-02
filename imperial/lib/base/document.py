@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod, ABCMeta
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from imperial.lib.base.client import BaseClient
 
 
-class BaseDocument(Base, ABC):
+class BaseDocument(Base, metaclass=ABCMeta):
     __slots__ = (
         "_client",
         "_content",

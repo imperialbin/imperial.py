@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 from typing import TYPE_CHECKING
 
 from imperial.common import snake_dict_to_camel, ensure_json, camel_dict_to_snake
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from imperial.lib.base.client import BaseClient
 
 
-class BaseRest(Base, ABC):
+class BaseRest(Base, metaclass=ABCMeta):
     """
     Handles direct API interactions
     """
