@@ -26,7 +26,7 @@ class Client(BaseClient, ABC):
             method=method,
             url=url,
             json=payload,
-            headers=self._headers
+            headers=self.headers
         )
         return self._response(resp)
 
@@ -58,14 +58,3 @@ class Client(BaseClient, ABC):
 
     def _delete_document(self, id: str) -> dict:
         return self._request(method="DELETE", url=f"{self.API_V1_DOCUMENT}/{id}")
-
-
-if __name__ == "__main__":
-    imp = Client()
-    print(imp.document.create("yeah"))
-    print(imp.token)
-    # doc = imp.create_document("yeah", short_urls=True)
-    # print(f"{doc.language=}")
-    # doc.edit(language="python")
-    # print(doc)
-    # print(f"{doc.language=}")
