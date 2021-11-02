@@ -60,7 +60,9 @@ class BaseDocument(Manager, ABC):
         return representation + ">"
 
     def _update(self, **kwargs):
-        self._id: str = kwargs.get("id", self._id)
+        if not self._id:
+            self._id: str = kwargs.get("id", None)
+        self._content: str = kwargs.get("content", self._content)
         self._views: int = kwargs.get("views", self._views)
 
         timestamps = kwargs.get("timestamps", {})

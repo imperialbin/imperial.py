@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from abc import ABC
 
-from imperial.lib.base.document import BaseDocument
 from imperial.exceptions import DocumentNotFound, InvalidAuthorization
+from imperial.lib.base.document import BaseDocument
 
 
 class Document(BaseDocument, ABC):
@@ -18,19 +18,21 @@ class Document(BaseDocument, ABC):
 
         if self.deleted:
             raise DocumentNotFound(self.id)
-        if not self.editable:
+        if not self.editable or not self.client.token:
             raise InvalidAuthorization()
 
-        settings = self._client._patch_document(
-            id=self.id,
-            content=content or self.content,
-            language=language or self.language,
-            expiration=expiration or self.expiration_days,
-            image_embed=image_embed or self.image_embed,
-            public=public or self.public,
-            editors=editors or self.editors
-        )
-        self._update(**settings["data"])
+        payload = {
+            "id": self.id,
+            "content": content or self.content,
+            "language": language or self.language,
+            "expiration": expiration or self.expiration_days,
+            "image_embed": image_embed or self.image_embed,
+            "public": public or self.public,
+            "editors": editors or self.editors
+        }
+
+        settings = self.client.rest.request(method="PATCH", url="/document", payload=payload)
+        self._update(**settings)
 
     def duplicate(self, content: str, *,
                   language: str | None = None,
@@ -44,20 +46,24 @@ class Document(BaseDocument, ABC):
                   public: bool = False,
                   create_gist: bool = False,
                   editors: list[str] = None) -> BaseDocument:
-        return self._client.create_document(
-            content=content or self.content,
-            language=language or self.language,
-            expiration=expiration or self.expiration_days,
-            short_urls=short_urls or self.short_urls,
-            long_urls=long_urls or self.long_urls,
-            image_embed=image_embed or self.image_embed,
-            instant_delete=instant_delete or self.instant_delete,
-            encrypted=encrypted or self.encrypted,
-            password=password or self.password,
-            public=public or self.public,
-            create_gist=create_gist,
-            editors=editors or self.editors
-        )
+
+        payload = {
+            "content": content or self.content,
+            "language": language or self.language,
+            "expiration": expiration or self.expiration_days,
+            "short_urls": short_urls or self.short_urls,
+            "long_urls": long_urls or self.long_urls,
+            "image_embed": image_embed or self.image_embed,
+            "instant_delete": instant_delete or self.instant_delete,
+            "encrypted": encrypted or self.encrypted,
+            "password": password or self.password,
+            "public": public or self.public,
+            "create_gist": create_gist,
+            "editors": editors or self.editors
+        }
+
+        data = self.client.rest.request(method="POST", url="/document", payload=payload)
+        return Document(self.client, **data)
 
     def delete(self) -> None:
-        self._client._delete_document(self.id)
+        self.client.rest.request(method="DELETE", url=f"/document/{self.id}")
