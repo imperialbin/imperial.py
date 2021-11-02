@@ -8,6 +8,7 @@ from imperial.common import MISSING
 from imperial.exceptions import InvalidAuthorization
 
 if TYPE_CHECKING:
+    from imperial.lib.base.rest import BaseRest
     from imperial.lib.base.document_manager import BaseDocumentManager
 
 
@@ -19,6 +20,11 @@ class BaseClient(ABC):
 
     def __repr__(self):
         return f"<{self.__class__.__name__} token={self._token!r}>"
+
+    @property
+    @abstractmethod
+    def rest(self) -> BaseRest:
+        pass
 
     @property
     @abstractmethod

@@ -5,12 +5,13 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 from imperial.common import date_difference
+from imperial.lib.base.manager import Manager
 
 if TYPE_CHECKING:
     from imperial.lib.base.client import BaseClient
 
 
-class BaseDocument(ABC):
+class BaseDocument(Manager, ABC):
     __slots__ = (
         "_client",
         "_content",
@@ -28,7 +29,7 @@ class BaseDocument(ABC):
     )
 
     def __init__(self, client: BaseClient, content: str, **kwargs):
-        self._client: BaseClient = client
+        super().__init__(client)
         self._content: str = content
         self._id: str | None = None
         self._views: int = 0
@@ -132,15 +133,15 @@ class BaseDocument(ABC):
 
     @property
     def editable(self) -> bool:
-        return self._client.token and not self.deleted
+        return self.client.token and not self.deleted
 
     @property
     def raw(self) -> str:
-        return f"{self._client.HOSTNAME}/r/{self.id}"
+        return f"{self.client.rest.HOSTNAME}/r/{self.id}"
 
     @property
     def formatted(self) -> str:
-        return f"{self._client.HOSTNAME}/p/{self.id}"
+        return f"{self.client.rest.HOSTNAME}/p/{self.id}"
 
     @property
     def expiration_days(self) -> int:

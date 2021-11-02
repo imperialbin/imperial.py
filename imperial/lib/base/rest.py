@@ -32,7 +32,7 @@ class BaseRest(Manager, ABC):
         return self._http_client
 
     @abstractmethod
-    def _request(self, *, method: str, url: str, data: dict | None = None) -> dict:
+    def request(self, *, method: str, url: str, payload: dict | None = None) -> dict:
         """
         Handles the sending of requests
         """
