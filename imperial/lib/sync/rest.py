@@ -22,6 +22,7 @@ class Rest(BaseRest, ABC):
         return self._http_client
 
     def _request(self, *, method: str, url: str, payload: dict | None = None) -> dict:
+        url = self.API_V1 + url
         payload = self._payload(payload) if payload else {}
         resp = self.http_client.request(
             method=method,

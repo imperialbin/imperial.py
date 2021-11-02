@@ -75,6 +75,6 @@ class BaseRest(Manager, ABC):
             raise InvalidAuthorization()
         if resp.status_code == 404:
             raise DocumentNotFound()
-        if not success:
+        if not success or "data" not in json:
             raise ImperialError(message)
-        return json
+        return json["data"]
