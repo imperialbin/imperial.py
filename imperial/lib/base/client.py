@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from imperial.lib.base.rest import BaseRest
     from imperial.lib.base.document_manager import BaseDocumentManager
     from imperial.lib.base.users_manager import BaseUsersManager
+    from imperial.lib.base.me_manager import BaseMeManager
 
 
 class BaseClient(metaclass=ABCMeta):
@@ -35,6 +36,11 @@ class BaseClient(metaclass=ABCMeta):
     @property
     @abstractmethod
     def users(self) -> BaseUsersManager:
+        pass
+
+    @property
+    @abstractmethod
+    def me(self) -> BaseMeManager:
         pass
 
     @property

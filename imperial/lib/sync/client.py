@@ -5,6 +5,7 @@ from abc import ABC
 from imperial.common import MISSING
 from imperial.lib.base.client import BaseClient
 from imperial.lib.sync.document_manager import DocumentManager
+from imperial.lib.sync.me_manager import MeManager
 from imperial.lib.sync.rest import Rest
 from imperial.lib.sync.users_manager import UsersManager
 
@@ -16,6 +17,7 @@ class Client(BaseClient, ABC):
         self._rest = Rest(self)
         self._document = DocumentManager(self)
         self._users = UsersManager(self)
+        self._me = MeManager(self)
 
     @property
     def rest(self) -> Rest:
@@ -29,8 +31,12 @@ class Client(BaseClient, ABC):
     def users(self) -> UsersManager:
         return self._users
 
+    @property
+    def me(self) -> MeManager:
+        return self._me
+
 
 if __name__ == "__main__":
     client = Client()
-    user = client.users.get("pxseu")
+    user = client.me.get()
     print(user)
