@@ -11,13 +11,13 @@ if TYPE_CHECKING:
 
 class BaseUser(Base, metaclass=ABCMeta):
 
-    def __init__(self, client: BaseClient, **kwargs):
+    def __init__(self, client: BaseClient, username: str, icon: str, member_plus: bool, banned: bool):
         super().__init__(client)
         self._username: str
         self._icon: str
         self._member_plus: bool = False
         self._banned: bool = False
-        self._update(**kwargs)
+        self._update(username, icon, member_plus, banned)
 
     def _update(self, username: str, icon: str, member_plus: bool, banned: bool):
         self._username = username

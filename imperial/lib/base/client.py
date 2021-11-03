@@ -10,6 +10,7 @@ from imperial.exceptions import InvalidAuthorization
 if TYPE_CHECKING:
     from imperial.lib.base.rest import BaseRest
     from imperial.lib.base.document_manager import BaseDocumentManager
+    from imperial.lib.base.users_manager import BaseUsersManager
 
 
 class BaseClient(metaclass=ABCMeta):
@@ -29,6 +30,11 @@ class BaseClient(metaclass=ABCMeta):
     @property
     @abstractmethod
     def document(self) -> BaseDocumentManager:
+        pass
+
+    @property
+    @abstractmethod
+    def users(self) -> BaseUsersManager:
         pass
 
     @property

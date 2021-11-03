@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 from abc import ABC
-from typing import TYPE_CHECKING
 
 from imperial.common import MISSING
 from imperial.lib.base.client import BaseClient
 from imperial.lib.sync.document_manager import DocumentManager
 from imperial.lib.sync.rest import Rest
-
-if TYPE_CHECKING:
-    from imperial.lib.base.rest import BaseRest
+from imperial.lib.sync.users_manager import UsersManager
 
 
 class Client(BaseClient, ABC):
@@ -18,18 +15,22 @@ class Client(BaseClient, ABC):
         super().__init__(token)
         self._rest = Rest(self)
         self._document = DocumentManager(self)
+        self._users = UsersManager(self)
 
     @property
-    def rest(self) -> BaseRest:
+    def rest(self) -> Rest:
         return self._rest
 
     @property
-    def document(self):
+    def document(self) -> DocumentManager:
         return self._document
+
+    @property
+    def users(self) -> UsersManager:
+        return self._users
 
 
 if __name__ == "__main__":
     client = Client()
-    doc = client.document.create(content="yeah")
-    print(doc)
-    print(doc.formatted)
+    user = client.users.get("pxseu")
+    print(user)
