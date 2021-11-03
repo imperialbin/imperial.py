@@ -31,6 +31,9 @@ class BaseMe(Base, metaclass=ABCMeta):
         self._opt: str
         self._update(**kwargs)
 
+    def __repr__(self):
+        return self._repr("username", "email", "member_plus")
+
     def _update(self, **kwargs):
         if "id" in kwargs:
             self._id = kwargs["id"]

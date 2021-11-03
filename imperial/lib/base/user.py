@@ -19,6 +19,9 @@ class BaseUser(Base, metaclass=ABCMeta):
         self._banned: bool = False
         self._update(username, icon, member_plus, banned)
 
+    def __repr__(self):
+        return self._repr("username", "member_plus")
+
     def _update(self, username: str, icon: str, member_plus: bool, banned: bool):
         self._username = username
         self._icon = icon

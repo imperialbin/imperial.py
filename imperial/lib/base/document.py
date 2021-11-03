@@ -46,18 +46,7 @@ class BaseDocument(Base, metaclass=ABCMeta):
         self._update(**kwargs)
 
     def __repr__(self):
-        representation = f"<Document id={self.id}"
-        if self.id:
-            if self.expiration:
-                representation += f" expiration={self.expiration:%x}"
-            if self.language:
-                representation += f" language={self.language}"
-            if self.password:
-                representation += f" password={self.password}"
-            if self.deleted:
-                # self.deleted will always be true here
-                representation += " deleted=True"
-        return representation + ">"
+        return self._repr("id", "expiration", "language", "password", "delete", validate_keys=True)
 
     def _update(self, **kwargs):
         if not self._id:
