@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 from abc import ABCMeta
 from typing import TYPE_CHECKING
 
@@ -65,3 +64,63 @@ class BaseMe(Base, metaclass=ABCMeta):
             self._github_access = kwargs["github_access"]
         if "opt" in kwargs:
             self._opt = kwargs["opt"]
+
+    @property
+    def id(self) -> str:
+        return self._id
+
+    @property
+    def user_id(self) -> int:
+        return self._user_id
+
+    @property
+    def username(self) -> str:
+        return self._username
+
+    @property
+    def email(self) -> str:
+        return self._email
+
+    @property
+    def banned(self) -> bool:
+        return self._banned
+
+    @property
+    def confirmed(self) -> bool:
+        return self._confirmed
+
+    @property
+    def icon(self) -> str:
+        return self._icon
+
+    @property
+    def member_plus(self) -> bool:
+        return self._member_plus
+
+    @property
+    def documents_made(self) -> int:
+        return self._documents_made
+
+    @property
+    def active_unlimited_documents(self) -> int:
+        return self._active_unlimited_documents
+
+    @property
+    def discord_id(self) -> str:
+        return self._discord_id
+
+    @property
+    def admin(self) -> bool:
+        return self._admin
+
+    @property
+    def api_token(self) -> str:
+        return self._api_token
+
+    @property
+    def github_access(self) -> str:
+        return self._github_access
+
+    @property
+    def opt(self) -> str:
+        return self._opt
