@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Any
     from imperial.lib.base.client import BaseClient
 
 
@@ -17,11 +18,13 @@ class Base:
     def _repr(self, *keys: str, validate_keys: bool = False):
         if not keys:
             return f"<{self.__class__.__name__}>"
-        elif not validate_keys:
-            matches = [f"{k}={getattr(self, k)}" for k in keys]
-        else:
-            matches = [f"{k}={getattr(self, k)}" for k in keys if keys]
-        content = ", ".join(matches)
+        matches: dict[str, Any] = {}
+        for key in keys:
+            value = getattr(self, key)
+            if validate_keys and not value:
+                continue
+            matches[key] = repr(value)
+        content = ", ".join(f"{k}={v}" for k, v in matches.items())
         return f"<{self.__class__.__name__} {content}>"
 
     @property

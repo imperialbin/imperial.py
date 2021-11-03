@@ -46,7 +46,7 @@ class BaseDocument(Base, metaclass=ABCMeta):
         self._update(**kwargs)
 
     def __repr__(self):
-        return self._repr("id", "expiration", "language", "password", "delete", validate_keys=True)
+        return self._repr("id", "expiration", "language", "password", "deleted", validate_keys=True)
 
     def _update(self, **kwargs):
         if not self._id:
