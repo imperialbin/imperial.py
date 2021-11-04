@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABCMeta, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Coroutine
 
 from imperial.common import snake_dict_to_camel, ensure_json, camel_dict_to_snake
 from imperial.exceptions import InvalidAuthorization, ImperialError, DocumentNotFound
@@ -32,7 +32,7 @@ class BaseRest(Base, metaclass=ABCMeta):
         return self._http_client
 
     @abstractmethod
-    def request(self, *, method: str, path: str, payload: dict | None = None) -> dict:
+    def request(self, *, method: str, path: str, payload: dict | None = None) -> dict | Coroutine[dict]:
         """
         Handles the sending of requests
         """
