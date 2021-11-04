@@ -22,7 +22,7 @@ class DocumentManager(BaseDocumentManager):
         Uploads content to https://imperialb.in
         POST https://staging-balls-api.impb.in/document
         """
-        data = self.client.rest.request(method="POST", url="/document", payload=locals())
+        data = self.client.rest.request(method="POST", path="/document", payload=locals())
         return Document(client=self._client, **data)
 
     def get(self, id: str) -> Document:
@@ -30,7 +30,7 @@ class DocumentManager(BaseDocumentManager):
         Gets document from https://imperialb.in
         GET https://staging-balls-api.impb.in/document/:id
         """
-        data = self.client.rest.request(method="GET", url=f"/document/{id}")
+        data = self.client.rest.request(method="GET", path=f"/document/{id}")
         return Document(client=self._client, **data)
 
     def patch(self, id: str, content: str, *,
@@ -44,7 +44,7 @@ class DocumentManager(BaseDocumentManager):
         Edits document on https://imperialb.in
         PATCH https://staging-balls-api.impb.in/document/:id
         """
-        data = self.client.rest.request(method="PATCH", url="/document/", payload=locals())
+        data = self.client.rest.request(method="PATCH", path="/document/", payload=locals())
         return Document(client=self._client, **data)
 
     def delete(self, id: str) -> None:
@@ -52,4 +52,4 @@ class DocumentManager(BaseDocumentManager):
         Deletes document from https://imperialb.in
         DELETE https://staging-balls-api.impb.in/document
         """
-        self.client.rest.request(method="DELETE", url=f"/document/{id}")
+        self.client.rest.request(method="DELETE", path=f"/document/{id}")

@@ -31,7 +31,7 @@ class Document(BaseDocument, ABC):
             "editors": editors or self.editors
         }
 
-        settings = self.client.rest.request(method="PATCH", url="/document", payload=payload)
+        settings = self.client.rest.request(method="PATCH", path="/document", payload=payload)
         self._update(**settings)
 
     def duplicate(self, content: str, *,
@@ -62,8 +62,8 @@ class Document(BaseDocument, ABC):
             "editors": editors or self.editors
         }
 
-        data = self.client.rest.request(method="POST", url="/document", payload=payload)
+        data = self.client.rest.request(method="POST", path="/document", payload=payload)
         return Document(self.client, **data)
 
     def delete(self) -> None:
-        self.client.rest.request(method="DELETE", url=f"/document/{self.id}")
+        self.client.rest.request(method="DELETE", path=f"/document/{self.id}")

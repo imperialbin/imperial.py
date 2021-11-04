@@ -10,5 +10,5 @@ from imperial.lib.sync.user import User
 class UsersManager(BaseUsersManager, metaclass=ABCMeta):
 
     def get(self, username: str) -> User:
-        data = self.client.rest.request(method="GET", url=f"/user/{username}")
+        data = self.client.rest.request(method="GET", path=f"/user/{username}")
         return User(self.client, **data)
