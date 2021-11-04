@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC
 
 from imperial.exceptions import DocumentNotFound, InvalidAuthorization
-from imperial.lib.base.document import BaseDocument
+from imperial.lib.base.classes import BaseDocument
 
 
 class Document(BaseDocument, ABC):

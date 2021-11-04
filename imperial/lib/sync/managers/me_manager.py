@@ -3,9 +3,8 @@ from __future__ import annotations
 from abc import ABCMeta
 from typing import Literal
 
-from imperial.lib.base.me_manager import BaseMeManager
-from imperial.lib.sync.document import Document
-from imperial.lib.sync.me import Me
+from imperial.lib.base.managers import BaseMeManager
+from imperial.lib.sync.classes import Document, Me
 
 
 class MeManager(BaseMeManager, metaclass=ABCMeta):
@@ -22,4 +21,3 @@ class MeManager(BaseMeManager, metaclass=ABCMeta):
 
     def set_icon(self, method: Literal["github", "gravatar"], url: str) -> None:
         self.client.rest.request(method="PATCH", path="/user/@me/icon", payload=locals())
-

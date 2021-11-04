@@ -6,8 +6,7 @@ from typing import TYPE_CHECKING, Literal
 from imperial.lib.base.base import Base
 
 if TYPE_CHECKING:
-    from imperial.lib.base.me import BaseMe
-    from imperial.lib.sync.document import Document
+    from imperial.lib.base.classes import BaseDocument, BaseMe
 
 
 class BaseMeManager(Base, metaclass=ABCMeta):
@@ -17,7 +16,7 @@ class BaseMeManager(Base, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def recent(self) -> list[Document] | None:
+    def recent(self) -> list[BaseDocument] | None:
         pass
 
     @abstractmethod

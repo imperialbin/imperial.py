@@ -1,11 +1,17 @@
 from __future__ import annotations
 
-from imperial.lib.base.document_manager import BaseDocumentManager
-from imperial.lib.sync.document import Document
+from abc import ABCMeta, abstractmethod
+from typing import TYPE_CHECKING
+
+from imperial.lib.base.base import Base
+
+if TYPE_CHECKING:
+    from imperial.lib.base.classes import BaseDocument
 
 
-class DocumentManager(BaseDocumentManager):
+class BaseDocumentManager(Base, metaclass=ABCMeta):
 
+    @abstractmethod
     def create(self, content: str, *,
                language: str = None,
                expiration: int = 5,
@@ -17,39 +23,35 @@ class DocumentManager(BaseDocumentManager):
                password: str = None,
                public: bool = False,
                create_gist: bool = False,
-               editors: list[str] = None) -> Document:
+               editors: list[str] = None) -> BaseDocument:
         """
         Uploads content to https://imperialb.in
         POST https://staging-balls-api.impb.in/document
         """
-        data = self.client.rest.request(method="POST", path="/document", payload=locals())
-        return Document(client=self._client, **data)
 
-    def get(self, id: str) -> Document:
+    @abstractmethod
+    def get(self, id: str) -> BaseDocument:
         """
         Gets document from https://imperialb.in
         GET https://staging-balls-api.impb.in/document/:id
         """
-        data = self.client.rest.request(method="GET", path=f"/document/{id}")
-        return Document(client=self._client, **data)
 
+    @abstractmethod
     def patch(self, id: str, content: str, *,
               language: str = None,
               expiration: int = 5,
               image_embed: bool = False,
               instant_delete: bool = False,
               public: bool = False,
-              editors: list[str] = None) -> Document:
+              editors: list[str] = None) -> BaseDocument:
         """
         Edits document on https://imperialb.in
         PATCH https://staging-balls-api.impb.in/document/:id
         """
-        data = self.client.rest.request(method="PATCH", path="/document/", payload=locals())
-        return Document(client=self._client, **data)
 
+    @abstractmethod
     def delete(self, id: str) -> None:
         """
         Deletes document from https://imperialb.in
         DELETE https://staging-balls-api.impb.in/document
         """
-        self.client.rest.request(method="DELETE", path=f"/document/{id}")

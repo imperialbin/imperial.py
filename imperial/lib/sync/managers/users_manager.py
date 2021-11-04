@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from abc import ABCMeta
 
-from imperial.lib.base.users_manager import BaseUsersManager
-from imperial.lib.sync.user import User
+from imperial.lib.base.managers import BaseUsersManager
+from imperial.lib.sync.classes import User
 
 
 class UsersManager(BaseUsersManager, metaclass=ABCMeta):

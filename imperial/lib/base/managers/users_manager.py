@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from imperial.lib.base.base import Base
 
 if TYPE_CHECKING:
-    from imperial.lib.base.user import BaseUser
+    from imperial.lib.base.classes import BaseUser
 
 
 class BaseUsersManager(Base, metaclass=ABCMeta):
