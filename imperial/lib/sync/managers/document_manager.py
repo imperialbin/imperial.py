@@ -18,18 +18,10 @@ class DocumentManager(BaseDocumentManager):
                public: bool = False,
                create_gist: bool = False,
                editors: list[str] = None) -> Document:
-        """
-        Uploads content to https://imperialb.in
-        POST https://staging-balls-api.impb.in/document
-        """
         data = self.client.rest.request(method="POST", path="/document", payload=locals())
         return Document(client=self._client, **data)
 
     def get(self, id: str, password: str = None) -> Document:
-        """
-        Gets document from https://imperialb.in
-        GET https://staging-balls-api.impb.in/document/:id
-        """
         path = f"/document/{id}"
         if password:
             path += f"?password={password}"
@@ -43,16 +35,8 @@ class DocumentManager(BaseDocumentManager):
               instant_delete: bool = False,
               public: bool = False,
               editors: list[str] = None) -> Document:
-        """
-        Edits document on https://imperialb.in
-        PATCH https://staging-balls-api.impb.in/document/:id
-        """
         data = self.client.rest.request(method="PATCH", path="/document/", payload=locals())
         return Document(client=self._client, **data)
 
     def delete(self, id: str) -> None:
-        """
-        Deletes document from https://imperialb.in
-        DELETE https://staging-balls-api.impb.in/document
-        """
         self.client.rest.request(method="DELETE", path=f"/document/{id}")

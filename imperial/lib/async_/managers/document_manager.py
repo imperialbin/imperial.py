@@ -18,18 +18,10 @@ class AsyncDocumentManager(BaseDocumentManager):
                      public: bool = False,
                      create_gist: bool = False,
                      editors: list[str] = None) -> AsyncDocument:
-        """
-        Uploads content to https://imperialb.in
-        POST https://staging-balls-api.impb.in/document
-        """
         data = await self.client.rest.request(method="POST", path="/document", payload=locals())
         return AsyncDocument(client=self._client, **data)
 
     async def get(self, id: str, password: str = None) -> AsyncDocument:
-        """
-        Gets document from https://imperialb.in
-        GET https://staging-balls-api.impb.in/document/:id
-        """
         path = f"/document/{id}"
         if password:
             path += f"?password={password}"
@@ -43,16 +35,8 @@ class AsyncDocumentManager(BaseDocumentManager):
                     instant_delete: bool = False,
                     public: bool = False,
                     editors: list[str] = None) -> AsyncDocument:
-        """
-        Edits document on https://imperialb.in
-        PATCH https://staging-balls-api.impb.in/document/:id
-        """
         data = await self.client.rest.request(method="PATCH", path="/document/", payload=locals())
         return AsyncDocument(client=self._client, **data)
 
     async def delete(self, id: str) -> None:
-        """
-        Deletes document from https://imperialb.in
-        DELETE https://staging-balls-api.impb.in/document
-        """
         await self.client.rest.request(method="DELETE", path=f"/document/{id}")
