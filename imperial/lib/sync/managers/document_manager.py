@@ -25,12 +25,15 @@ class DocumentManager(BaseDocumentManager):
         data = self.client.rest.request(method="POST", path="/document", payload=locals())
         return Document(client=self._client, **data)
 
-    def get(self, id: str) -> Document:
+    def get(self, id: str, password: str = None) -> Document:
         """
         Gets document from https://imperialb.in
         GET https://staging-balls-api.impb.in/document/:id
         """
-        data = self.client.rest.request(method="GET", path=f"/document/{id}")
+        path = f"/document/{id}"
+        if password:
+            path += f"?password={password}"
+        data = self.client.rest.request(method="GET", path=path)
         return Document(client=self._client, **data)
 
     def patch(self, id: str, content: str, *,

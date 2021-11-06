@@ -25,12 +25,15 @@ class AsyncDocumentManager(BaseDocumentManager):
         data = await self.client.rest.request(method="POST", path="/document", payload=locals())
         return AsyncDocument(client=self._client, **data)
 
-    async def get(self, id: str) -> AsyncDocument:
+    async def get(self, id: str, password: str = None) -> AsyncDocument:
         """
         Gets document from https://imperialb.in
         GET https://staging-balls-api.impb.in/document/:id
         """
-        data = await self.client.rest.request(method="GET", path=f"/document/{id}")
+        path = f"/document/{id}"
+        if password:
+            path += f"?password={password}"
+        data = await self.client.rest.request(method="GET", path=path)
         return AsyncDocument(client=self._client, **data)
 
     async def patch(self, id: str, content: str, *,

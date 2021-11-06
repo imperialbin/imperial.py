@@ -27,7 +27,6 @@ class AsyncRest(BaseRest, ABC):
         resp: httpx.Response
 
         if self.http_client:
-            print("1")
             resp = await self.http_client.request(
                 method=method,
                 url=url,
@@ -35,7 +34,6 @@ class AsyncRest(BaseRest, ABC):
                 headers=self.headers
             )
         else:
-            print("2")
             async with httpx.AsyncClient() as client:
                 resp = await client.request(
                     method=method,
