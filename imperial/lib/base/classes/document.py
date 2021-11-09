@@ -76,7 +76,6 @@ class BaseDocument(Base, metaclass=ABCMeta):
         if "editors" in settings:
             self._editors = settings["editors"]
 
-    # signature should match patch_document (without id)
     @abstractmethod
     def edit(self, content: str, *,
              language: str = None,
@@ -86,7 +85,7 @@ class BaseDocument(Base, metaclass=ABCMeta):
              public: bool = False,
              editors: list[str] = None) -> None:
         """
-        Edits document code on https://imperialb.in
+        Edits document settings
         """
 
     @abstractmethod
@@ -103,7 +102,7 @@ class BaseDocument(Base, metaclass=ABCMeta):
                   create_gist: bool = False,
                   editors: list[str] = None) -> "BaseDocument":
         """
-        Duplicates document
+        Duplicates document with new settings, or settings from current document
         """
 
     @abstractmethod

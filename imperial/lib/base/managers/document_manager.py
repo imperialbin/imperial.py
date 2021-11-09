@@ -26,14 +26,14 @@ class BaseDocumentManager(Base, metaclass=ABCMeta):
                editors: list[str] = None) -> BaseDocument:
         """
         Uploads content to https://imperialb.in
-        POST https://staging-balls-api.impb.in/document
+        POST https://api.imperialb.in/v1/document
         """
 
     @abstractmethod
     def get(self, id: str) -> BaseDocument:
         """
         Gets document from https://imperialb.in
-        GET https://staging-balls-api.impb.in/document/:id
+        GET https://api.imperialb.in/v1/document/:id
         """
 
     @abstractmethod
@@ -46,12 +46,12 @@ class BaseDocumentManager(Base, metaclass=ABCMeta):
               editors: list[str] = None) -> BaseDocument:
         """
         Edits document on https://imperialb.in
-        PATCH https://staging-balls-api.impb.in/document/:id
+        PATCH https://api.imperialb.in/v1/document/:id
         """
 
     @abstractmethod
     def delete(self, id: str) -> None:
         """
         Deletes document from https://imperialb.in
-        DELETE https://staging-balls-api.impb.in/document
+        DELETE https://api.imperialb.in/v1/document/:id
         """

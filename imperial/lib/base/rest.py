@@ -47,7 +47,7 @@ class BaseRest(Base, metaclass=ABCMeta):
     @staticmethod
     def _payload(data: dict) -> dict:
         """
-        Prepares data before it's sent in _request
+        Prepares data before it's sent in request
         """
         data.pop("self", None)
         new_data: dict = {"settings": {}}
