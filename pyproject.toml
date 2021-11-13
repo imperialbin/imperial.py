@@ -3,7 +3,7 @@ name = "imperial"
 version = "3.0.0a1"
 description = ""
 authors = ["Hexiro <realhexiro@gmail.com>"]
-license = "MIT"
+license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "^3.6"
